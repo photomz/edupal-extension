@@ -1,0 +1,37 @@
+{
+  "manifest_version": 2,
+  "name": "Edu-Pal",
+  "version": "0.0.1",
+  "author": "Markus Zhang and Arjun Barrett",
+  "description": "Online learning made better",
+  "icons": {
+    "16": "assets/logo/16.png",
+    "24": "assets/logo/24.png",
+    "32": "assets/logo/32.png",
+    "48": "assets/logo/48.png",
+    "64": "assets/logo/64.png",
+    "96": "assets/logo/96.png",
+    "128": "assets/logo/128.png",
+    "256": "assets/logo/256.png"
+  },
+  "background": {
+    "scripts": ["background/index.ts"],
+    "persistent": true
+  },
+  "browser_action": {
+    "default_icon": "assets/logo/256.png",
+    "default_popup": "popup/index.html"
+  },
+  "content_scripts": [
+    {
+      "matches": ["*://meet.google.com/*"],
+      "js": ["injected/index.ts"]
+    }
+  ],
+  "options_ui": {
+    "page": "options/index.html",
+    "open_in_tab": true
+  },
+  "permissions": ["*://meet.google.com/*"],
+  "web_accessible_resources": ["**/*.*.map"]
+}

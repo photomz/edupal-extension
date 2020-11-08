@@ -1,0 +1,10 @@
+{
+  "compilerOptions": {
+    "noEmit": true,
+    "moduleResolution": "node",
+    "target": "ES6", // can be babel-ified
+    "strict": true,
+    "jsx": "preserve"
+  },
+  "include": ["src/**/*.{ts,tsx}"]
+}
