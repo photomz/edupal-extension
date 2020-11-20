@@ -1,4 +1,3 @@
-import { browser } from 'webextension-polyfill-ts';
 import { init, deinit } from './ui';
 
 let started = false;
@@ -17,12 +16,6 @@ const interval = setInterval(() => {
   }
 }, 500);
 
-declare const module: {
-  hot?: {
-    dispose(fn: () => void): void;
-  }
-};
-
 if (module.hot) {
   const HMR_KEY = '__parcel_hmr_reloaded';
   const reloaded = sessionStorage.getItem(HMR_KEY) != null;
@@ -32,7 +25,7 @@ if (module.hot) {
       sessionStorage.removeItem(HMR_KEY);
     });
   } else {
-    browser.runtime.sendMessage({
+    chrome.runtime.sendMessage({
       action: 'reload'
     });
   }

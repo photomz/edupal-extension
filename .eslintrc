@@ -1,5 +1,9 @@
 {
-  "parser": "@typescript-eslint/parser",
+  "env": {
+    "browser": true,
+    "jest": true
+  },
+  "plugins": ["prettier"],
   "parserOptions": {
     "ecmaVersion": 2020,
     "sourceType": "module",
@@ -9,13 +13,25 @@
   },
   "extends": [
     "plugin:react/recommended",
-    "plugin:@typescript-eslint/recommended",
-    "prettier/@typescript-eslint",
-    "plugin:prettier/recommended"
+    "plugin:prettier/recommended",
+    "airbnb"
   ],
   "settings": {
     "react": {
       "version": "detect"
     }
+  },
+  "rules": {
+    "react/no-danger": 0,
+    "no-tabs": 0,
+    "react/no-array-index-key": 0,
+    "jsx-a11y/label-has-for": [
+      "error",
+      {
+        "required": {
+          "some": ["nesting", "id"]
+        }
+      }
+    ]
   }
 }
