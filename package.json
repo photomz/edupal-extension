@@ -14,7 +14,9 @@
     "build": "parcel build src/manifest.json --target prod"
   },
   "devDependencies": {
-    "@babel/core": "^7.0.0",
+    "@babel/core": "^7.12.3",
+    "babel-core": "^6.26.3",
+    "babel-eslint": "^10.1.0",
     "eslint": "^7.12.1",
     "eslint-config-airbnb": "^18.2.1",
     "eslint-config-prettier": "^6.15.0",
@@ -31,6 +33,7 @@
     "@material-ui/core": "^4.11.0",
     "react": "^17.0.1",
     "react-dom": "^17.0.1",
+    "recoil": "^0.1.2",
     "shortid": "^2.2.16",
     "styled-components": "^5.2.1"
   }
