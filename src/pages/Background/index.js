@@ -8,6 +8,7 @@ import '../../assets/icons/96.png';
 import '../../assets/icons/128.png';
 import '../../assets/icons/256.png';
 
+// eslint-disable-next-line no-console
 chrome.runtime.onMessage.addListener(console.log);
 
 // chrome.runtime.onUpdateAvailable.addListener(function (details) {
