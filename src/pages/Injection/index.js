@@ -1,3 +1,4 @@
+/* global chrome */
 import { init, deinit } from './ui';
 
 let started = false;
@@ -26,7 +27,7 @@ if (module.hot) {
     });
   } else {
     chrome.runtime.sendMessage({
-      action: 'reload'
+      action: 'reload',
     });
   }
 }

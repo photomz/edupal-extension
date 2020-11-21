@@ -1,6 +1,6 @@
 import React from 'react';
 import { RecoilRoot } from 'recoil';
-import { inject } from '../util/index.ts';
+import { inject } from '../util';
 
 const Root = () => <RecoilRoot>App</RecoilRoot>;
 
@@ -10,7 +10,7 @@ export const init = () => {
 };
 
 // return value is whether this is final deinit
-export const deinit = (): boolean => {
+export const deinit = () => {
   console.log('bye');
   return true;
 };

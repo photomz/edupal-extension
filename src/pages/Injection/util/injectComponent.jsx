@@ -1,7 +1,7 @@
-import React, { ComponentType } from 'react';
+import React from 'react';
 import { render } from 'react-dom';
 
-const injectComponent = (Component: ComponentType, query: string): void => {
+const injectComponent = (Component, query) => {
   render(<Component />, document.querySelector(query));
 };
 

@@ -2,21 +2,29 @@
   "name": "edupal-extension",
   "version": "0.0.1",
   "description": "Google Meet client modifications with an emphasis on learning",
-  "repository": "https://github.com/edu-pal/edupal-extension",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/edu-pal/edupal-extension"
+  },
   "contributors": [
     "Markus Zhang <markuszhang8@gmail.com>",
     "Arjun Barrett <arjunbarrett@gmail.com>"
   ],
   "private": true,
   "scripts": {
-    "dev": "parcel src/manifest.json --target dev",
-    "lint": "eslint --fix \"src/**/*.{ts,tsx}\"",
-    "build": "parcel build src/manifest.json --target prod"
+    "lint": "eslint --fix \"src/**/*.{js,jsx}\"",
+    "build": "node config/build.js",
+    "start": "node config/webserver.js",
+    "debug": "node --lazy --inspect-brk=9229 --preserve-symlinks --preserve-symlinks-main config/webserver.js"
   },
   "devDependencies": {
     "@babel/core": "^7.12.3",
-    "babel-core": "^6.26.3",
+    "@babel/preset-react": "7.7.4",
     "babel-eslint": "^10.1.0",
+    "babel-loader": "8.0.6",
+    "clean-webpack-plugin": "3.0.0",
+    "copy-webpack-plugin": "5.0.5",
+    "css-loader": "3.2.0",
     "eslint": "^7.12.1",
     "eslint-config-airbnb": "^18.2.1",
     "eslint-config-prettier": "^6.15.0",
@@ -25,12 +33,21 @@
     "eslint-plugin-prettier": "^3.1.4",
     "eslint-plugin-react": "^7.21.5",
     "eslint-plugin-react-hooks": "^4.2.0",
+    "html-loader": "0.5.5",
+    "html-webpack-plugin": "3.2.0",
     "parcel-plugin-web-extension": "^1.6.1",
     "prettier": "^2.1.2",
-    "typescript": "^4.1.2"
+    "react-hot-loader": "4.12.18",
+    "style-loader": "1.0.0",
+    "webpack": "4.41.2",
+    "webpack-cli": "3.3.10",
+    "webpack-dev-server": "3.10.3",
+    "write-file-webpack-plugin": "4.5.1"
   },
   "dependencies": {
     "@material-ui/core": "^4.11.0",
+    "file-loader": "4.3.0",
+    "fs-extra": "8.1.0",
     "react": "^17.0.1",
     "react-dom": "^17.0.1",
     "recoil": "^0.1.2",

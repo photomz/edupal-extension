@@ -1,3 +1,13 @@
+/* global chrome */
+import '../../assets/icons/16.png';
+import '../../assets/icons/24.png';
+import '../../assets/icons/32.png';
+import '../../assets/icons/48.png';
+import '../../assets/icons/64.png';
+import '../../assets/icons/96.png';
+import '../../assets/icons/128.png';
+import '../../assets/icons/256.png';
+
 chrome.runtime.onMessage.addListener(console.log);
 
 // chrome.runtime.onUpdateAvailable.addListener(function (details) {
