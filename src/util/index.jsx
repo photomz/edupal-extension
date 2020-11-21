@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { render } from 'react-dom';
 // import { useDispatch } from 'react-redux';
 // import { bindActionCreators } from 'redux';
@@ -134,6 +134,41 @@ const contains = (selector, text) => {
   );
 };
 
+function useDelayedUnmount(time = 500) {
+  const [state, setState] = useState('unmounted');
+  const show = () => {
+    if (state === 'unmounting') {
+      return;
+    }
+    setState('mounting');
+  };
+  const hide = () => {
+    if (state === 'mounting') {
+      return;
+    }
+    setState('unmounting');
+  };
+
+  useEffect(() => {
+    let timeoutId;
+    if (state === 'unmounting') {
+      timeoutId = setTimeout(() => {
+        setState('unmounted');
+      }, time);
+    } else if (state === 'mounting') {
+      timeoutId = setTimeout(() => {
+        setState('mounted');
+      }, time);
+    }
+
+    return () => {
+      clearTimeout(timeoutId);
+    };
+  }, [state, time]);
+
+  return [state, show, hide];
+}
+
 // /**
 //  * Binds an array of actions or 1 action, and dispatches it using useDispatch.
 //  * @param {[Function]|Function} actions - Array or 1 action.
@@ -164,5 +199,6 @@ export default {
   parseTimeToDayMonth,
   parseTimeToDayName,
   contains,
+  useDelayedUnmount,
   // useActions,
 };
