@@ -1,0 +1,20 @@
+html,
+body {
+  font-family: 'Lato';
+  font-size: 18px;
+  overscroll-behavior: none;
+}
+
+html {
+  overflow: hidden;
+}
+
+body {
+  overflow-y: scroll;
+  overflow-x: hidden;
+  background-color: #fafafa;
+}
+
+* {
+  user-select: none;
+}

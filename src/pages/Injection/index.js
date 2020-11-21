@@ -1,6 +1,16 @@
-/* global chrome */
-import { init, deinit } from './ui';
+import Root from './Root';
+import util from '../../util';
 
+const init = () => {
+  util.injectComponent(Root, '#root');
+};
+
+// return value is whether this is final deinit
+const deinit = () => {
+  // eslint-disable-next-line no-console
+  console.log('bye');
+  return true;
+};
 let started = false;
 
 const interval = setInterval(() => {
@@ -16,18 +26,3 @@ const interval = setInterval(() => {
     started = false;
   }
 }, 500);
-
-if (module.hot) {
-  const HMR_KEY = '__parcel_hmr_reloaded';
-  const reloaded = sessionStorage.getItem(HMR_KEY) != null;
-  if (!reloaded) {
-    sessionStorage.setItem(HMR_KEY, '');
-    module.hot.dispose(() => {
-      sessionStorage.removeItem(HMR_KEY);
-    });
-  } else {
-    chrome.runtime.sendMessage({
-      action: 'reload',
-    });
-  }
-}
