@@ -22,8 +22,8 @@ const Container = styled.div`
 
 const scrapeMeetData = () => {
   const dataScript = Util.contains('script', 'accounts.google.com');
+  if (!dataScript[1] && process.env.NODE_ENV === 'development') return null;
   const userData = JSON.parse(dataScript[1].text.match(/\[(.*?)\]/)[0]);
-  if (!document) throw new Error('Document object is unreachable');
   return {
     meetingId: document
       .querySelector('[data-unresolved-meeting-id]')
@@ -48,7 +48,10 @@ const App = () => {
   const setIsVisible = useSetRecoilState(atoms.isVisible);
 
   // Get user data
-  useEffect(() => setMeetData(scrapeMeetData()), []);
+  useEffect(() => {
+    const scraped = scrapeMeetData();
+    if (scraped) setMeetData(scraped);
+  }, []);
 
   // Websocket init
   useEffect(() => {

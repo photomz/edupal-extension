@@ -69,14 +69,12 @@ const EmojiWrapper = styled.div`
 
 const Message = (username, emojiId, avatar, tone) => {
   const mountState = Util.useDelayedUnmount(500);
-  const emojiUrl = React.lazy(() =>
-    import(`../../assets/images/nod/tones/${emojiId}-${tone || 0}.gif`)
-  );
+  // const emojiUrl = React.lazy(() =>
+  //   import(`../../assets/images/nod/tones/${emojiId}-${tone || 0}.gif`)
+  // );
   return (
     <Wrapper isUnmounting={mountState === 'unmounting'}>
-      <EmojiWrapper>
-        <Emoji src={emojiUrl} alt="emoji" />
-      </EmojiWrapper>
+      <EmojiWrapper>{/* <Emoji src={emojiUrl} alt="emoji" /> */}</EmojiWrapper>
       <Avatar alt={username} src={avatar} />
       {username}
     </Wrapper>

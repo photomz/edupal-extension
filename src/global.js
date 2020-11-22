@@ -1,4 +1,3 @@
 export default {
-  socketUrl: 'wss://j24amtdvi4.execute-api.us-east-1.amazonaws.com/prod',
-  extensionId: 'some-id',
+  socketUrl: 'wss://0cyod0odw5.execute-api.ap-southeast-1.amazonaws.com/dev/',
 };

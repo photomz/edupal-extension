@@ -45,9 +45,9 @@ const HandUpButton = () => {
   const tone = useRecoilValue(atoms.emojiTone);
   const preferredName = useRecoilValue(atoms.preferredNameSelector);
 
-  const handUrl = React.lazy(() =>
-    import(`../../assets/images/nod/tones/hand-${tone || 0}.gif`)
-  );
+  // const handUrl = React.lazy(() =>
+  //   import(`../../assets/images/nod/tones/hand-${tone || 0}.gif`)
+  // );
 
   const sendHand = () => {
     setIsReactionsDropdownOpen(false);
@@ -80,7 +80,7 @@ const HandUpButton = () => {
     >
       <InnerWrapper tabIndex={-1} aria-label="Raise your hand">
         <Background />
-        <Image src={handUrl} />
+        {/* <Image src={handUrl} /> */}
       </InnerWrapper>
     </TrayButtonWrapper>
   );

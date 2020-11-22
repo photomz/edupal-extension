@@ -3,7 +3,7 @@ import styled, { keyframes } from 'styled-components';
 import { useSetRecoilState } from 'recoil';
 import Util from '../../util';
 import atoms from '../../atoms';
-import closeButton from '../../assets/images/nod/down.png';
+// import closeButton from '../../assets/images/nod/down.png';
 
 const mount = keyframes`
 	from {
@@ -51,10 +51,10 @@ const Avatar = styled.div`
   margin-right: 10px;
 `;
 
-const Emoji = styled.div`
-  max-width: 26px;
-  transition: all 0.3s ease;
-`;
+// const Emoji = styled.div`
+//   max-width: 26px;
+//   transition: all 0.3s ease;
+// `;
 
 const EmojiWrapper = styled.div`
   border-radius: 50%;
@@ -71,13 +71,13 @@ const EmojiWrapper = styled.div`
   overflow: hidden;
 `;
 
-const Hand = (messageId, text, avatar, tone) => {
+const Hand = (messageId, text, avatar /* , tone */) => {
   const mountState = Util.useDelayedUnmount(500);
-  const [isHover, setIsHover] = useState(false);
+  const [, setIsHover] = useState(false);
   const mutateHand = useSetRecoilState(atoms.handsSelector);
-  const handUrl = React.lazy(() =>
-    import(`../../assets/images/nod/tones/hand-${tone || 0}.gif`)
-  );
+  // const handUrl = React.lazy(() =>
+  //   import(`../../assets/images/nod/tones/hand-${tone || 0}.gif`)
+  // );
   const removeHand = () => {
     mutateHand({ action: 'remove', data: messageId });
   };
@@ -89,8 +89,8 @@ const Hand = (messageId, text, avatar, tone) => {
       onClick={removeHand}
     >
       <EmojiWrapper>
-        {isHover && <Emoji alt="Remove icon" src={closeButton} />}
-        <Emoji src={handUrl} alt="emoji" />
+        {/* {isHover && <Emoji alt="Remove icon" src={closeButton} />} */}
+        {/* <Emoji src={handUrl} alt="emoji" /> */}
       </EmojiWrapper>
       <Avatar alt={text} src={avatar} />
     </Wrapper>

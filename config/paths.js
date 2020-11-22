@@ -52,7 +52,7 @@ module.exports = {
   appPath: resolveApp('.'),
   appBuild: resolveApp('build'),
   appPublic: resolveApp('public'),
-  appHtml: resolveApp('src/pages/Injection/index.html'),
+  appHtml: resolveApp('public/index.html'),
   appIndexJs: resolveModule(resolveApp, 'src/pages/Injection/index'),
   appPackageJson: resolveApp('package.json'),
   appSrc: resolveApp('src'),

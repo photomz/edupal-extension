@@ -43,9 +43,9 @@ const Reaction = (emoji, label) => {
   const preferredName = useRecoilValue(atoms.preferredNameSelector);
   const tone = useRecoilValue(atoms.emojiTone);
   const { meetingId, avatar } = useRecoilValue(atoms.meetData);
-  const emojiUrl = React.lazy(() =>
-    import(`../../assets/images/nod/tones/${emoji}-${tone || 0}.gif`)
-  );
+  // const emojiUrl = React.lazy(() =>
+  //   import(`../../assets/images/nod/tones/${emoji}-${tone || 0}.gif`)
+  // );
 
   const canPost = !useRecoilValue(atoms.myMessagesSelector).length;
 
@@ -79,7 +79,7 @@ const Reaction = (emoji, label) => {
       aria-label={label}
     >
       <DropdownItem tabIndex={-1} isFaded={!canPost}>
-        <Emoji src={emojiUrl} />
+        {/* <Emoji src={emojiUrl} /> */}
       </DropdownItem>
     </EmojiWrapper>
   );

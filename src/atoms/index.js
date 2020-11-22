@@ -1,8 +1,12 @@
 import { atom, selector } from 'recoil';
+import mockMeetData from './data.json';
 
 const meetData = atom({
   key: 'meetData',
-  default: {},
+  default:
+    process.env.NODE_ENV === 'development'
+      ? mockMeetData
+      : process.env.NODE_ENV === 'production' && {},
 });
 
 const isVisible = atom({

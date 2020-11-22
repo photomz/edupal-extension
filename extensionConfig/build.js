@@ -1,6 +1,6 @@
-var webpack = require("webpack"),
-  config = require("../webpack.config");
+const webpack = require('webpack-4.41');
+const config = require('../webpack.config');
 
-webpack(config, function(err) {
+webpack(config, function (err) {
   if (err) throw err;
 });

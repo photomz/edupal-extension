@@ -1,10 +1,10 @@
-const webpack = require('webpack');
+const webpack = require('webpack-4.41');
 const path = require('path');
 const fileSystem = require('fs');
 
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
-const HtmlWebpackPlugin = require('html-webpack-plugin');
+const HtmlWebpackPlugin = require('html-webpack-plugin-5');
 const WriteFilePlugin = require('write-file-webpack-plugin');
 const ReloadPlugin = require('./extensionConfig/ReloadPlugin');
 const env = require('./extensionConfig/env');
@@ -55,7 +55,7 @@ const options = {
       },
       {
         test: new RegExp(`.(${fileExtensions.join('|')})$`),
-        loader: 'url-loader',
+        loader: 'file-loader?name=[name].[ext]',
         exclude: /node_modules/,
       },
       {

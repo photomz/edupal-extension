@@ -1,9 +1,9 @@
-const WebpackDevServer = require('webpack-dev-server');
-const webpack = require('webpack');
+const WebpackDevServer = require('webpack-dev-server-3.10');
+const webpack = require('webpack-4.41');
 const path = require('path');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 const config = require('../webpack.config');
-const env = require('./extensionEnv');
+const env = require('./env');
 
 // Webpack uses this path to fetch the manifest + hot update chunks.
 // Not setting it for content scripts or scripts injected into client

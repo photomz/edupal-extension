@@ -24,7 +24,9 @@ const MessageWrapper = () => {
   const [hands, mutateHand] = useRecoilState(atoms.handsSelector);
 
   useEffect(() => {
-    if (lastJsonMessage=== null || !lastJsonMessage.hasOwnProperty(message)) return;
+    // eslint-disable-next-line no-prototype-builtins
+    if (lastJsonMessage === null || !lastJsonMessage.hasOwnProperty('message'))
+      return;
     const m = lastJsonMessage.message;
     switch (lastJsonMessage.action) {
       case 'MESSAGE':

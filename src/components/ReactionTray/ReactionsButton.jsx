@@ -5,7 +5,7 @@ import atoms from '../../atoms';
 import { TrayButton, TrayButtonBackground } from './styles';
 import ReactionsDropdown from './ReactionsDropdown';
 
-import thumbImage from '../../assets/images/nod/notification.png';
+// import thumbImage from '../../assets/images/nod/notification.png';
 
 const Wrapper = styled.div`
   &:focus > ${TrayButton} {
@@ -49,7 +49,7 @@ const ReactionsButton = () => {
     >
       <TrayButton tabIndex={-1} aria-label="Open Nod extension">
         <TrayButtonBackground />
-        <Image src={thumbImage} />
+        {/* <Image src={thumbImage} /> */}
         {isDropdownOpen && <ReactionsDropdown />}
       </TrayButton>
     </Wrapper>
