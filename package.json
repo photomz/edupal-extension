@@ -13,8 +13,8 @@
   "private": true,
   "scripts": {
     "lint": "eslint --fix \"src/**/*.{js,jsx}\"",
-    "build": "node config/build.js",
-    "start": "node config/webserver.js",
+    "build": "node extensionConfig/build.js",
+    "start": "node extensionConfig/webserver.js",
     "debug": "node --lazy --inspect-brk=9229 --preserve-symlinks --preserve-symlinks-main config/webserver.js"
   },
   "devDependencies": {
