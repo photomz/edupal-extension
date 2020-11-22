@@ -25,6 +25,7 @@ const fileExtensions = [
   'ttf',
   'woff',
   'woff2',
+  'gif',
 ];
 
 if (fileSystem.existsSync(secretsPath)) {
@@ -39,7 +40,7 @@ const options = {
     options: './pages/Options/index.js',
     background: './pages/Background/index.js',
     content: './pages/Content/index.js',
-    injection:'./pages/Injection/index.js'
+    injection: './pages/Injection/index.js',
   },
   output: {
     path: path.join(__dirname, 'build'),
@@ -54,7 +55,7 @@ const options = {
       },
       {
         test: new RegExp(`.(${fileExtensions.join('|')})$`),
-        loader: 'file-loader?name=[name].[ext]',
+        loader: 'url-loader',
         exclude: /node_modules/,
       },
       {
@@ -70,9 +71,9 @@ const options = {
     ],
   },
   resolve: {
-    alias: alias,
+    alias,
     extensions: fileExtensions
-      .map((extension) => '.' + extension)
+      .map((extension) => `.${extension}`)
       .concat(['.jsx', '.js', '.css']),
   },
   plugins: [
@@ -87,7 +88,7 @@ const options = {
     new CopyWebpackPlugin([
       {
         from: './manifest.json',
-        transform: function (content, path) {
+        transform(content, path) {
           // generates the manifest file using the package.json informations
           return Buffer.from(
             JSON.stringify({

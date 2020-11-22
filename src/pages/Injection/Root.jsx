@@ -1,4 +1,5 @@
 import React from 'react';
+import ReactDOM from 'react-dom';
 import { RecoilRoot } from 'recoil';
 import App from './App';
 import './Root.css';
@@ -9,4 +10,8 @@ const Root = () => (
   </RecoilRoot>
 );
 
-export default Root;
+const renderRoot = (id) => {
+  ReactDOM.render(<Root />, document.getElementById(id));
+};
+
+export default renderRoot;

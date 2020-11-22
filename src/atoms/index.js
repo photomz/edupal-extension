@@ -14,7 +14,15 @@ const hands = atom({ key: 'hands', default: [] });
 
 const messages = atom({ key: 'messages', default: [] });
 
-const isDropdownOpen = atom({ key: 'isDropdownOpen', default: false });
+const isReactionsDropdownOpen = atom({
+  key: 'isReactionsDropdownOpen',
+  default: false,
+});
+
+const isSettingsDropdownOpen = atom({
+  key: 'isSettingsDropdownOpen',
+  default: false,
+});
 
 const isUpdateAvailable = atom({
   key: 'isUpdateAvailable',
@@ -27,19 +35,32 @@ const emojiTone = atom({ key: 'emojiTone', default: 0 });
 
 const isFullName = atom({ key: 'fullName', default: '' });
 
+const myHandsSelector = selector({
+  key: 'myHandsSelector',
+  get: ({ get }) => get(hands).filter(({ owner }) => owner),
+});
+
+const myMessagesSelector = selector({
+  key: 'myMessagesSelector',
+  get: ({ get }) => get(hands).filter(({ owner }) => owner),
+});
+
+const preferredNameSelector = selector({
+  key: 'preferredNameSelector',
+  get: ({ get }) =>
+    get(isFullName) ? get(meetData).fullName : get(meetData).name,
+});
+
 const handsSelector = selector({
   key: 'handsSelector',
   get: ({ get }) => get(hands),
-  set: ({ get, set }, { action, data }) => {
+  set: ({ set }, { action, data }) => {
     switch (action) {
       case 'add':
-        set(hands, get(hands).unshift(data));
+        set(hands, (prev) => [data].concat(prev));
         break;
       case 'remove':
-        set(
-          hands,
-          get(hands).filter((hand) => hand.messageId !== data)
-        );
+        set(hands, (prev) => prev.filter((hand) => hand.messageId !== data));
         break;
       default:
         break;
@@ -50,20 +71,17 @@ const handsSelector = selector({
 const messagesSelector = selector({
   key: 'messagesSelector',
   get: ({ get }) => get(messages),
-  set: ({ get, set }, { action, data }) => {
+  set: ({ set }, { action, data }) => {
     switch (action) {
       case 'add':
-        set(messages, get(messages).unshift(data));
+        set(messages, (prev) => [data].concat(prev));
         setTimeout(
           () => set(messagesSelector, { action: 'remove', data }),
           3000
         );
         break;
       case 'remove':
-        set(
-          messages,
-          get(messages).filter((hand) => hand.messageId !== data)
-        );
+        set(messages, (prev) => prev.filter((hand) => hand.messageId !== data));
         break;
       default:
         break;
@@ -71,14 +89,24 @@ const messagesSelector = selector({
   },
 });
 
+const areDropdownsOpen = selector({
+  key: 'areDropdownsOpen',
+  get: ({ get }) => get(isReactionsDropdownOpen) || get(isSettingsDropdownOpen),
+});
+
 export default {
   meetData,
   isVisible,
   handsSelector,
   messagesSelector,
-  isDropdownOpen,
+  isReactionsDropdownOpen,
+  isSettingsDropdownOpen,
   hasCheckedUpdate,
   emojiTone,
   isUpdateAvailable,
   isFullName,
+  myHandsSelector,
+  preferredNameSelector,
+  myMessagesSelector,
+  areDropdownsOpen,
 };

@@ -1,14 +1,9 @@
-import React, { useEffect, useState } from 'react';
-import { render } from 'react-dom';
+import { useEffect, useState } from 'react';
 // import { useDispatch } from 'react-redux';
 // import { bindActionCreators } from 'redux';
 import shortid from 'shortid';
 
 import $ from '../styles/global';
-
-const injectComponent = (Component, query) => {
-  render(<Component />, document.querySelector(query));
-};
 
 /**
  * Retrieves 1 absolute path to the Webpack processed image from the assets/image folder.
@@ -188,7 +183,6 @@ function useDelayedUnmount(time = 500) {
 // };
 
 export default {
-  injectComponent,
   isMobile,
   isDesktop,
   isTablet,

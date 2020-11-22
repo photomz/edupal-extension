@@ -71,12 +71,12 @@ const EmojiWrapper = styled.div`
   overflow: hidden;
 `;
 
-const Hand = (messageId, username, avatar, tone) => {
+const Hand = (messageId, text, avatar, tone) => {
   const mountState = Util.useDelayedUnmount(500);
   const [isHover, setIsHover] = useState(false);
   const mutateHand = useSetRecoilState(atoms.handsSelector);
   const handUrl = React.lazy(() =>
-    import(`../../assets/images/nod/tones/${tone || 0}/hand.gif`)
+    import(`../../assets/images/nod/tones/hand-${tone || 0}.gif`)
   );
   const removeHand = () => {
     mutateHand({ action: 'remove', data: messageId });
@@ -92,7 +92,7 @@ const Hand = (messageId, username, avatar, tone) => {
         {isHover && <Emoji alt="Remove icon" src={closeButton} />}
         <Emoji src={handUrl} alt="emoji" />
       </EmojiWrapper>
-      <Avatar alt={username} src={avatar} />
+      <Avatar alt={text} src={avatar} />
     </Wrapper>
   );
 };

@@ -1,12 +1,10 @@
-/* global chrome */
 import React, { useEffect } from 'react';
 import { useRecoilState } from 'recoil';
 import useWebsockets from 'react-use-websocket';
-import styled, { keyframes } from 'styled-components';
+import styled from 'styled-components';
 import shortid from 'shortid';
 import atoms from '../../atoms';
 import global from '../../global';
-import Util from '../../util';
 import Message from './Message';
 import Hand from './Hand';
 
@@ -26,8 +24,9 @@ const MessageWrapper = () => {
   const [hands, mutateHand] = useRecoilState(atoms.handsSelector);
 
   useEffect(() => {
-    const m = lastJsonMessage;
-    switch (m.action) {
+    if (lastJsonMessage=== null || !lastJsonMessage.hasOwnProperty(message)) return;
+    const m = lastJsonMessage.message;
+    switch (lastJsonMessage.action) {
       case 'MESSAGE':
         mutateMessage({
           action: 'add',
@@ -46,7 +45,7 @@ const MessageWrapper = () => {
           action: 'add',
           data: {
             messageId: m.messageId,
-            username: m.username,
+            text: m.text,
             img: m.img,
             owner: false,
             tone: m.tone,
@@ -73,13 +72,13 @@ const MessageWrapper = () => {
           tone={tone}
         />
       ))}
-      {hands.map(({ messageId, username, img, tone }) => (
+      {hands.map(({ messageId, text, img, tone }) => (
         <Hand
           key={messageId}
-          messageId={messageId}
+          text={text}
           tone={tone}
           avatar={img}
-          username={username}
+          messageId={messageId}
         />
       ))}
     </Wrapper>

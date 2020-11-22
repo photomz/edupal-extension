@@ -1,5 +1,6 @@
 /* eslint-disable no-console */
 import React, { useState, useEffect } from 'react';
+import { hot } from 'react-hot-loader';
 import useWebsocket from 'react-use-websocket';
 import styled from 'styled-components';
 import { useRecoilState, useSetRecoilState } from 'recoil';
@@ -44,7 +45,7 @@ const App = () => {
     isSocketConnected
   );
   const [meetData, setMeetData] = useRecoilState(atoms.meetData);
-  const [, setIsVisible] = useSetRecoilState(atoms.isVisible);
+  const setIsVisible = useSetRecoilState(atoms.isVisible);
 
   // Get user data
   useEffect(() => setMeetData(scrapeMeetData()), []);
@@ -120,4 +121,4 @@ const App = () => {
   );
 };
 
-export default App;
+export default hot(module)(App);

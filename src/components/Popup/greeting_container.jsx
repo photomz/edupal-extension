@@ -1,6 +1,6 @@
 import React from 'react';
 import { hot } from 'react-hot-loader';
-import icon from '../../assets/icons/128.png';
+import icon from '../../assets/images/nod/down.png';
 
 const Greeting = () => (
   <div>
