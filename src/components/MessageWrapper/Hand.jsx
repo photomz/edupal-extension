@@ -1,8 +1,33 @@
 import React, { useState } from 'react';
-import styled from 'styled-components';
+import styled, { keyframes } from 'styled-components';
+import { useSetRecoilState } from 'recoil';
+import Util from '../../util';
+import atoms from '../../atoms';
 import closeButton from '../../assets/images/nod/down.png';
 
+const mount = keyframes`
+	from {
+		opacity: 0;
+	}
+	to {
+		opacity: 1;
+	}
+`;
+
+const unmount = keyframes`
+	from {
+		opacity: 1;
+		margin-buttom: 0px;
+	}
+	to {
+		opacity: 0;
+		margin-buttom: 50px;
+	}
+`;
+
 const Wrapper = styled.div`
+  animation: ${({ isUnmounting }) => (isUnmounting ? unmount : mount)} 0.5s
+    ease-in-out;
   opacity: 1;
   height: auto;
   background-color: white;
@@ -47,17 +72,18 @@ const EmojiWrapper = styled.div`
 `;
 
 const Hand = (messageId, username, avatar, tone) => {
+  const mountState = Util.useDelayedUnmount(500);
   const [isHover, setIsHover] = useState(false);
+  const mutateHand = useSetRecoilState(atoms.handsSelector);
   const handUrl = React.lazy(() =>
     import(`../../assets/images/nod/tones/${tone || 0}/hand.gif`)
   );
   const removeHand = () => {
-    // TODO: Remove hand
-    // eslint-disable-next-line no-console
-    console.log('Hand removed');
+    mutateHand({ action: 'remove', data: messageId });
   };
   return (
     <Wrapper
+      isUnmounting={mountState === 'unmounting'}
       onMouseEnter={() => setIsHover(true)}
       onMouseLeave={() => setIsHover(false)}
       onClick={removeHand}

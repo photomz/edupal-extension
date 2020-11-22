@@ -1,7 +1,30 @@
 import React from 'react';
-import styled from 'styled-components';
+import styled, { keyframes } from 'styled-components';
+import Util from '../../util';
+
+const mount = keyframes`
+	from {
+		opacity: 0;
+	}
+	to {
+		opacity: 1;
+	}
+`;
+
+const unmount = keyframes`
+	from {
+		opacity: 1;
+		margin-buttom: 0px;
+	}
+	to {
+		opacity: 0;
+		margin-buttom: 50px;
+	}
+`;
 
 const Wrapper = styled.div`
+  animation: ${({ isUnmounting }) => (isUnmounting ? unmount : mount)} 0.5s
+    ease-in-out;
   opacity: 1;
   height: auto;
   background-color: white;
@@ -45,15 +68,17 @@ const EmojiWrapper = styled.div`
 `;
 
 const Message = (username, emojiId, avatar, tone) => {
+  const mountState = Util.useDelayedUnmount(500);
   const emojiUrl = React.lazy(() =>
     import(`../../assets/images/nod/tones/${tone || 0}/${emojiId}.gif`)
   );
   return (
-    <Wrapper>
+    <Wrapper isUnmounting={mountState === 'unmounting'}>
       <EmojiWrapper>
         <Emoji src={emojiUrl} alt="emoji" />
       </EmojiWrapper>
       <Avatar alt={username} src={avatar} />
+      {username}
     </Wrapper>
   );
 };

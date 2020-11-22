@@ -14,6 +14,19 @@ const hands = atom({ key: 'hands', default: [] });
 
 const messages = atom({ key: 'messages', default: [] });
 
+const isDropdownOpen = atom({ key: 'isDropdownOpen', default: false });
+
+const isUpdateAvailable = atom({
+  key: 'isUpdateAvailable',
+  default: false,
+});
+
+const hasCheckedUpdate = atom({ key: 'hasCheckedUpdate', default: false });
+
+const emojiTone = atom({ key: 'emojiTone', default: 0 });
+
+const isFullName = atom({ key: 'fullName', default: '' });
+
 const handsSelector = selector({
   key: 'handsSelector',
   get: ({ get }) => get(hands),
@@ -63,4 +76,9 @@ export default {
   isVisible,
   handsSelector,
   messagesSelector,
+  isDropdownOpen,
+  hasCheckedUpdate,
+  emojiTone,
+  isUpdateAvailable,
+  isFullName,
 };
