@@ -1,4 +1,4 @@
-import { atom, selector } from 'recoil';
+import { atom } from 'recoil';
 import mockMeetData from './data.json';
 
 const meetData = atom({
@@ -14,103 +14,106 @@ const isVisible = atom({
   default: true,
 });
 
-const hands = atom({ key: 'hands', default: [] });
+const isDrawerOpen = atom({ key: 'isDrawerOpen', default: false });
 
-const messages = atom({ key: 'messages', default: [] });
+// const hands = atom({ key: 'hands', default: [] });
 
-const isReactionsDropdownOpen = atom({
-  key: 'isReactionsDropdownOpen',
-  default: false,
-});
+// const messages = atom({ key: 'messages', default: [] });
 
-const isSettingsDropdownOpen = atom({
-  key: 'isSettingsDropdownOpen',
-  default: false,
-});
+// const isReactionsDropdownOpen = atom({
+//   key: 'isReactionsDropdownOpen',
+//   default: false,
+// });
 
-const isUpdateAvailable = atom({
-  key: 'isUpdateAvailable',
-  default: false,
-});
+// const isSettingsDropdownOpen = atom({
+//   key: 'isSettingsDropdownOpen',
+//   default: false,
+// });
 
-const hasCheckedUpdate = atom({ key: 'hasCheckedUpdate', default: false });
+// const isUpdateAvailable = atom({
+//   key: 'isUpdateAvailable',
+//   default: false,
+// });
 
-const emojiTone = atom({ key: 'emojiTone', default: 0 });
+// const hasCheckedUpdate = atom({ key: 'hasCheckedUpdate', default: false });
 
-const isFullName = atom({ key: 'fullName', default: '' });
+// const emojiTone = atom({ key: 'emojiTone', default: 0 });
 
-const myHandsSelector = selector({
-  key: 'myHandsSelector',
-  get: ({ get }) => get(hands).filter(({ owner }) => owner),
-});
+// const isFullName = atom({ key: 'fullName', default: '' });
 
-const myMessagesSelector = selector({
-  key: 'myMessagesSelector',
-  get: ({ get }) => get(hands).filter(({ owner }) => owner),
-});
+// const myHandsSelector = selector({
+//   key: 'myHandsSelector',
+//   get: ({ get }) => get(hands).filter(({ owner }) => owner),
+// });
 
-const preferredNameSelector = selector({
-  key: 'preferredNameSelector',
-  get: ({ get }) =>
-    get(isFullName) ? get(meetData).fullName : get(meetData).name,
-});
+// const myMessagesSelector = selector({
+//   key: 'myMessagesSelector',
+//   get: ({ get }) => get(hands).filter(({ owner }) => owner),
+// });
 
-const handsSelector = selector({
-  key: 'handsSelector',
-  get: ({ get }) => get(hands),
-  set: ({ set }, { action, data }) => {
-    switch (action) {
-      case 'add':
-        set(hands, (prev) => [data].concat(prev));
-        break;
-      case 'remove':
-        set(hands, (prev) => prev.filter((hand) => hand.messageId !== data));
-        break;
-      default:
-        break;
-    }
-  },
-});
+// const preferredNameSelector = selector({
+//   key: 'preferredNameSelector',
+//   get: ({ get }) =>
+//     get(isFullName) ? get(meetData).fullName : get(meetData).name,
+// });
 
-const messagesSelector = selector({
-  key: 'messagesSelector',
-  get: ({ get }) => get(messages),
-  set: ({ set }, { action, data }) => {
-    switch (action) {
-      case 'add':
-        set(messages, (prev) => [data].concat(prev));
-        setTimeout(
-          () => set(messagesSelector, { action: 'remove', data }),
-          3000
-        );
-        break;
-      case 'remove':
-        set(messages, (prev) => prev.filter((hand) => hand.messageId !== data));
-        break;
-      default:
-        break;
-    }
-  },
-});
+// const handsSelector = selector({
+//   key: 'handsSelector',
+//   get: ({ get }) => get(hands),
+//   set: ({ set }, { action, data }) => {
+//     switch (action) {
+//       case 'add':
+//         set(hands, (prev) => [data].concat(prev));
+//         break;
+//       case 'remove':
+//         set(hands, (prev) => prev.filter((hand) => hand.messageId !== data));
+//         break;
+//       default:
+//         break;
+//     }
+//   },
+// });
 
-const areDropdownsOpen = selector({
-  key: 'areDropdownsOpen',
-  get: ({ get }) => get(isReactionsDropdownOpen) || get(isSettingsDropdownOpen),
-});
+// const messagesSelector = selector({
+//   key: 'messagesSelector',
+//   get: ({ get }) => get(messages),
+//   set: ({ set }, { action, data }) => {
+//     switch (action) {
+//       case 'add':
+//         set(messages, (prev) => [data].concat(prev));
+//         setTimeout(
+//           () => set(messagesSelector, { action: 'remove', data }),
+//           3000
+//         );
+//         break;
+//       case 'remove':
+//         set(messages, (prev) => prev.filter((hand) => hand.messageId !== data));
+//         break;
+//       default:
+//         break;
+//     }
+//   },
+// });
+
+// const areDropdownsOpen = selector({
+//   key: 'areDropdownsOpen',
+//   get: ({ get }) => get(isReactionsDropdownOpen) || get(isSettingsDropdownOpen),
+// });
 
 export default {
   meetData,
   isVisible,
-  handsSelector,
-  messagesSelector,
-  isReactionsDropdownOpen,
-  isSettingsDropdownOpen,
-  hasCheckedUpdate,
-  emojiTone,
-  isUpdateAvailable,
-  isFullName,
-  myHandsSelector,
-  preferredNameSelector,
-  myMessagesSelector,
-  areDropdownsOpen,
+  isDrawerOpen,
+  // handsSelector,
+  // messagesSelector,
+  // isReactionsDropdownOpen,
+  // isSettingsDropdownOpen,
+  // hasCheckedUpdate,
+  // emojiTone,
+  // isUpdateAvailable,
+  // isFullName,
+  // myHandsSelector,
+  // preferredNameSelector,
+  // myMessagesSelector,
+  // areDropdownsOpen,
 };

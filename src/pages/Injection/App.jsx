@@ -8,8 +8,8 @@ import global from '../../global';
 import Util from '../../util';
 import atoms from '../../atoms';
 
-import MessageWrapper from '../../components/MessageWrapper';
-import ReactionTray from '../../components/ReactionTray';
+import ShortAppBar from '../../containers/ShortAppBar';
+import Sidebar from '../../containers/Sidebar';
 
 const Container = styled.div`
   position: absolute;
@@ -56,28 +56,15 @@ const App = () => {
   // Websocket init
   useEffect(() => {
     setIsSocketConnected(true);
-    sendJsonMessage({
-      route: 'join',
-      data: {
-        id: meetData.meetingId,
-        team: meetData.team,
-      },
-    });
+    // TODO: JoinMeeting
     // Send console message
-    console.log(
-      '%c Edu-pal Google Meet Extension has started up.',
-      'background: #4D2F3C; color: #FBE2A0'
-    );
-    console.log(
-      '%c Something gone wrong? Let us know - edupal.group@gmail.com',
-      'background: #4D2F3C; color: #FBE2A0'
-    );
+    console.log('%c Edu-pal Google Meet Extension has started up.');
   }, []);
 
   // Send ping to keep socket connection open
   useEffect(() => {
     const keepAlive = setInterval(() => {
-      console.log('Keeping nod alive...');
+      console.log('Keeping Edu-pal alive...');
       sendJsonMessage({ route: 'ping' });
     }, 60000 * 9);
     return clearInterval(keepAlive);
@@ -93,10 +80,6 @@ const App = () => {
   useEffect(() => {
     (async () => {
       document.addEventListener('beforeunload', () => {
-        sendJsonMessage({
-          route: 'disconnect',
-          data: { id: meetData.meetingId },
-        });
         // TODO:  Wbs disconnect
       });
 
@@ -105,12 +88,12 @@ const App = () => {
         // eslint-disable-next-line no-await-in-loop
         await new Promise((r) => setTimeout(r, 200));
       }
-      sendJsonMessage({
-        route: 'disconnect',
-        data: { id: meetData.meetingId },
-      });
+      // sendJsonMessage({
+      //   route: 'disconnect',
+      //   data: { id: meetData.meetingId },
+      // });
       setIsSocketConnected(false);
-      // TODO: Wbs disconnect and close
+      // TODO: Wbs disconnect
     })();
   }, [meetData]);
 
@@ -118,8 +101,8 @@ const App = () => {
 
   return (
     <Container>
-      <ReactionTray />
-      <MessageWrapper />
+      <ShortAppBar />
+      <Sidebar />
     </Container>
   );
 };
