@@ -1,14 +1,38 @@
-import React from 'react';
+import React, { useEffect } from 'react';
+import { useSetRecoilState, useRecoilValue } from 'recoil';
 import styled from 'styled-components';
 import Container from '@material-ui/core/Container';
-import Typography from '@material-ui/core/Typography';
+import atoms from '../../atoms';
+// TODO: Fix flashcard variable height
+import Flashcard from '../../components/Flashcard';
 
-const FlexContainer = styled(Container)``;
+import mockWebsocketData from './data.json';
+
+const FlexContainer = styled(Container)`
+  overflow: hidden;
+`;
 
 const QuestionPanel = () => {
+  const addQuestion = useSetRecoilState(atoms.addQuestion);
+  const numQuestions = useRecoilValue(atoms.numQuestions);
+
+  // TODO: Websocket
+  useEffect(() => {
+    mockWebsocketData.forEach(({ action, data }) => {
+      switch (action) {
+        case 'receiveAsk':
+          addQuestion(data);
+          break;
+        default:
+          break;
+      }
+    });
+  }, []);
   return (
     <FlexContainer>
-      <Typography>Question Panel</Typography>
+      {[...Array(numQuestions)].map((_, i) => (
+        <Flashcard key={i} num={i} />
+      ))}
     </FlexContainer>
   );
 };

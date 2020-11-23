@@ -22,8 +22,8 @@ const useStyles = makeStyles((theme) => ({
   drawerPaper: {
     position: 'absolute',
     right: theme.spacing(0),
-    whiteSpace: 'nowrap',
     width: drawerWidth,
+    margin: '0 auto',
     transition: theme.transitions.create('width', {
       easing: theme.transitions.easing.easeOut,
       duration: theme.transitions.duration.enteringScreen,
@@ -66,13 +66,15 @@ const Sidebar = () => {
   const c = useStyles();
   const [isDrawerOpen, setIsDrawerOpen] = useRecoilState(atoms.isDrawerOpen);
   const drawerRef = useRef(null);
+  const hamburgerRef = useRef(null);
 
-  Util.useOutsideClick([drawerRef], () => setIsDrawerOpen(false));
+  Util.useOutsideClick([drawerRef, hamburgerRef], () => setIsDrawerOpen(false));
 
   return (
     <Wrapper>
       <Fab
         size="large"
+        ref={hamburgerRef}
         variant="extended"
         className={clsx(c.fab, !isDrawerOpen && c.fabClose)}
         aria-label="open drawer"

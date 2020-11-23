@@ -1,5 +1,6 @@
 /* eslint-disable react/jsx-wrap-multilines */
-import React from 'react';
+import React, { useState } from 'react';
+import styled from 'styled-components';
 import prop from 'prop-types';
 import { useRecoilValue } from 'recoil';
 import { makeStyles } from '@material-ui/core/styles';
@@ -7,13 +8,13 @@ import { makeStyles } from '@material-ui/core/styles';
 import Card from '@material-ui/core/Card';
 import CardHeader from '@material-ui/core/CardHeader';
 import CardMedia from '@material-ui/core/CardMedia';
-// import CardContent from '@material-ui/core/CardContent';
 import CardActions from '@material-ui/core/CardActions';
 import Avatar from '@material-ui/core/Avatar';
 import IconButton from '@material-ui/core/IconButton';
 import Typography from '@material-ui/core/Typography';
+import Popover from '@material-ui/core/Popover';
 
-import MoreVertIcon from '@material-ui/icons/MoreVert';
+import InfoIcon from '@material-ui/icons/Info';
 
 import {
   McqOption,
@@ -27,8 +28,6 @@ import Util from '../../util';
 const useStyles = makeStyles(($) => ({
   root: {
     maxWidth: 345,
-    marginTop: $.spacing(4),
-    marginBottom: $.spacing(4),
   },
   title: {
     paddingLeft: $.spacing(2),
@@ -49,12 +48,20 @@ const useStyles = makeStyles(($) => ({
   },
 }));
 
-const QuestionCard = ({ num }) => {
-  // TODO: Make recoil selector
-  const { avatar, teacher, askTimestamp, question } = useRecoilValue(
-    atoms.questions
-  )[num];
+const StyledPopover = styled(Popover)`
+  pointer-events: none;
+`;
+
+const QuestionCard = ({ num, handleRespond }) => {
+  const {
+    avatar,
+    teacher,
+    askTimestamp,
+    question,
+    questionId,
+  } = useRecoilValue(atoms.questions)[num];
   const c = useStyles();
+  const [popoverAnchor, setPopoverAnchor] = useState(null);
 
   let OptionComponent;
   switch (question.type) {
@@ -81,8 +88,12 @@ const QuestionCard = ({ num }) => {
           <Avatar aria-label="recipe" src={avatar} className={c.avatar} />
         }
         action={
-          <IconButton aria-label="settings">
-            <MoreVertIcon />
+          <IconButton
+            aria-label="settings"
+            onMouseEnter={(e) => setPopoverAnchor(e.currentTarget)}
+            onMouseLeave={() => setPopoverAnchor(null)}
+          >
+            <InfoIcon />
           </IconButton>
         }
         title={teacher.name}
@@ -104,11 +115,28 @@ const QuestionCard = ({ num }) => {
           title="Question Image"
         />
       )}
-      {/* <CardContent>
-        <Typography variant="body2" color="textSecondary" component="p" />
-      </CardContent> */}
+      <StyledPopover
+        anchorEl={popoverAnchor}
+        open={!!popoverAnchor}
+        onClose={() => setPopoverAnchor(null)}
+        anchorOrigin={{
+          vertical: 'top',
+          horizontal: 'left',
+        }}
+        transformOrigin={{
+          vertical: 'bottom',
+          horizontal: 'center',
+        }}
+        disableRestoreFocus
+      >
+        <Typography>
+          {process.env.NODE_ENV === 'development'
+            ? `{questionId: ${questionId}, askTimestamp: ${askTimestamp}, teacher.id: ${teacher.id} }`
+            : 'Nothing to see here...'}
+        </Typography>
+      </StyledPopover>
       <CardActions disableSpacing>
-        <OptionComponent num={num} />
+        <OptionComponent num={num} handleRespond={handleRespond} />
       </CardActions>
     </Card>
   );
@@ -116,6 +144,7 @@ const QuestionCard = ({ num }) => {
 
 QuestionCard.propTypes = {
   num: prop.number.isRequired,
+  handleRespond: prop.func.isRequired,
 };
 
 export default QuestionCard;

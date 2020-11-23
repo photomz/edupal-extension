@@ -122,6 +122,11 @@ const parseTimeToDayName = (item) => {
   return date.toLocaleString('en-us', { weekday: 'short' });
 };
 
+const parseDateToDayTime = (date) =>
+  new Date(date).toLocaleTimeString(navigator.language, {
+    hour: '2-digit',
+    minute: '2-digit',
+  });
 const contains = (selector, text) => {
   const elements = document.querySelectorAll(selector);
   return [].filter.call(elements, (element) =>
@@ -194,5 +199,6 @@ export default {
   parseTimeToDayName,
   contains,
   useDelayedUnmount,
+  parseDateToDayTime,
   // useActions,
 };

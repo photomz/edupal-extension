@@ -1,0 +1,106 @@
+[
+	{
+		"action": "receiveAsk",
+		"data": {
+			"avatar": "https://lh3.googleusercontent.com/ogw/ADGmqu_cHhjs55Zz8UZ4t59S0AVyqg8_9b9Fdrl2SUqXQjs=s32-c-mo",
+			"askTimestamp": "2020-11-23T02:28:02.540Z",
+			"questionId": "vZOLdGzg9",
+			"teacher": {
+				"name": "Mr Denousse",
+				"id": "owAQQKJ-Y"
+			},
+			"question": {
+				"type": "MCQ",
+				"image": "https://www.incimages.com/uploaded_files/image/1920x1080/getty_470493341_20001333200092800_398689.jpg",
+				"text": "What is 9+10?"
+			},
+			"answerCrypt": "POIKKJsKt",
+			"meta": {
+				"optionNum": 4,
+				"options": [
+					19,
+					21,
+					34,
+					36
+				]
+			}
+		}
+	},
+	{
+		"action": "receiveAsk",
+		"data": {
+			"avatar": "https://lh3.googleusercontent.com/-59H2RjZjMeg/AAAAAAAAAAI/AAAAAAAAAAA/AMZuuckKHAVSZAWBPu2TIvh0OsB2OTRzcA/s48-c/photo.jpg",
+			"askTimestamp": "2020-11-23T02:33:02.540Z",
+			"questionId": "E3dD2oLFg",
+			"teacher": {
+				"name": "Mr Denousse",
+				"id": "owAQQKJ-Y"
+			},
+			"question": {
+				"type": "MCQ",
+				"image": null,
+				"text": "Find the derivative of e^(2x)."
+			},
+			"answerCrypt": "xRddhq9_R",
+			"meta": {
+				"optionNum": 5,
+				"options": [
+					"e^x",
+					"e^(2x)",
+					"2e^(2x)",
+					"2e^(x)",
+					"2x*e"
+				]
+			}
+		}
+	},
+	{
+		"action": "receiveAsk",
+		"data": {
+			"avatar": "https://lh3.googleusercontent.com/-59H2RjZjMeg/AAAAAAAAAAI/AAAAAAAAAAA/AMZuuckKHAVSZAWBPu2TIvh0OsB2OTRzcA/s48-c/photo.jpg",
+			"askTimestamp": "2020-11-23T02:35:02.540Z",
+			"questionId": "E3dD2ghLFg",
+			"teacher": {
+				"name": "Mr Denousse",
+				"id": "owAQQKJ-Y"
+			},
+			"question": {
+				"type": "MCQ",
+				"image": null,
+				"text": null
+			},
+			"answerCrypt": "xRddhq9_R",
+			"meta": {
+				"optionNum": 5,
+				"options": null
+			}
+		}
+	},
+	{
+		"action": "receiveAsk",
+		"data": {
+			"avatar": "https://lh3.googleusercontent.com/ogw/ADGmqu_cHhjs55Zz8UZ4t59S0AVyqg8_9b9Fdrl2SUqXQjs=s32-c-mo",
+			"askTimestamp": "2020-11-23T02:28:02.540Z",
+			"questionId": "vZOLdGzg9",
+			"teacher": {
+				"name": "Mr Denousse",
+				"id": "owAQQKJ-Y"
+			},
+			"question": {
+				"type": "MCQ",
+				"image": "https://www.gstatic.com/meet/google_meet_marketing_ongoing_meeting_grid_427cbb32d746b1d0133b898b50115e96.jpg",
+				"text": "What is 9+10?"
+			},
+			"answerCrypt": "POIKKJsKt",
+			"meta": {
+				"optionNum": 4,
+				"options": [
+					19,
+					21,
+					34,
+					36
+				]
+			}
+		}
+	}
+]

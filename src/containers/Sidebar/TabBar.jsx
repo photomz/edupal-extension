@@ -38,41 +38,34 @@ const tabMeta = [
   { label: 'Settings', Icon: SettingsIcon, Panel: SettingsPanel },
 ];
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles(($) => ({
   root: {
-    backgroundColor: theme.palette.background.paper,
+    backgroundColor: $.palette.background.paper,
   },
 }));
 
 const TabBar = () => {
   const c = useStyles();
-  const theme = useTheme();
+  const $ = useTheme();
   const [selectedTabNum, setSelectedTabNum] = useState(0);
 
   return (
     <div className={c.root}>
-      <AppBar position="static" color="default">
+      <AppBar position="sticky" color="secondary">
         <Tabs
           value={selectedTabNum}
           onChange={(_, newValue) => setSelectedTabNum(newValue)}
           variant="scrollable"
           scrollButtons="auto"
-          indicatorColor="secondary"
-          textColor="secondary"
+          indicatorColor="primary"
         >
-          {tabMeta.map(({ label, Icon }, i) => (
-            <Tab
-              key={label}
-              label={label}
-              id={`simple-tab-${i}`}
-              aria-controls={`simple-tabpanel-${i}`}
-              icon={<Icon />}
-            />
+          {tabMeta.map(({ label, Icon }) => (
+            <Tab key={label} label={label} icon={<Icon />} />
           ))}
         </Tabs>
       </AppBar>
       <SwipeableViews
-        axis={theme.direction === 'rtl' ? 'x-reverse' : 'x'}
+        axis={$.direction === 'rtl' ? 'x-reverse' : 'x'}
         index={selectedTabNum}
         onChangeIndex={(i) => setSelectedTabNum(i)}
       >

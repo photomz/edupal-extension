@@ -1,8 +1,8 @@
 export default {
   palette: {
     common: {
-      black: '#222',
-      white: '#fff',
+      black: '#212121',
+      white: '#efefef',
     },
     // Blue
     primary: {
@@ -15,6 +15,21 @@ export default {
       light: '#96f',
       main: '#56f',
       dark: '#4436ff',
+    },
+    green: {
+      light: '#49b063',
+      main: '#008037',
+      dark: '#00520c',
+    },
+    yellow: {
+      light: '#ffff7a',
+      main: '#ffd147',
+      dark: '#c8a002',
+    },
+    red: {
+      light: '#ff718d',
+      main: '#d13d60',
+      dark: '9a0037',
     },
   },
 };
