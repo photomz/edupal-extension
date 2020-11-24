@@ -52,7 +52,7 @@ const StyledPopover = styled(Popover)`
   pointer-events: none;
 `;
 
-const QuestionCard = ({ num, handleRespond }) => {
+const QuestionCard = ({ num }) => {
   const {
     avatar,
     teacher,
@@ -136,7 +136,7 @@ const QuestionCard = ({ num, handleRespond }) => {
         </Typography>
       </StyledPopover>
       <CardActions disableSpacing>
-        <OptionComponent num={num} handleRespond={handleRespond} />
+        <OptionComponent num={num} />
       </CardActions>
     </Card>
   );
@@ -144,7 +144,6 @@ const QuestionCard = ({ num, handleRespond }) => {
 
 QuestionCard.propTypes = {
   num: prop.number.isRequired,
-  handleRespond: prop.func.isRequired,
 };
 
 export default QuestionCard;

@@ -3,7 +3,6 @@ import { useSetRecoilState, useRecoilValue } from 'recoil';
 import styled from 'styled-components';
 import Container from '@material-ui/core/Container';
 import atoms from '../../atoms';
-// TODO: Fix flashcard variable height
 import Flashcard from '../../components/Flashcard';
 
 import mockWebsocketData from './data.json';
@@ -21,6 +20,7 @@ const QuestionPanel = () => {
     mockWebsocketData.forEach(({ action, data }) => {
       switch (action) {
         case 'receiveAsk':
+          // TODO: Fill atoms.questionResponseStates with questionIds on init
           addQuestion(data);
           break;
         default:

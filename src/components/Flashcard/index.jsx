@@ -21,8 +21,10 @@ const slideInRight = keyframes`
   }
 `;
 
+const duration = '0.6s'; // Stylelint throws useless error otherwise
+const easing = 'ease-out';
 const slideAnimation = css`
-  ${slideInRight} 0.6s ease-out;
+  ${slideInRight} ${duration} ${easing};
 `;
 const Wrapper = styled.div`
   ${({ $ }) => `  
@@ -65,8 +67,7 @@ const BackSide = styled(CardSide)`
 
 const Flashcard = ({ num }) => {
   const { questionId } = useRecoilValue(atoms.questions)[num];
-  const [hasRespondedMap, setHasResponded] = useRecoilState(atoms.flipResponse);
-  const hasResponded = hasRespondedMap[questionId];
+  const hasResponded = useRecoilValue(atoms.flipResponse)[questionId];
   const [isFlippedMap, setIsFlipped] = useRecoilState(atoms.flipFlashcard);
   const isDrawerOpen = useRecoilValue(atoms.isDrawerOpen);
   const isFlipped = isFlippedMap[questionId];
@@ -76,16 +77,14 @@ const Flashcard = ({ num }) => {
     if (hasResponded) setIsFlipped(questionId);
   };
 
-  const handleRespond = () => setHasResponded(questionId);
-
   return (
     <Wrapper $={$} onClick={handleFlip} isAnimating={isDrawerOpen}>
       <InnerWrapper $={$} isFlipped={isFlipped}>
         <FrontSide>
-          <QuestionCard num={num} handleRespond={handleRespond} />
+          <QuestionCard num={num} />
         </FrontSide>
         <BackSide>
-          <AnswerCard num={num} />
+          <AnswerCard num={num} questionId={questionId} />
         </BackSide>
       </InnerWrapper>
     </Wrapper>

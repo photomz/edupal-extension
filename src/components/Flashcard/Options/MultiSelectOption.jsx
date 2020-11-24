@@ -1,7 +1,175 @@
-import React from 'react';
+import React, { useState } from 'react';
+import styled from 'styled-components';
+import { useRecoilValue, useSetRecoilState } from 'recoil';
 import prop from 'prop-types';
 
-const MultiSelectOption = ({ num }) => <div>{num}</div>;
+import { useTheme } from '@material-ui/core/styles';
+import Grid from '@material-ui/core/Grid';
+import Typography from '@material-ui/core/Typography';
+import Paper from '@material-ui/core/Paper';
+import Checkbox from '@material-ui/core/Checkbox';
+import Button from '@material-ui/core/Button';
+import atoms from '../../../atoms';
+
+const Wrapper = styled.div``;
+
+const alphabet = [
+  ['A', 'primary'],
+  ['B', 'red'],
+  ['C', 'green'],
+  ['D', 'secondary'],
+  ['E', 'yellow'],
+];
+
+const StyledCheckbox = styled(Checkbox)`
+  ${({ $, colour }) => `
+  
+  margin: ${$.spacing(1)};
+  background-color: ${$.palette[colour].main};
+  transition: all 0.3s ease-in-out;
+  &:hover {
+    box-shadow: ${$.shadows[4]};
+    background-color: ${$.palette[colour].dark};
+  }
+  color: ${$.palette.common.white};
+  font-weight: ${$.typography.fontWeightMedium};
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  width: 45px;
+  height: 45px;
+`}
+`;
+
+const StyledPaper = styled(Paper)`
+  ${({ $ }) => ` 
+  border-width: 2px;
+  padding: ${$.spacing(1)} ${$.spacing(2)};
+  margin: 0 ${$.spacing(1)};
+  flex-grow: 10;
+  `}
+`;
+
+const Check = ({ i, handleCheck, hasResponded, checked }) => {
+  const $ = useTheme();
+  return (
+    <StyledCheckbox
+      $={$}
+      colour={alphabet[i][1]}
+      sizes="large"
+      color="default"
+      checked={checked}
+      disabled={hasResponded}
+      onClick={() => handleCheck(i)}
+      onChange={(e) => handleCheck(i, e.target.checked)}
+    >
+      {alphabet[i][0]}
+    </StyledCheckbox>
+  );
+};
+
+Check.defaultProps = {
+  handleCheck: () => {},
+};
+
+Check.propTypes = {
+  i: prop.number.isRequired,
+  hasResponded: prop.bool.isRequired,
+  checked: prop.bool.isRequired,
+  handleCheck: prop.func,
+};
+
+const TextOption = ({ i, text, handleCheck, hasResponded, checked }) => {
+  const $ = useTheme();
+
+  return (
+    <Grid
+      container
+      item
+      xs={12}
+      direction="row"
+      justify="space-between"
+      alignItems="stretch"
+      wrap="nowrap"
+      onClick={() => handleCheck(i)}
+    >
+      <Check hasResponded={hasResponded} i={i} checked={checked} />
+      <StyledPaper $={$} variant="outlined">
+        <Typography>{text}</Typography>
+      </StyledPaper>
+    </Grid>
+  );
+};
+
+TextOption.propTypes = {
+  i: prop.number.isRequired,
+  text: prop.oneOfType([prop.string, prop.number]).isRequired,
+  hasResponded: prop.bool.isRequired,
+  handleCheck: prop.func.isRequired,
+  checked: prop.bool.isRequired,
+};
+
+const MultiSelectOption = ({ num }) => {
+  const {
+    meta: { optionNum, options },
+    questionId,
+  } = useRecoilValue(atoms.questions)[num];
+  const setHasResponded = useSetRecoilState(atoms.flipResponse);
+  const hasResponded = useRecoilValue(atoms.questionResponseStates)[questionId];
+  const setResponse = useSetRecoilState(atoms.responseSelector);
+
+  const [checkedMap, setCheckedMap] = useState(
+    [...Array(optionNum)].fill(false)
+  );
+
+  const hasOptionsText = options !== null;
+
+  const handleCheck = (i, checked) => {
+    console.log('Checked');
+    setCheckedMap((prevMap) => {
+      const newMap = prevMap;
+      newMap[i] = checked !== undefined ? checked : !prevMap[i];
+      return newMap;
+    });
+  };
+
+  const handleRespond = () => {
+    setHasResponded(questionId);
+    setResponse({ [questionId]: checkedMap });
+  };
+
+  return (
+    <Wrapper>
+      <Grid container spacing={1} justify="center">
+        {[...Array(optionNum)].map((_, i) =>
+          hasOptionsText ? (
+            <TextOption
+              key={i}
+              i={i}
+              text={options[i]}
+              checked={checkedMap[i]}
+              handleCheck={handleCheck}
+              hasResponded={hasResponded || false}
+              // hasResponded is empty object on init so undefined, must default to false
+            />
+          ) : (
+            <Check
+              key={i}
+              i={i}
+              checked={checkedMap[i]}
+              handleCheck={handleCheck}
+              hasResponded={hasResponded || false}
+            />
+          )
+        )}
+        <Button color="primary" disabled={hasResponded} onClick={handleRespond}>
+          Done
+        </Button>
+      </Grid>
+    </Wrapper>
+  );
+};
 
 MultiSelectOption.propTypes = {
   num: prop.number.isRequired,

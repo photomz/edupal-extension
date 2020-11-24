@@ -1,6 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
-import { useRecoilValue } from 'recoil';
+import { useRecoilValue, useSetRecoilState } from 'recoil';
 import prop from 'prop-types';
 
 import { useTheme } from '@material-ui/core/styles';
@@ -59,7 +59,7 @@ const LetterFab = ({ i, handleRespond }) => {
       $={$}
       colour={alphabet[i][1]}
       sizes="large"
-      onClick={handleRespond}
+      onClick={() => handleRespond(i)}
     >
       {alphabet[i][0]}
     </StyledAvatar>
@@ -81,7 +81,8 @@ const TextOption = ({ i, text, handleRespond }) => {
       xs={12}
       direction="row"
       justify="space-between"
-      alignItems="center"
+      alignItems="stretch"
+      wrap="nowrap"
     >
       <LetterFab i={i} handleRespond={handleRespond} />
       <StyledPaper $={$} variant="outlined">
@@ -97,11 +98,20 @@ TextOption.propTypes = {
   handleRespond: prop.func.isRequired,
 };
 
-const McqOptions = ({ num, handleRespond }) => {
+const McqOption = ({ num }) => {
   const {
     meta: { optionNum, options },
+    questionId,
   } = useRecoilValue(atoms.questions)[num];
+  const setHasResponded = useSetRecoilState(atoms.flipResponse);
+  const setResponse = useSetRecoilState(atoms.responseSelector);
+
   const hasOptionsText = options !== null;
+
+  const handleRespond = (i) => {
+    setHasResponded(questionId);
+    setResponse({ [questionId]: i });
+  };
 
   return (
     <Wrapper>
@@ -123,9 +133,8 @@ const McqOptions = ({ num, handleRespond }) => {
   );
 };
 
-McqOptions.propTypes = {
+McqOption.propTypes = {
   num: prop.number.isRequired,
-  handleRespond: prop.func.isRequired,
 };
 
-export default McqOptions;
+export default McqOption;
