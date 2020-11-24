@@ -93,7 +93,12 @@ const TextOption = ({ i, text, handleCheck, hasResponded, checked }) => {
       alignItems="stretch"
       wrap="nowrap"
     >
-      <Check hasResponded={hasResponded} i={i} checked={checked} />
+      <Check
+        hasResponded={hasResponded}
+        i={i}
+        checked={checked}
+        handleCheck={handleCheck}
+      />
       <StyledButton
         $={$}
         variant="outlined"
