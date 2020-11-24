@@ -7,7 +7,8 @@ import { useTheme } from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
 import Avatar from '@material-ui/core/Avatar';
-import Paper from '@material-ui/core/Paper';
+// import Paper from '@material-ui/core/Paper';
+import Button from '@material-ui/core/Button';
 import atoms from '../../../atoms';
 
 const Wrapper = styled.div`
@@ -43,12 +44,13 @@ const StyledAvatar = styled(Avatar)`
 `}
 `;
 
-const StyledPaper = styled(Paper)`
+const StyledButton = styled(Button)`
   ${({ $ }) => ` 
-  border-width: 2px;
   padding: ${$.spacing(1)} ${$.spacing(2)};
   margin: 0 ${$.spacing(1)};
   flex-grow: 10;
+  border-width: 1px;
+  text-transform: none;
   `}
 `;
 
@@ -66,9 +68,13 @@ const LetterFab = ({ i, handleRespond }) => {
   );
 };
 
+LetterFab.defaultProps = {
+  handleRespond: () => {},
+};
+
 LetterFab.propTypes = {
   i: prop.number.isRequired,
-  handleRespond: prop.func.isRequired,
+  handleRespond: prop.func,
 };
 
 const TextOption = ({ i, text, handleRespond }) => {
@@ -84,10 +90,15 @@ const TextOption = ({ i, text, handleRespond }) => {
       alignItems="stretch"
       wrap="nowrap"
     >
-      <LetterFab i={i} handleRespond={handleRespond} />
-      <StyledPaper $={$} variant="outlined">
+      <LetterFab i={i} />
+      <StyledButton
+        $={$}
+        variant="outlined"
+        color="default"
+        onClick={() => handleRespond(i)}
+      >
         <Typography>{text}</Typography>
-      </StyledPaper>
+      </StyledButton>
     </Grid>
   );
 };

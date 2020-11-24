@@ -6,7 +6,6 @@ import prop from 'prop-types';
 import { useTheme } from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
-import Paper from '@material-ui/core/Paper';
 import Checkbox from '@material-ui/core/Checkbox';
 import Button from '@material-ui/core/Button';
 import atoms from '../../../atoms';
@@ -42,12 +41,13 @@ const StyledCheckbox = styled(Checkbox)`
 `}
 `;
 
-const StyledPaper = styled(Paper)`
+const StyledButton = styled(Button)`
   ${({ $ }) => ` 
-  border-width: 2px;
   padding: ${$.spacing(1)} ${$.spacing(2)};
   margin: 0 ${$.spacing(1)};
   flex-grow: 10;
+  border-width: 1px;
+  text-transform: none;
   `}
 `;
 
@@ -92,12 +92,16 @@ const TextOption = ({ i, text, handleCheck, hasResponded, checked }) => {
       justify="space-between"
       alignItems="stretch"
       wrap="nowrap"
-      onClick={() => handleCheck(i)}
     >
       <Check hasResponded={hasResponded} i={i} checked={checked} />
-      <StyledPaper $={$} variant="outlined">
+      <StyledButton
+        $={$}
+        variant="outlined"
+        color="default"
+        onClick={() => handleCheck(i)}
+      >
         <Typography>{text}</Typography>
-      </StyledPaper>
+      </StyledButton>
     </Grid>
   );
 };
@@ -124,11 +128,10 @@ const MultiSelectOption = ({ num }) => {
   );
 
   const hasOptionsText = options !== null;
-
   const handleCheck = (i, checked) => {
-    console.log('Checked');
+    if (hasResponded) return;
     setCheckedMap((prevMap) => {
-      const newMap = prevMap;
+      const newMap = [...prevMap];
       newMap[i] = checked !== undefined ? checked : !prevMap[i];
       return newMap;
     });
