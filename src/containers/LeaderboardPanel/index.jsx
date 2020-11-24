@@ -1,11 +1,38 @@
-import React from 'react';
-import Box from '@material-ui/core/Box';
-import Typography from '@material-ui/core/Typography';
+import React, { useEffect, useState } from 'react';
+import styled from 'styled-components';
+import Container from '@material-ui/core/Container';
+import Person from './Person';
 
-const LeaderboardPanel = () => (
-  <Box p={3}>
-    <Typography>Leaderboard Panel</Typography>
-  </Box>
-);
+import mockHttpData from './data.json';
+
+const FlexContainer = styled(Container)`
+  overflow: hidden;
+`;
+
+const LeaderboardPanel = () => {
+  const [board, setBoard] = useState([]);
+
+  useEffect(() => {
+    // TODO: HTTP backend call
+    const sortedLeaderboard = mockHttpData.sort(
+      (a, b) => b.meetingPoints - a.meetingPoints
+    );
+    setBoard(sortedLeaderboard);
+  }, []);
+
+  return (
+    <FlexContainer>
+      {board.map(({ name, id, avatar, change, points }) => (
+        <Person
+          key={id}
+          name={name}
+          avatar={avatar}
+          change={change}
+          points={points}
+        />
+      ))}
+    </FlexContainer>
+  );
+};
 
 export default LeaderboardPanel;
