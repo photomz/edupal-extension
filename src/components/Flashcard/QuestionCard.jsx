@@ -1,10 +1,9 @@
-/* eslint-disable no-unused-vars */
 /* eslint-disable react/jsx-wrap-multilines */
 import React, { useState } from 'react';
 import styled from 'styled-components';
 import prop from 'prop-types';
 import { useRecoilValue } from 'recoil';
-import { makeStyles, useTheme } from '@material-ui/core/styles';
+import { useTheme } from '@material-ui/core/styles';
 
 import Card from '@material-ui/core/Card';
 import CardHeader from '@material-ui/core/CardHeader';
@@ -27,24 +26,13 @@ import {
 import atoms from '../../atoms';
 import Util from '../../util';
 
-const useStyles = makeStyles(($) => ({
-  root: {
-    maxWidth: 345,
-  },
-  title: {
-    paddingLeft: $.spacing(2),
-  },
-  expand: {
-    transform: 'rotate(0deg)',
-    marginLeft: 'auto',
-    transition: $.transitions.create('transform', {
-      duration: $.transitions.duration.shortest,
-    }),
-  },
-  expandOpen: {
-    transform: 'rotate(180deg)',
-  },
-}));
+const FixedWidthCard = styled(Card)`
+  max-width: 345px;
+`;
+
+const PaddedTypography = styled(Typography)`
+  ${({ $ }) => `padding-left: ${$.spacing(2)}`}
+`;
 
 const StyledPopover = styled(Popover)`
   pointer-events: none;
@@ -78,7 +66,6 @@ const QuestionCard = ({ num }) => {
     question,
     questionId,
   } = useRecoilValue(atoms.questions)[num];
-  const c = useStyles();
   const $ = useTheme();
   const [popoverAnchor, setPopoverAnchor] = useState(null);
 
@@ -100,12 +87,12 @@ const QuestionCard = ({ num }) => {
       throw new Error('Invalid question type');
   }
 
+  // TODO: useEffect to construct response object, send to websocket
+
   return (
-    <Card className={c.root}>
+    <FixedWidthCard>
       <CardHeader
-        avatar={
-          <Avatar aria-label="recipe" src={avatar} className={c.avatar} />
-        }
+        avatar={<Avatar src={avatar} />}
         action={
           <IconButton
             aria-label="settings"
@@ -118,15 +105,15 @@ const QuestionCard = ({ num }) => {
         title={teacher.name}
         subheader={Util.parseDateToDayTime(askTimestamp)}
       />
-      <Typography
+      <PaddedTypography
         component="h4"
         variant="h5"
         color="initial"
-        className={c.title}
         gutterBottom
+        $={$}
       >
         {question.text || `Question ${num + 1}`}
-      </Typography>
+      </PaddedTypography>
       {question.image !== null && (
         <PositionedCardMedia image={question.image} title="Question image">
           <CornerIconButton
@@ -161,7 +148,7 @@ const QuestionCard = ({ num }) => {
       <CardActions disableSpacing>
         <OptionComponent num={num} />
       </CardActions>
-    </Card>
+    </FixedWidthCard>
   );
 };
 

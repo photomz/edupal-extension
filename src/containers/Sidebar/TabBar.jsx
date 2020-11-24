@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import SwipeableViews from 'react-swipeable-views';
 
-import { makeStyles, useTheme } from '@material-ui/core/styles';
+import { useTheme } from '@material-ui/core/styles';
 import AppBar from '@material-ui/core/AppBar';
 import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
@@ -38,19 +38,12 @@ const tabMeta = [
   { label: 'Settings', Icon: SettingsIcon, Panel: SettingsPanel },
 ];
 
-const useStyles = makeStyles(($) => ({
-  root: {
-    backgroundColor: $.palette.background.paper,
-  },
-}));
-
 const TabBar = () => {
-  const c = useStyles();
   const $ = useTheme();
   const [selectedTabNum, setSelectedTabNum] = useState(0);
 
   return (
-    <div className={c.root}>
+    <div>
       <AppBar position="sticky" color="secondary">
         <Tabs
           value={selectedTabNum}

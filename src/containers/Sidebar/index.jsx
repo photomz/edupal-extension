@@ -1,9 +1,8 @@
 import React, { useRef } from 'react';
 import { useRecoilState } from 'recoil';
 import styled from 'styled-components';
-import clsx from 'clsx';
 
-import { makeStyles } from '@material-ui/core/styles';
+import { useTheme } from '@material-ui/core/styles';
 import Drawer from '@material-ui/core/Drawer';
 import Fab from '@material-ui/core/Fab';
 
@@ -18,52 +17,47 @@ const drawerWidth = 400;
 
 const Wrapper = styled.div``;
 
-const useStyles = makeStyles((theme) => ({
-  drawerPaper: {
-    position: 'absolute',
-    right: theme.spacing(0),
-    width: drawerWidth,
-    margin: '0 auto',
-    transition: theme.transitions.create('width', {
-      easing: theme.transitions.easing.easeOut,
-      duration: theme.transitions.duration.enteringScreen,
-    }),
-    border: 0,
-  },
-  drawerPaperClose: {
-    overflowX: 'hidden',
-    transition: theme.transitions.create('width', {
-      easing: theme.transitions.easing.sharp,
-      duration: theme.transitions.duration.leavingScreen,
-    }),
-    width: theme.spacing(7),
-    [theme.breakpoints.up('sm')]: {
-      width: theme.spacing(9),
-    },
-  },
-  fab: {
-    position: 'absolute',
-    backgroundColor: theme.palette.common.white,
-    top: theme.spacing(12),
-    right: theme.spacing(-4) + drawerWidth,
-    paddingRight: theme.spacing(5),
-    paddingLeft: theme.spacing(2),
-    transition: theme.transitions.create('right', {
-      easing: theme.transitions.easing.sharp,
-      duration: theme.transitions.duration.enteringScreen,
-    }),
-  },
-  fabClose: {
-    right: theme.spacing(-4),
-    transition: theme.transitions.create('right', {
-      easing: theme.transitions.easing.sharp,
-      duration: theme.transitions.duration.leavingScreen,
-    }),
-  },
-}));
+const DrawerPaper = styled(Drawer)`
+  ${({ $ }) => `
+    position: absolute;
+    right: ${$.spacing(0)};
+    width: ${drawerWidth}px;
+    margin: 0 auto;
+    transition: ${$.transitions.create('width')};
+    border: 0;
+    `}
+  ${({ $, $isClosed }) =>
+    $isClosed &&
+    `overflow-x: hidden;
+    width: ${$.spacing(7)}px;
+    `}
+  & > .MuiPaper-root {
+    width: ${drawerWidth};
+  }
+`;
+
+const PullFab = styled(Fab)`
+  ${({ $ }) => `
+    position: absolute;
+    background-color: ${$.palette.common.white};
+    &&&{right: ${$.spacing(-4) + drawerWidth};}
+    top: ${$.spacing(12)};
+    padding: 0 ${$.spacing(5)} 0 ${$.spacing(2)};
+    transition: right ${$.transitions.duration.enteringScreen}ms ${
+    $.transitions.easing.easeOut
+  };`}
+  ${({ $, $isClosed }) =>
+    $isClosed &&
+    `&&&{right: ${$.spacing(-4)}};
+      transition: right ${$.transitions.duration.leavingScreen}ms ${
+      $.transitions.easing.sharp
+    };
+     `}
+`;
 
 const Sidebar = () => {
-  const c = useStyles();
+  // const c = useStyles();
+  const $ = useTheme();
   const [isDrawerOpen, setIsDrawerOpen] = useRecoilState(atoms.isDrawerOpen);
   const drawerRef = useRef(null);
   const hamburgerRef = useRef(null);
@@ -72,28 +66,28 @@ const Sidebar = () => {
 
   return (
     <Wrapper>
-      <Fab
+      <PullFab
         size="large"
         ref={hamburgerRef}
         variant="extended"
-        className={clsx(c.fab, !isDrawerOpen && c.fabClose)}
-        aria-label="open drawer"
+        $={$}
+        $isClosed={!isDrawerOpen}
+        aria-label="Open sidebar"
         onClick={() => setIsDrawerOpen((prev) => !prev)}
       >
         <ChevronLeftIcon />
-      </Fab>
-      <Drawer
+      </PullFab>
+      <DrawerPaper
         ref={drawerRef}
-        classes={{
-          paper: clsx(c.drawerPaper, !isDrawerOpen && c.drawerPaperClose),
-        }}
+        $={$}
+        $isClosed={!isDrawerOpen}
         open={isDrawerOpen}
         anchor="right"
         variant="persistent"
       >
         <SidebarHead />
         <TabBar />
-      </Drawer>
+      </DrawerPaper>
     </Wrapper>
   );
 };
