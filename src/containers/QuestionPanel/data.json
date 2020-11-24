@@ -12,16 +12,17 @@
 			"question": {
 				"type": "MCQ",
 				"image": "https://www.incimages.com/uploaded_files/image/1920x1080/getty_470493341_20001333200092800_398689.jpg",
-				"text": "What is 9+10?"
+				"text": "Find the derivative of e^(2x)."
 			},
 			"answerCrypt": "POIKKJsKt",
 			"meta": {
-				"optionNum": 4,
+				"optionNum": 5,
 				"options": [
-					19,
-					21,
-					34,
-					36
+					"e^x",
+					"e^(2x)",
+					"2e^(2x)",
+					"2e^(x)",
+					"2x*e"
 				]
 			}
 		}
@@ -33,25 +34,15 @@
 			"askTimestamp": "2020-11-23T02:33:02.540Z",
 			"questionId": "E3dD2oLFg",
 			"teacher": {
-				"name": "Mr Denousse",
+				"name": "Ms Branson",
 				"id": "owAQQKJ-Y"
 			},
 			"question": {
-				"type": "MCQ",
+				"type": "TrueFalse",
 				"image": null,
-				"text": "Find the derivative of e^(2x)."
+				"text": "Is HL History the best subject?"
 			},
-			"answerCrypt": "xRddhq9_R",
-			"meta": {
-				"optionNum": 5,
-				"options": [
-					"e^x",
-					"e^(2x)",
-					"2e^(2x)",
-					"2e^(x)",
-					"2x*e"
-				]
-			}
+			"answerCrypt": "xRddhq9_R"
 		}
 	},
 	{
