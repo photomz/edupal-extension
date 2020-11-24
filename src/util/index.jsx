@@ -134,7 +134,7 @@ const contains = (selector, text) => {
   );
 };
 
-function useDelayedUnmount(time = 500) {
+const useDelayedUnmount = (time = 500) => {
   const [state, setState] = useState('unmounted');
   const show = () => {
     if (state === 'unmounting') {
@@ -167,7 +167,7 @@ function useDelayedUnmount(time = 500) {
   }, [state, time]);
 
   return [state, show, hide];
-}
+};
 
 // /**
 //  * Binds an array of actions or 1 action, and dispatches it using useDispatch.

@@ -47,6 +47,7 @@ const StyledButton = styled(Button)`
   ${({ $ }) => ` 
   padding: ${$.spacing(1)} ${$.spacing(2)};
   margin: 0 ${$.spacing(1)};
+  margin-top: ${$.spacing(1)};
   flex-grow: 10;
   border-width: 1px;
   text-transform: none;

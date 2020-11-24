@@ -1,5 +1,6 @@
-import React, { useEffect } from 'react';
-import { useSetRecoilState, useRecoilValue } from 'recoil';
+/* eslint-disable no-unused-vars */
+import React, { useEffect, useRef } from 'react';
+import { useSetRecoilState, useRecoilValue, useResetRecoilState } from 'recoil';
 import styled from 'styled-components';
 import Container from '@material-ui/core/Container';
 import atoms from '../../atoms';
@@ -14,6 +15,10 @@ const FlexContainer = styled(Container)`
 const QuestionPanel = () => {
   const addQuestion = useSetRecoilState(atoms.addQuestion);
   const numQuestions = useRecoilValue(atoms.numQuestions);
+  const isDrawerOpen = useRecoilValue(atoms.isDrawerOpen);
+  const resetFlashcardFlip = useResetRecoilState(atoms.flashcardFlipStates);
+  const panelBottom = useRef(null);
+  const panelHeight = useRef(null);
 
   // TODO: Websocket
   useEffect(() => {
@@ -28,11 +33,21 @@ const QuestionPanel = () => {
       }
     });
   }, []);
+
+  useEffect(() => {
+    panelBottom.current.scrollIntoView({ behavior: 'smooth' });
+  }, [isDrawerOpen, panelHeight]);
+
+  useEffect(() => {
+    if (!isDrawerOpen) resetFlashcardFlip();
+  }, [isDrawerOpen]);
+
   return (
-    <FlexContainer>
+    <FlexContainer ref={panelHeight}>
       {[...Array(numQuestions)].map((_, i) => (
         <Flashcard key={i} num={i} />
       ))}
+      <div ref={panelBottom} />
     </FlexContainer>
   );
 };

@@ -22,7 +22,6 @@ const alphabet = [
 
 const StyledCheckbox = styled(Checkbox)`
   ${({ $, colour }) => `
-  
   margin: ${$.spacing(1)};
   background-color: ${$.palette[colour].main};
   transition: all 0.3s ease-in-out;
@@ -45,6 +44,7 @@ const StyledButton = styled(Button)`
   ${({ $ }) => ` 
   padding: ${$.spacing(1)} ${$.spacing(2)};
   margin: 0 ${$.spacing(1)};
+  margin-top: ${$.spacing(1)};
   flex-grow: 10;
   border-width: 1px;
   text-transform: none;
@@ -114,6 +114,10 @@ TextOption.propTypes = {
   checked: prop.bool.isRequired,
 };
 
+const DoneButton = styled(Button)`
+  ${({ $ }) => `margin-bottom: ${$.spacing(1)};`}
+`;
+
 const MultiSelectOption = ({ num }) => {
   const {
     meta: { optionNum, options },
@@ -122,6 +126,7 @@ const MultiSelectOption = ({ num }) => {
   const setHasResponded = useSetRecoilState(atoms.flipResponse);
   const hasResponded = useRecoilValue(atoms.questionResponseStates)[questionId];
   const setResponse = useSetRecoilState(atoms.responseSelector);
+  const $ = useTheme();
 
   const [checkedMap, setCheckedMap] = useState(
     [...Array(optionNum)].fill(false)
@@ -166,9 +171,14 @@ const MultiSelectOption = ({ num }) => {
             />
           )
         )}
-        <Button color="primary" disabled={hasResponded} onClick={handleRespond}>
+        <DoneButton
+          $={$}
+          color="primary"
+          disabled={hasResponded}
+          onClick={handleRespond}
+        >
           Done
-        </Button>
+        </DoneButton>
       </Grid>
     </Wrapper>
   );

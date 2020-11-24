@@ -93,5 +93,22 @@
 				]
 			}
 		}
+	},
+	{
+		"action": "receiveAsk",
+		"data": {
+			"avatar": "https://lh3.googleusercontent.com/ogw/ADGmqu_cHhjs55Zz8UZ4t59S0AVyqg8_9b9Fdrl2SUqXQjs=s32-c-mo",
+			"askTimestamp": "2020-11-23T11:29:02.540Z",
+			"questionId": "vZOLsdfdfGzg9",
+			"teacher": {
+				"name": "Ms Branson",
+				"id": "owAQQKJ-Y"
+			},
+			"question": {
+				"type": "ShortAnswer",
+				"image": "https://www.history.com/.image/t_share/MTU3ODc4Njc0MzgyMzMzNjYz/hith-neville-chamberlain-peace-in-our-time-1938-2.jpg",
+				"text": "To what extent was the policy of Appeasement in the invasion of Czechoslovakia justified? [10 marks]"
+			}
+		}
 	}
 ]
