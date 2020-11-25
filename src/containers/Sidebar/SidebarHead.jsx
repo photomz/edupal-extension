@@ -1,5 +1,4 @@
 import React from 'react';
-import { useTheme } from '@material-ui/core/styles';
 import styled from 'styled-components';
 import Container from '@material-ui/core/Container';
 import logo from '../../assets/images/logo_words.svg';
@@ -18,10 +17,9 @@ const FlexContainer = styled(Container)`
 `;
 
 const SidebarHead = () => {
-  const theme = useTheme();
   return (
-    <FlexContainer theme={theme}>
-      <Image src={logo} theme={theme} />
+    <FlexContainer>
+      <Image src={logo}} />
     </FlexContainer>
   );
 };

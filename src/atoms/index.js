@@ -77,6 +77,26 @@ const respondTimestampSelector = selector({
     set(respondTimestamp, (prev) => ({ ...prev, ...resObj })),
 });
 
+const handleResponse = selector({
+  key: 'handleResponse',
+  set: ({ set }, { questionId, obj }) => {
+    set(flipResponse, questionId);
+    set(responseSelector, { [questionId]: obj });
+    set(respondTimestampSelector, { [questionId]: new Date().toISOString() });
+    set(flipFlashcard, questionId);
+  },
+});
+
+const role = atom({
+  key: 'role',
+  default: 'STUDENT',
+  persistence_UNSTABLE: {
+    type: 'role',
+  },
+});
+
+const isUploaderOpen = atom({ key: 'isUploaderOpen', default: false });
+
 export default {
   meetData,
   isVisible,
@@ -92,4 +112,7 @@ export default {
   responseSelector,
   respondTimestamp,
   respondTimestampSelector,
+  handleResponse,
+  role,
+  isUploaderOpen,
 };

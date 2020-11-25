@@ -48,10 +48,11 @@ const isDesktop = () => window.matchMedia($.device.desktop).matches;
 /**
  * Informs if a click outside the selected ref is done.
  * @param {array} refArray - Array of components refs to avoid
+ * @param {boolean} override - Override
  * @param {func} callback - A callback function to run if user clicked outside the array of
  *  components
  */
-const useOutsideClick = (refArray, callback) => {
+const useOutsideClick = (refArray, override, callback) => {
   const handleOutsideClick = (event) => {
     let outsideClick = false;
 
@@ -64,14 +65,13 @@ const useOutsideClick = (refArray, callback) => {
       if (ref && ref.current && !ref.current.contains(event.target)) {
         if (refArray.length > 1) {
           refArray
-            .filter((refPrime) => {
-              if (ref === refPrime) {
-                return false;
-              }
-              return true;
-            })
+            .filter((refPrime) => ref !== refPrime)
             .forEach((refPrime) => {
-              if (!refPrime.current.contains(event.target)) {
+              if (
+                refPrime &&
+                refPrime.current &&
+                !refPrime.current.contains(event.target)
+              ) {
                 outsideClick = true;
               }
             });
@@ -87,6 +87,7 @@ const useOutsideClick = (refArray, callback) => {
   };
 
   useEffect(() => {
+    if (override) return () => {};
     if (typeof document !== 'undefined') {
       document.addEventListener('mousedown', handleOutsideClick);
     }
@@ -96,7 +97,7 @@ const useOutsideClick = (refArray, callback) => {
         document.removeEventListener('mousedown', handleOutsideClick);
       }
     };
-  }, []);
+  }, [override]);
 };
 
 /**
@@ -127,6 +128,7 @@ const parseDateToDayTime = (date) =>
     hour: '2-digit',
     minute: '2-digit',
   });
+
 const contains = (selector, text) => {
   const elements = document.querySelectorAll(selector);
   return [].filter.call(elements, (element) =>
@@ -134,41 +136,20 @@ const contains = (selector, text) => {
   );
 };
 
-const useDelayedUnmount = (time = 500) => {
-  const [state, setState] = useState('unmounted');
-  const show = () => {
-    if (state === 'unmounting') {
-      return;
-    }
-    setState('mounting');
-  };
-  const hide = () => {
-    if (state === 'mounting') {
-      return;
-    }
-    setState('unmounting');
-  };
+function useDelayUnmount(isMounted, delayTime) {
+  const [shouldRender, setShouldRender] = useState(false);
 
   useEffect(() => {
     let timeoutId;
-    if (state === 'unmounting') {
-      timeoutId = setTimeout(() => {
-        setState('unmounted');
-      }, time);
-    } else if (state === 'mounting') {
-      timeoutId = setTimeout(() => {
-        setState('mounted');
-      }, time);
+    if (isMounted && !shouldRender) {
+      timeoutId = setTimeout(() => setShouldRender(true), delayTime);
+    } else if (!isMounted && shouldRender) {
+      timeoutId = setTimeout(() => setShouldRender(false), delayTime);
     }
-
-    return () => {
-      clearTimeout(timeoutId);
-    };
-  }, [state, time]);
-
-  return [state, show, hide];
-};
-
+    return () => clearTimeout(timeoutId);
+  }, [isMounted, delayTime, shouldRender]);
+  return shouldRender;
+}
 // /**
 //  * Binds an array of actions or 1 action, and dispatches it using useDispatch.
 //  * @param {[Function]|Function} actions - Array or 1 action.
@@ -198,7 +179,7 @@ export default {
   parseTimeToDayMonth,
   parseTimeToDayName,
   contains,
-  useDelayedUnmount,
+  useDelayUnmount,
   parseDateToDayTime,
   // useActions,
 };

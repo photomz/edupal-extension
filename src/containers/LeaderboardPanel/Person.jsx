@@ -3,7 +3,6 @@
 import React from 'react';
 import styled from 'styled-components';
 import prop from 'prop-types';
-import { useTheme } from '@material-ui/core/styles';
 
 import Card from '@material-ui/core/Card';
 import CardHeader from '@material-ui/core/CardHeader';
@@ -16,18 +15,18 @@ import UpIcon from '@material-ui/icons/KeyboardArrowUp';
 import DownIcon from '@material-ui/icons/KeyboardArrowDown';
 
 const PersonCard = styled(Card)`
-  margin: ${({ $ }) => $.spacing(1)} 0;
+  margin: ${({ theme }) => theme.spacing(1)} 0;
   &&& .MuiCardHeader-action {
     align-self: center;
-    margin-right: ${({ $ }) => $.spacing(1)};
+    margin-right: ${({ theme }) => theme.spacing(1)};
   }
-  ${({ isMe, $ }) =>
+  ${({ isMe, theme }) =>
     isMe &&
-    `background-color: ${$.palette.secondary.dark}; 
-    box-shadow: ${$.shadows[8]};
+    `background-color: ${theme.palette.secondary.dark}; 
+    box-shadow: ${theme.shadows[8]};
     &&& * {
-      color: ${$.palette.common.white};
-      font-weight: ${$.typography.fontWeightMedium};
+      color: ${theme.palette.common.white};
+      font-weight: ${theme.typography.fontWeightMedium};
     }
      `}
 `;
@@ -35,19 +34,19 @@ const PersonCard = styled(Card)`
 const StyledGrid = styled(Grid)``;
 
 const Trophy = styled(Avatar)`
-  ${({ $, colour }) => `
+  ${({ theme, colour }) => `
 	color: #fff;
 	align-self: center;
-	box-shadow: ${$.shadows[2]};
-	background-color: ${$.palette[colour].main};
-	border: 3px solid ${$.palette[colour].light};
+	box-shadow: ${theme.shadows[2]};
+	background-color: ${theme.palette[colour].main};
+	border: 3px solid ${theme.palette[colour].light};
 
   `}
 `;
 
 const InnerGrid = styled(Grid)`
-  color: ${({ $, colour }) => $.palette[colour].main};
-  margin-left: ${({ $ }) => $.spacing(1)};
+  color: ${({ theme, colour }) => theme.palette[colour].main};
+  margin-left: ${({ theme }) => theme.spacing(1)};
   &&& svg {
     width: 16px;
     height: 16px;
@@ -66,11 +65,9 @@ const changeMap = [
 ];
 
 const ChangeIndicator = ({ change }) => {
-  const $ = useTheme();
   const [Icon, colour] = changeMap[change >= 0 ? 0 : 1];
   return (
     <InnerGrid
-      $={$}
       colour={colour}
       container
       direction="row"
@@ -90,8 +87,6 @@ ChangeIndicator.propTypes = {
 
 // Change in position index, not points
 const Person = ({ name, avatar, change, points, isMe, rank }) => {
-  const $ = useTheme();
-
   let trophyColor;
   switch (rank) {
     case 1:
@@ -109,11 +104,11 @@ const Person = ({ name, avatar, change, points, isMe, rank }) => {
   }
 
   return (
-    <PersonCard variant="outlined" $={$} isMe={isMe}>
+    <PersonCard variant="outlined" isMe={isMe}>
       <CardHeader
         avatar={<Avatar src={avatar} />}
         action={
-          <Trophy $={$} colour={trophyColor}>
+          <Trophy colour={trophyColor}>
             <TrophyIcon />
           </Trophy>
         }

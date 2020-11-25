@@ -1,13 +1,14 @@
 import React, { useEffect, useRef } from 'react';
 import { useSetRecoilState, useRecoilValue, useResetRecoilState } from 'recoil';
 import styled from 'styled-components';
-import Container from '@material-ui/core/Container';
 import atoms from '../../atoms';
+
 import Flashcard from '../../components/Flashcard';
+import QuestionBuilder from '../../components/QuestionBuilder';
 
 import mockWebsocketData from './data.json';
 
-const FlexContainer = styled(Container)`
+const FlexContainer = styled.div`
   overflow: hidden;
 `;
 
@@ -17,6 +18,7 @@ const QuestionPanel = () => {
 
   const addQuestion = useSetRecoilState(atoms.addQuestion);
   const resetFlashcardFlip = useResetRecoilState(atoms.flashcardFlipStates);
+  const role = useRecoilValue(atoms.role);
 
   const panelBottom = useRef(null);
   const panelHeight = useRef(null);
@@ -48,6 +50,7 @@ const QuestionPanel = () => {
       {[...Array(numQuestions)].map((_, i) => (
         <Flashcard key={i} num={i} />
       ))}
+      {role === 'TEACHER' && <QuestionBuilder />}
       <div ref={panelBottom} />
     </FlexContainer>
   );

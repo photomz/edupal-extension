@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import SwipeableViews from 'react-swipeable-views';
 
-import { useTheme } from '@material-ui/core/styles';
 import AppBar from '@material-ui/core/AppBar';
 import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
@@ -39,7 +38,6 @@ const tabMeta = [
 ];
 
 const TabBar = () => {
-  const $ = useTheme();
   const [selectedTabNum, setSelectedTabNum] = useState(0);
 
   return (

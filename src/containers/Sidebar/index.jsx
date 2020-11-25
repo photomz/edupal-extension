@@ -1,8 +1,7 @@
-import React, { useRef } from 'react';
-import { useRecoilState } from 'recoil';
+import React, { useRef, useEffect } from 'react';
+import { useRecoilState, useRecoilValue } from 'recoil';
 import styled from 'styled-components';
 
-import { useTheme } from '@material-ui/core/styles';
 import Drawer from '@material-ui/core/Drawer';
 import Fab from '@material-ui/core/Fab';
 
@@ -18,7 +17,7 @@ const drawerWidth = 400;
 const Wrapper = styled.div``;
 
 const DrawerPaper = styled(Drawer)`
-  ${({ $ }) => `
+  ${({ theme: $ }) => `
     position: absolute;
     right: ${$.spacing(0)};
     width: ${drawerWidth}px;
@@ -33,11 +32,12 @@ const DrawerPaper = styled(Drawer)`
     `}
   & > .MuiPaper-root {
     width: ${drawerWidth};
+    border: 0;
   }
 `;
 
 const PullFab = styled(Fab)`
-  ${({ $ }) => `
+  ${({ theme: $ }) => `
     position: absolute;
     background-color: ${$.palette.common.white};
     &&&{right: ${$.spacing(-4) + drawerWidth};}
@@ -46,7 +46,7 @@ const PullFab = styled(Fab)`
     transition: right ${$.transitions.duration.enteringScreen}ms ${
     $.transitions.easing.easeOut
   };`}
-  ${({ $, $isClosed }) =>
+  ${({ theme: $, $isClosed }) =>
     $isClosed &&
     `&&&{right: ${$.spacing(-4)}};
       transition: right ${$.transitions.duration.leavingScreen}ms ${
@@ -56,13 +56,16 @@ const PullFab = styled(Fab)`
 `;
 
 const Sidebar = () => {
-  // const c = useStyles();
-  const $ = useTheme();
   const [isDrawerOpen, setIsDrawerOpen] = useRecoilState(atoms.isDrawerOpen);
+  const isUploaderOpen = useRecoilValue(atoms.isUploaderOpen);
   const drawerRef = useRef(null);
   const hamburgerRef = useRef(null);
 
-  Util.useOutsideClick([drawerRef, hamburgerRef], () => setIsDrawerOpen(false));
+  useEffect(() => {}, []);
+
+  Util.useOutsideClick([drawerRef, hamburgerRef], isUploaderOpen, () =>
+    setIsDrawerOpen(false)
+  );
 
   return (
     <Wrapper>
@@ -70,7 +73,6 @@ const Sidebar = () => {
         size="large"
         ref={hamburgerRef}
         variant="extended"
-        $={$}
         $isClosed={!isDrawerOpen}
         aria-label="Open sidebar"
         onClick={() => setIsDrawerOpen((prev) => !prev)}
@@ -79,14 +81,15 @@ const Sidebar = () => {
       </PullFab>
       <DrawerPaper
         ref={drawerRef}
-        $={$}
         $isClosed={!isDrawerOpen}
         open={isDrawerOpen}
         anchor="right"
         variant="persistent"
       >
-        <SidebarHead />
-        <TabBar />
+        <div id="edupal-questionPanel">
+          <SidebarHead />
+          <TabBar />
+        </div>
       </DrawerPaper>
     </Wrapper>
   );
