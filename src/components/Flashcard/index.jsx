@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import prop from 'prop-types';
 import { useRecoilState, useRecoilValue } from 'recoil';
 import styled, { keyframes, css } from 'styled-components';
@@ -71,20 +71,46 @@ const Flashcard = ({ num }) => {
   const [isFlippedMap, setIsFlipped] = useRecoilState(atoms.flipFlashcard);
   const isDrawerOpen = useRecoilValue(atoms.isDrawerOpen);
   const isFlipped = isFlippedMap[questionId];
+  const response = useRecoilValue(atoms.response)[questionId];
+  const meetData = useRecoilValue(atoms.meetData);
+  const question = useRecoilValue(atoms.questions)[num];
+  const respondTimestamp = useRecoilValue(atoms.respondTimestamp)[questionId];
   const $ = useTheme();
 
-  const handleFlip = () => {
-    if (hasResponded) setIsFlipped(questionId);
-  };
+  useEffect(() => {
+    const payload = {
+      route: 'respond',
+      data: {
+        student: {
+          name: meetData.name,
+          id: meetData.userId,
+        },
+        answerCrypt: question.answerCrypt,
+        avatar: meetData.avatar,
+        questionId: question.questionId,
+        meetingId: meetData.meetingId,
+        classId: 'null', // TODO: Class join show get UI UX in V2
+        response: JSON.stringify(response),
+        askTimestamp: question.askTimestamp,
+        respondTimestamp,
+      },
+    };
+    // TODO: Websocket emit
+    console.log(payload);
+  }, [hasResponded]);
 
   return (
-    <Wrapper $={$} onClick={handleFlip} isAnimating={isDrawerOpen}>
+    <Wrapper
+      $={$}
+      onClick={() => hasResponded && setIsFlipped(questionId)}
+      isAnimating={isDrawerOpen}
+    >
       <InnerWrapper $={$} isFlipped={isFlipped}>
         <FrontSide>
           <QuestionCard num={num} />
         </FrontSide>
         <BackSide>
-          <AnswerCard num={num} questionId={questionId} />
+          {hasResponded && <AnswerCard num={num} questionId={questionId} />}
         </BackSide>
       </InnerWrapper>
     </Wrapper>

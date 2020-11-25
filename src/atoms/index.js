@@ -68,6 +68,15 @@ const responseSelector = selector({
   set: ({ set }, resObj) => set(response, (prev) => ({ ...prev, ...resObj })),
 });
 
+const respondTimestamp = atom({ key: 'respondTimestamp', default: {} });
+
+const respondTimestampSelector = selector({
+  key: 'respondTimestampSelector',
+  get: ({ get }) => get(respondTimestamp),
+  set: ({ set }, resObj) =>
+    set(respondTimestamp, (prev) => ({ ...prev, ...resObj })),
+});
+
 export default {
   meetData,
   isVisible,
@@ -81,4 +90,6 @@ export default {
   flipResponse,
   response,
   responseSelector,
+  respondTimestamp,
+  respondTimestampSelector,
 };

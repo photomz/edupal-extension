@@ -90,7 +90,7 @@ const TextOption = ({ i, text, handleRespond }) => {
       alignItems="stretch"
       wrap="nowrap"
     >
-      <LetterFab i={i} />
+      <LetterFab i={i} handleRespond={handleRespond} />
       <StyledButton
         $={$}
         variant="outlined"
@@ -116,12 +116,14 @@ const McqOption = ({ num }) => {
   } = useRecoilValue(atoms.questions)[num];
   const setHasResponded = useSetRecoilState(atoms.flipResponse);
   const setResponse = useSetRecoilState(atoms.responseSelector);
+  const setTimestamp = useSetRecoilState(atoms.respondTimestampSelector);
 
   const hasOptionsText = options !== null;
 
   const handleRespond = (i) => {
     setHasResponded(questionId);
     setResponse({ [questionId]: i });
+    setTimestamp({ [questionId]: new Date().toISOString() });
   };
 
   return (

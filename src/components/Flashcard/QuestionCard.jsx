@@ -145,7 +145,7 @@ const QuestionCard = ({ num }) => {
             : 'Nothing to see here...'}
         </Typography>
       </StyledPopover>
-      <CardActions disableSpacing>
+      <CardActions>
         <OptionComponent num={num} />
       </CardActions>
     </FixedWidthCard>

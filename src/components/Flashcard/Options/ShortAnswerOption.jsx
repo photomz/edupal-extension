@@ -22,12 +22,14 @@ const ShortAnswerOption = ({ num }) => {
   const setHasResponded = useSetRecoilState(atoms.flipResponse);
   const hasResponded = useRecoilValue(atoms.questionResponseStates)[questionId];
   const setResponse = useSetRecoilState(atoms.responseSelector);
+  const setTimestamp = useSetRecoilState(atoms.respondTimestampSelector);
   const [text, setText] = useState('');
   const $ = useTheme();
 
   const handleRespond = () => {
     setHasResponded(questionId);
     setResponse({ [questionId]: text });
+    setTimestamp({ [questionId]: new Date().toISOString() });
   };
 
   return (

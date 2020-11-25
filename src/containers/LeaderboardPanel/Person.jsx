@@ -15,13 +15,21 @@ import TrophyIcon from '@material-ui/icons/EmojiEvents';
 import UpIcon from '@material-ui/icons/KeyboardArrowUp';
 import DownIcon from '@material-ui/icons/KeyboardArrowDown';
 
-const FixedWidthCard = styled(Card)`
-  max-width: 345px;
-  margin: ${({ $ }) => $.spacing(1)};
+const PersonCard = styled(Card)`
+  margin: ${({ $ }) => $.spacing(1)} 0;
   &&& .MuiCardHeader-action {
     align-self: center;
     margin-right: ${({ $ }) => $.spacing(1)};
   }
+  ${({ isMe, $ }) =>
+    isMe &&
+    `background-color: ${$.palette.secondary.dark}; 
+    box-shadow: ${$.shadows[8]};
+    &&& * {
+      color: ${$.palette.common.white};
+      font-weight: ${$.typography.fontWeightMedium};
+    }
+     `}
 `;
 
 const StyledGrid = styled(Grid)``;
@@ -81,15 +89,31 @@ ChangeIndicator.propTypes = {
 };
 
 // Change in position index, not points
-const Person = ({ name, avatar, change, points }) => {
+const Person = ({ name, avatar, change, points, isMe, rank }) => {
   const $ = useTheme();
 
+  let trophyColor;
+  switch (rank) {
+    case 1:
+      trophyColor = 'gold';
+      break;
+    case 2:
+      trophyColor = 'silver';
+      break;
+    case 3:
+      trophyColor = 'bronze';
+      break;
+    default:
+      trophyColor = 'merit';
+      break;
+  }
+
   return (
-    <FixedWidthCard variant="outlined" $={$}>
+    <PersonCard variant="outlined" $={$} isMe={isMe}>
       <CardHeader
         avatar={<Avatar src={avatar} />}
         action={
-          <Trophy $={$} colour="yellow">
+          <Trophy $={$} colour={trophyColor}>
             <TrophyIcon />
           </Trophy>
         }
@@ -106,7 +130,7 @@ const Person = ({ name, avatar, change, points }) => {
         }
         subheader={`${points} Points`}
       />
-    </FixedWidthCard>
+    </PersonCard>
   );
 };
 
@@ -115,6 +139,8 @@ Person.propTypes = {
   avatar: prop.string.isRequired,
   change: prop.number.isRequired,
   points: prop.number.isRequired,
+  isMe: prop.bool.isRequired,
+  rank: prop.number.isRequired,
 };
 
 export default Person;

@@ -29,11 +29,13 @@ const TrueFalseOption = ({ num }) => {
   const setHasResponded = useSetRecoilState(atoms.flipResponse);
   const setResponse = useSetRecoilState(atoms.responseSelector);
   const hasResponded = useRecoilValue(atoms.questionResponseStates)[questionId];
+  const setTimestamp = useSetRecoilState(atoms.respondTimestampSelector);
   const $ = useTheme();
 
   const handleRespond = (tf) => {
     setHasResponded(questionId);
     setResponse({ [questionId]: tf });
+    setTimestamp({ [questionId]: new Date().toISOString() });
   };
 
   return (

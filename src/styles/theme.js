@@ -31,5 +31,21 @@ export default {
       main: '#d13d60',
       dark: '9a0037',
     },
+    gold: {
+      light: '#fcef43',
+      main: '#f6d42a',
+    },
+    silver: {
+      light: '#eee9e9',
+      main: '#c5bbba',
+    },
+    bronze: {
+      light: '#c09278',
+      main: '#8f5536',
+    },
+    merit: {
+      light: '#fb7a9b',
+      main: '#ed4f77',
+    },
   },
 };
