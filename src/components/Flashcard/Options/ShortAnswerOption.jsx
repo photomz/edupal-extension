@@ -19,17 +19,13 @@ const StyledTextField = styled(TextField)`
 
 const ShortAnswerOption = ({ num }) => {
   const { questionId } = useRecoilValue(atoms.questions)[num];
-  const setHasResponded = useSetRecoilState(atoms.flipResponse);
   const hasResponded = useRecoilValue(atoms.questionResponseStates)[questionId];
-  const setResponse = useSetRecoilState(atoms.responseSelector);
-  const setTimestamp = useSetRecoilState(atoms.respondTimestampSelector);
   const [text, setText] = useState('');
   const $ = useTheme();
 
+  const handleResponse = useSetRecoilState(atoms.handleResponse);
   const handleRespond = () => {
-    setHasResponded(questionId);
-    setResponse({ [questionId]: text });
-    setTimestamp({ [questionId]: new Date().toISOString() });
+    handleResponse({ questionId, obj: text });
   };
 
   return (

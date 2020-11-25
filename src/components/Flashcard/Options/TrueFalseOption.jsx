@@ -26,16 +26,12 @@ const StyledButton = styled(Button)`
 
 const TrueFalseOption = ({ num }) => {
   const { questionId } = useRecoilValue(atoms.questions)[num];
-  const setHasResponded = useSetRecoilState(atoms.flipResponse);
-  const setResponse = useSetRecoilState(atoms.responseSelector);
   const hasResponded = useRecoilValue(atoms.questionResponseStates)[questionId];
-  const setTimestamp = useSetRecoilState(atoms.respondTimestampSelector);
   const $ = useTheme();
 
-  const handleRespond = (tf) => {
-    setHasResponded(questionId);
-    setResponse({ [questionId]: tf });
-    setTimestamp({ [questionId]: new Date().toISOString() });
+  const handleResponse = useSetRecoilState(atoms.handleResponse);
+  const handleRespond = (obj) => {
+    handleResponse({ questionId, obj });
   };
 
   return (

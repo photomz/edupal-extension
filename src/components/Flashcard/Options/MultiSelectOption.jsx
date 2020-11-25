@@ -128,10 +128,7 @@ const MultiSelectOption = ({ num }) => {
     meta: { optionNum, options },
     questionId,
   } = useRecoilValue(atoms.questions)[num];
-  const setHasResponded = useSetRecoilState(atoms.flipResponse);
   const hasResponded = useRecoilValue(atoms.questionResponseStates)[questionId];
-  const setResponse = useSetRecoilState(atoms.responseSelector);
-  const setTimestamp = useSetRecoilState(atoms.respondTimestampSelector);
   const $ = useTheme();
 
   const [checkedMap, setCheckedMap] = useState(
@@ -148,10 +145,9 @@ const MultiSelectOption = ({ num }) => {
     });
   };
 
+  const handleResponse = useSetRecoilState(atoms.handleResponse);
   const handleRespond = () => {
-    setHasResponded(questionId);
-    setResponse({ [questionId]: checkedMap });
-    setTimestamp({ [questionId]: new Date().toISOString() });
+    handleResponse({ questionId, obj: checkedMap });
   };
 
   return (

@@ -2,7 +2,7 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
 import prop from 'prop-types';
-import { useRecoilValue } from 'recoil';
+import { useRecoilValue, useSetRecoilState } from 'recoil';
 import { useTheme } from '@material-ui/core/styles';
 
 import Card from '@material-ui/core/Card';
@@ -16,6 +16,7 @@ import Popover from '@material-ui/core/Popover';
 
 import InfoIcon from '@material-ui/icons/Info';
 import OpenIcon from '@material-ui/icons/OpenInNew';
+import RightIcon from '@material-ui/icons/ChevronRight';
 
 import {
   McqOption,
@@ -26,9 +27,7 @@ import {
 import atoms from '../../atoms';
 import Util from '../../util';
 
-const FixedWidthCard = styled(Card)`
-  max-width: 345px;
-`;
+const StyledCard = styled(Card)``;
 
 const PaddedTypography = styled(Typography)`
   ${({ $ }) => `padding-left: ${$.spacing(2)}`}
@@ -66,6 +65,8 @@ const QuestionCard = ({ num }) => {
     question,
     questionId,
   } = useRecoilValue(atoms.questions)[num];
+  const setFlashcardFlip = useSetRecoilState(atoms.flipFlashcard);
+  const hasResponded = useRecoilValue(atoms.flipResponse)[questionId];
   const $ = useTheme();
   const [popoverAnchor, setPopoverAnchor] = useState(null);
 
@@ -90,17 +91,26 @@ const QuestionCard = ({ num }) => {
   // TODO: useEffect to construct response object, send to websocket
 
   return (
-    <FixedWidthCard>
+    <StyledCard>
       <CardHeader
         avatar={<Avatar src={avatar} />}
         action={
-          <IconButton
-            aria-label="settings"
-            onMouseEnter={(e) => setPopoverAnchor(e.currentTarget)}
-            onMouseLeave={() => setPopoverAnchor(null)}
-          >
-            <InfoIcon />
-          </IconButton>
+          <>
+            <IconButton
+              aria-label="More information"
+              onMouseEnter={(e) => setPopoverAnchor(e.currentTarget)}
+              onMouseLeave={() => setPopoverAnchor(null)}
+            >
+              <InfoIcon />
+            </IconButton>
+            <IconButton
+              aria-label="See other card"
+              disabled={!hasResponded}
+              onClick={() => hasResponded && setFlashcardFlip(questionId)}
+            >
+              <RightIcon />
+            </IconButton>
+          </>
         }
         title={teacher.name}
         subheader={Util.parseDateToDayTime(askTimestamp)}
@@ -148,7 +158,7 @@ const QuestionCard = ({ num }) => {
       <CardActions>
         <OptionComponent num={num} />
       </CardActions>
-    </FixedWidthCard>
+    </StyledCard>
   );
 };
 

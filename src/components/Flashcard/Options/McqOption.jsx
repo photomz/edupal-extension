@@ -114,17 +114,12 @@ const McqOption = ({ num }) => {
     meta: { optionNum, options },
     questionId,
   } = useRecoilValue(atoms.questions)[num];
-  const setHasResponded = useSetRecoilState(atoms.flipResponse);
-  const setResponse = useSetRecoilState(atoms.responseSelector);
-  const setTimestamp = useSetRecoilState(atoms.respondTimestampSelector);
+  const handleResponse = useSetRecoilState(atoms.handleResponse);
 
-  const hasOptionsText = options !== null;
-
-  const handleRespond = (i) => {
-    setHasResponded(questionId);
-    setResponse({ [questionId]: i });
-    setTimestamp({ [questionId]: new Date().toISOString() });
+  const handleRespond = (obj) => {
+    handleResponse({ questionId, obj });
   };
+  const hasOptionsText = options !== null;
 
   return (
     <Wrapper>

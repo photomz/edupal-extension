@@ -1,33 +1,32 @@
 /* eslint-disable no-unused-vars */
 /* eslint-disable react/jsx-wrap-multilines */
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import styled from 'styled-components';
 import prop from 'prop-types';
-import { useRecoilValue } from 'recoil';
-import { useTheme } from '@material-ui/core/styles';
+import { useRecoilValue, useSetRecoilState } from 'recoil';
+import { useTheme, makeStyles } from '@material-ui/core/styles';
 
 import Card from '@material-ui/core/Card';
 import CardHeader from '@material-ui/core/CardHeader';
-import CardActions from '@material-ui/core/CardActions';
+import CardContent from '@material-ui/core/CardContent';
 import Avatar from '@material-ui/core/Avatar';
 import IconButton from '@material-ui/core/IconButton';
 import Typography from '@material-ui/core/Typography';
 import Popover from '@material-ui/core/Popover';
 import Skeleton from '@material-ui/lab/Skeleton';
 import Grid from '@material-ui/core/Grid';
+import Button from '@material-ui/core/Button';
 
 import InfoIcon from '@material-ui/icons/Info';
 import CorrectIcon from '@material-ui/icons/CheckCircle';
 import WrongIcon from '@material-ui/icons/Cancel';
 import UngradedIcon from '@material-ui/icons/IndeterminateCheckBox';
+import LeftIcon from '@material-ui/icons/ChevronLeft';
 
 import atoms from '../../atoms';
 import Util from '../../util';
 
-const FixedWidthCard = styled(Card)`
-  max-width: 345px;
-  height: 100%;
-`;
+const StyledCard = styled(Card)``;
 
 const PaddedTypography = styled(Typography)`
   ${({ $ }) => `padding-left: ${$.spacing(2)}`}
@@ -66,6 +65,9 @@ const AnswerCard = ({ num }) => {
   const respondTimestamp = useRecoilValue(atoms.respondTimestamp)[questionId];
   const response = useRecoilValue(atoms.response)[questionId];
   const [isLoading, setIsLoading] = useState(true);
+  const [isDialogOpen, setDialogOpen] = useState(false);
+  const setFlashcardFlip = useSetRecoilState(atoms.flipFlashcard);
+  const wrapperRef = useRef(null);
 
   const answer = {
     isCorrect: true,
@@ -80,17 +82,25 @@ const AnswerCard = ({ num }) => {
   const [Icon, colour] = largeIconMap[answer.isCorrect];
 
   return (
-    <FixedWidthCard>
+    <StyledCard ref={wrapperRef}>
       <CardHeader
         avatar={<Avatar src={avatar} />}
         action={
-          <IconButton
-            aria-label="More information"
-            onMouseEnter={(e) => setPopoverAnchor(e.currentTarget)}
-            onMouseLeave={() => setPopoverAnchor(null)}
-          >
-            <InfoIcon />
-          </IconButton>
+          <>
+            <IconButton
+              aria-label="More information"
+              onMouseEnter={(e) => setPopoverAnchor(e.currentTarget)}
+              onMouseLeave={() => setPopoverAnchor(null)}
+            >
+              <InfoIcon />
+            </IconButton>
+            <IconButton
+              aria-label="See other card"
+              onClick={() => setFlashcardFlip(questionId)}
+            >
+              <LeftIcon />
+            </IconButton>
+          </>
         }
         title={question.text || `Question ${num + 1}`}
         subheader={Util.parseDateToDayTime(respondTimestamp)}
@@ -118,7 +128,7 @@ const AnswerCard = ({ num }) => {
             : 'Nothing to see here...'}
         </Typography>
       </StyledPopover>
-      <CardActions disableSpacing>
+      <CardContent>
         <Grid
           container
           item
@@ -147,8 +157,8 @@ const AnswerCard = ({ num }) => {
             </Typography>
           )}
         </Grid>
-      </CardActions>
-    </FixedWidthCard>
+      </CardContent>
+    </StyledCard>
   );
 };
 

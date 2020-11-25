@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import prop from 'prop-types';
-import { useRecoilState, useRecoilValue } from 'recoil';
+import { useRecoilValue } from 'recoil';
 import styled, { keyframes, css } from 'styled-components';
 import { useTheme } from '@material-ui/core/styles';
 import atoms from '../../atoms';
@@ -33,44 +33,17 @@ const Wrapper = styled.div`
   height: auto;
   perspective: 999px;
   margin: ${$.spacing(4)} 0;
-  `}
-  animation: ${({ isAnimating }) => (isAnimating ? slideAnimation : 'none')};
-`;
-
-const InnerWrapper = styled.div`
-  ${({ $ }) => ` 
   position: relative;
   text-align: center;
-  transition: ${$.transitions.create('transform', {
-    duration: $.transitions.duration.complex,
-    easing: $.transitions.easing.easeInOut,
-  })};
-  transform-style: preserve-3d;
-  transform:`} ${({ isFlipped }) => (isFlipped ? 'rotateX(180deg)' : 'none')};
-`;
-
-const CardSide = styled.div`
-  /* position: absolute; */
-  backface-visibility: hidden;
-`;
-
-const FrontSide = styled(CardSide)``;
-
-const BackSide = styled(CardSide)`
-  transform: rotateX(180deg);
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
+  `}
+  animation: ${({ isAnimating }) => (isAnimating ? slideAnimation : 'none')};
 `;
 
 const Flashcard = ({ num }) => {
   const { questionId } = useRecoilValue(atoms.questions)[num];
   const hasResponded = useRecoilValue(atoms.flipResponse)[questionId];
-  const [isFlippedMap, setIsFlipped] = useRecoilState(atoms.flipFlashcard);
+  const isFlipped = useRecoilValue(atoms.flipFlashcard)[questionId];
   const isDrawerOpen = useRecoilValue(atoms.isDrawerOpen);
-  const isFlipped = isFlippedMap[questionId];
   const response = useRecoilValue(atoms.response)[questionId];
   const meetData = useRecoilValue(atoms.meetData);
   const question = useRecoilValue(atoms.questions)[num];
@@ -100,19 +73,12 @@ const Flashcard = ({ num }) => {
   }, [hasResponded]);
 
   return (
-    <Wrapper
-      $={$}
-      onClick={() => hasResponded && setIsFlipped(questionId)}
-      isAnimating={isDrawerOpen}
-    >
-      <InnerWrapper $={$} isFlipped={isFlipped}>
-        <FrontSide>
-          <QuestionCard num={num} />
-        </FrontSide>
-        <BackSide>
-          {hasResponded && <AnswerCard num={num} questionId={questionId} />}
-        </BackSide>
-      </InnerWrapper>
+    <Wrapper $={$} isAnimating={isDrawerOpen}>
+      {isFlipped && hasResponded ? (
+        <AnswerCard num={num} questionId={questionId} />
+      ) : (
+        <QuestionCard num={num} />
+      )}
     </Wrapper>
   );
 };
