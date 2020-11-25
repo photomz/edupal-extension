@@ -1,3 +1,4 @@
+/* eslint-disable no-nested-ternary */
 /* eslint-disable react/jsx-wrap-multilines */
 import React, { useState } from 'react';
 import styled from 'styled-components';
@@ -26,8 +27,11 @@ import {
 } from './Options';
 import atoms from '../../atoms';
 import Util from '../../util';
+import slide from '../../styles/animate';
 
-const StyledCard = styled(Card)``;
+const StyledCard = styled(Card)`
+  animation: ${({ animationStyle }) => slide[animationStyle]};
+`;
 
 const PaddedTypography = styled(Typography)`
   ${({ $ }) => `padding-left: ${$.spacing(2)}`}
@@ -57,7 +61,7 @@ const CornerIconButton = styled(IconButton)`
   `}
 `;
 
-const QuestionCard = ({ num }) => {
+const QuestionCard = ({ num, animationStyle }) => {
   const {
     avatar,
     teacher,
@@ -91,7 +95,7 @@ const QuestionCard = ({ num }) => {
   // TODO: useEffect to construct response object, send to websocket
 
   return (
-    <StyledCard>
+    <StyledCard animationStyle={animationStyle}>
       <CardHeader
         avatar={<Avatar src={avatar} />}
         action={
@@ -164,6 +168,7 @@ const QuestionCard = ({ num }) => {
 
 QuestionCard.propTypes = {
   num: prop.number.isRequired,
+  animationStyle: prop.string.isRequired,
 };
 
 export default QuestionCard;

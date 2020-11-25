@@ -23,10 +23,15 @@ import WrongIcon from '@material-ui/icons/Cancel';
 import UngradedIcon from '@material-ui/icons/IndeterminateCheckBox';
 import LeftIcon from '@material-ui/icons/ChevronLeft';
 
+import { Hidden } from '@material-ui/core';
 import atoms from '../../atoms';
 import Util from '../../util';
+import slide from '../../styles/animate';
 
-const StyledCard = styled(Card)``;
+const StyledCard = styled(Card)`
+  animation: ${({ animationStyle }) => slide[animationStyle]};
+  transition: 0.3s all ease-in-out;
+`;
 
 const PaddedTypography = styled(Typography)`
   ${({ $ }) => `padding-left: ${$.spacing(2)}`}
@@ -57,7 +62,7 @@ const largeIconMap = {
   null: [UngradedIcon, 'primary'],
 };
 
-const AnswerCard = ({ num }) => {
+const AnswerCard = ({ num, animationStyle }) => {
   const { avatar, name, userId } = useRecoilValue(atoms.meetData);
   const $ = useTheme();
   const [popoverAnchor, setPopoverAnchor] = useState(null);
@@ -82,7 +87,7 @@ const AnswerCard = ({ num }) => {
   const [Icon, colour] = largeIconMap[answer.isCorrect];
 
   return (
-    <StyledCard ref={wrapperRef}>
+    <StyledCard ref={wrapperRef} animationStyle={animationStyle}>
       <CardHeader
         avatar={<Avatar src={avatar} />}
         action={
@@ -164,6 +169,7 @@ const AnswerCard = ({ num }) => {
 
 AnswerCard.propTypes = {
   num: prop.number.isRequired,
+  animationStyle: prop.string.isRequired,
 };
 
 export default AnswerCard;
