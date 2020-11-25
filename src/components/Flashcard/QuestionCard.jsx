@@ -4,7 +4,6 @@ import React, { useState } from 'react';
 import styled from 'styled-components';
 import prop from 'prop-types';
 import { useRecoilValue, useSetRecoilState } from 'recoil';
-import { useTheme } from '@material-ui/core/styles';
 
 import Card from '@material-ui/core/Card';
 import CardHeader from '@material-ui/core/CardHeader';
@@ -30,11 +29,12 @@ import Util from '../../util';
 import slide from '../../styles/animate';
 
 const StyledCard = styled(Card)`
-  animation: ${({ animationStyle }) => slide[animationStyle]};
+  animation: ${({ $animationStyle }) => slide[$animationStyle]};
+  padding-bottom: ${({ theme }) => theme.spacing(1)};
 `;
 
 const PaddedTypography = styled(Typography)`
-  ${({ $ }) => `padding-left: ${$.spacing(2)}`}
+  ${({ theme: $ }) => `padding-left: ${$.spacing(2)}`}
 `;
 
 const StyledPopover = styled(Popover)`
@@ -48,7 +48,7 @@ const PositionedCardMedia = styled(CardMedia)`
 `;
 
 const CornerIconButton = styled(IconButton)`
-  ${({ $ }) => `  
+  ${({ theme: $ }) => `  
   position: absolute;
   bottom: 5px;
   right: 8px;
@@ -71,7 +71,6 @@ const QuestionCard = ({ num, animationStyle }) => {
   } = useRecoilValue(atoms.questions)[num];
   const setFlashcardFlip = useSetRecoilState(atoms.flipFlashcard);
   const hasResponded = useRecoilValue(atoms.flipResponse)[questionId];
-  const $ = useTheme();
   const [popoverAnchor, setPopoverAnchor] = useState(null);
 
   let OptionComponent;
@@ -95,7 +94,7 @@ const QuestionCard = ({ num, animationStyle }) => {
   // TODO: useEffect to construct response object, send to websocket
 
   return (
-    <StyledCard animationStyle={animationStyle}>
+    <StyledCard $animationStyle={animationStyle}>
       <CardHeader
         avatar={<Avatar src={avatar} />}
         action={
@@ -124,7 +123,6 @@ const QuestionCard = ({ num, animationStyle }) => {
         variant="h5"
         color="initial"
         gutterBottom
-        $={$}
       >
         {question.text || `Question ${num + 1}`}
       </PaddedTypography>
@@ -132,7 +130,6 @@ const QuestionCard = ({ num, animationStyle }) => {
         <PositionedCardMedia image={question.image} title="Question image">
           <CornerIconButton
             title="Open image in new tab"
-            $={$}
             onClick={() => window.open(question.image)}
           >
             <OpenIcon />

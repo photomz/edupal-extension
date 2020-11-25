@@ -1,11 +1,10 @@
-/* eslint-disable no-unused-vars */
 /* eslint-disable react/jsx-wrap-multilines */
 import React, { useState, useEffect, useRef } from 'react';
+import { useRecoilValue, useSetRecoilState } from 'recoil';
 import styled from 'styled-components';
 import prop from 'prop-types';
-import { useRecoilValue, useSetRecoilState } from 'recoil';
-import { useTheme, makeStyles } from '@material-ui/core/styles';
 
+import Grid from '@material-ui/core/Grid';
 import Card from '@material-ui/core/Card';
 import CardHeader from '@material-ui/core/CardHeader';
 import CardContent from '@material-ui/core/CardContent';
@@ -14,8 +13,6 @@ import IconButton from '@material-ui/core/IconButton';
 import Typography from '@material-ui/core/Typography';
 import Popover from '@material-ui/core/Popover';
 import Skeleton from '@material-ui/lab/Skeleton';
-import Grid from '@material-ui/core/Grid';
-import Button from '@material-ui/core/Button';
 
 import InfoIcon from '@material-ui/icons/Info';
 import CorrectIcon from '@material-ui/icons/CheckCircle';
@@ -23,26 +20,20 @@ import WrongIcon from '@material-ui/icons/Cancel';
 import UngradedIcon from '@material-ui/icons/IndeterminateCheckBox';
 import LeftIcon from '@material-ui/icons/ChevronLeft';
 
-import { Hidden } from '@material-ui/core';
 import atoms from '../../atoms';
 import Util from '../../util';
 import slide from '../../styles/animate';
 
 const StyledCard = styled(Card)`
-  animation: ${({ animationStyle }) => slide[animationStyle]};
+  animation: ${({ $animationStyle }) => slide[$animationStyle]};
   transition: 0.3s all ease-in-out;
 `;
-
-const PaddedTypography = styled(Typography)`
-  ${({ $ }) => `padding-left: ${$.spacing(2)}`}
-`;
-
 const StyledPopover = styled(Popover)`
   pointer-events: none;
 `;
 
 const StyledGrid = styled(Grid)`
-  ${({ $, colour }) => `
+  ${({ theme: $, colour }) => `
   color: ${$.palette[colour].main};
   display: flex;
   flex-direction: row;
@@ -63,14 +54,12 @@ const largeIconMap = {
 };
 
 const AnswerCard = ({ num, animationStyle }) => {
-  const { avatar, name, userId } = useRecoilValue(atoms.meetData);
-  const $ = useTheme();
+  const { avatar, userId } = useRecoilValue(atoms.meetData);
   const [popoverAnchor, setPopoverAnchor] = useState(null);
   const { questionId, question } = useRecoilValue(atoms.questions)[num];
   const respondTimestamp = useRecoilValue(atoms.respondTimestamp)[questionId];
   const response = useRecoilValue(atoms.response)[questionId];
   const [isLoading, setIsLoading] = useState(true);
-  const [isDialogOpen, setDialogOpen] = useState(false);
   const setFlashcardFlip = useSetRecoilState(atoms.flipFlashcard);
   const wrapperRef = useRef(null);
 
@@ -87,7 +76,7 @@ const AnswerCard = ({ num, animationStyle }) => {
   const [Icon, colour] = largeIconMap[answer.isCorrect];
 
   return (
-    <StyledCard ref={wrapperRef} animationStyle={animationStyle}>
+    <StyledCard ref={wrapperRef} $animationStyle={animationStyle}>
       <CardHeader
         avatar={<Avatar src={avatar} />}
         action={
@@ -142,7 +131,7 @@ const AnswerCard = ({ num, animationStyle }) => {
           justify="center"
           styles={{ flexGrow: 1 }}
         >
-          <StyledGrid $={$} colour={colour}>
+          <StyledGrid colour={colour}>
             {isLoading ? (
               <Skeleton
                 animation="wave"

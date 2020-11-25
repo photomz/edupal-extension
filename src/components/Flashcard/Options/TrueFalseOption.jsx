@@ -3,14 +3,12 @@ import styled from 'styled-components';
 import { useRecoilValue, useSetRecoilState } from 'recoil';
 import prop from 'prop-types';
 
-import { useTheme } from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid';
-import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
 import atoms from '../../../atoms';
 
 const StyledButton = styled(Button)`
-  ${({ $, colour }) => ` 
+  ${({ theme: $, colour }) => ` 
   padding: ${$.spacing(1)} ${$.spacing(2)};
   margin: 0 ${$.spacing(1)};
   flex-grow: 10;
@@ -27,7 +25,6 @@ const StyledButton = styled(Button)`
 const TrueFalseOption = ({ num }) => {
   const { questionId } = useRecoilValue(atoms.questions)[num];
   const hasResponded = useRecoilValue(atoms.questionResponseStates)[questionId];
-  const $ = useTheme();
 
   const handleResponse = useSetRecoilState(atoms.handleResponse);
   const handleRespond = (obj) => {
@@ -50,14 +47,13 @@ const TrueFalseOption = ({ num }) => {
       ].map((el) => (
         <StyledButton
           key={el[1]}
-          $={$}
           variant="contained"
           color="default"
           colour={el[2]}
           disabled={hasResponded}
           onClick={() => handleRespond(el[0])}
         >
-          <Typography>{el[1]}</Typography>
+          {el[1]}
         </StyledButton>
       ))}
     </Grid>

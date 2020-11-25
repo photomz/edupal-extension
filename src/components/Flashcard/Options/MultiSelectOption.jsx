@@ -3,7 +3,6 @@ import styled from 'styled-components';
 import { useRecoilValue, useSetRecoilState } from 'recoil';
 import prop from 'prop-types';
 
-import { useTheme } from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
 import Checkbox from '@material-ui/core/Checkbox';
@@ -21,7 +20,7 @@ const alphabet = [
 ];
 
 const StyledCheckbox = styled(Checkbox)`
-  ${({ $, colour }) => `
+  ${({ theme: $, colour }) => `
   margin: ${$.spacing(1)};
   background-color: ${$.palette[colour].main};
   transition: all 0.3s ease-in-out;
@@ -41,7 +40,7 @@ const StyledCheckbox = styled(Checkbox)`
 `;
 
 const StyledButton = styled(Button)`
-  ${({ $ }) => ` 
+  ${({ theme: $ }) => ` 
   padding: ${$.spacing(1)} ${$.spacing(2)};
   margin: 0 ${$.spacing(1)};
   margin-top: ${$.spacing(1)};
@@ -51,23 +50,19 @@ const StyledButton = styled(Button)`
   `}
 `;
 
-const Check = ({ i, handleCheck, hasResponded, checked }) => {
-  const $ = useTheme();
-  return (
-    <StyledCheckbox
-      $={$}
-      colour={alphabet[i][1]}
-      sizes="large"
-      color="default"
-      checked={checked}
-      disabled={hasResponded}
-      onClick={() => handleCheck(i)}
-      onChange={(e) => handleCheck(i, e.target.checked)}
-    >
-      {alphabet[i][0]}
-    </StyledCheckbox>
-  );
-};
+const Check = ({ i, handleCheck, hasResponded, checked }) => (
+  <StyledCheckbox
+    colour={alphabet[i][1]}
+    sizes="large"
+    color="default"
+    checked={checked}
+    disabled={hasResponded}
+    onClick={() => handleCheck(i)}
+    onChange={(e) => handleCheck(i, e.target.checked)}
+  >
+    {alphabet[i][0]}
+  </StyledCheckbox>
+);
 
 Check.defaultProps = {
   handleCheck: () => {},
@@ -80,36 +75,31 @@ Check.propTypes = {
   handleCheck: prop.func,
 };
 
-const TextOption = ({ i, text, handleCheck, hasResponded, checked }) => {
-  const $ = useTheme();
-
-  return (
-    <Grid
-      container
-      item
-      xs={12}
-      direction="row"
-      justify="space-between"
-      alignItems="stretch"
-      wrap="nowrap"
+const TextOption = ({ i, text, handleCheck, hasResponded, checked }) => (
+  <Grid
+    container
+    item
+    xs={12}
+    direction="row"
+    justify="space-between"
+    alignItems="stretch"
+    wrap="nowrap"
+  >
+    <Check
+      hasResponded={hasResponded}
+      i={i}
+      checked={checked}
+      handleCheck={handleCheck}
+    />
+    <StyledButton
+      variant="outlined"
+      color="default"
+      onClick={() => handleCheck(i)}
     >
-      <Check
-        hasResponded={hasResponded}
-        i={i}
-        checked={checked}
-        handleCheck={handleCheck}
-      />
-      <StyledButton
-        $={$}
-        variant="outlined"
-        color="default"
-        onClick={() => handleCheck(i)}
-      >
-        <Typography>{text}</Typography>
-      </StyledButton>
-    </Grid>
-  );
-};
+      <Typography>{text}</Typography>
+    </StyledButton>
+  </Grid>
+);
 
 TextOption.propTypes = {
   i: prop.number.isRequired,
@@ -119,9 +109,7 @@ TextOption.propTypes = {
   checked: prop.bool.isRequired,
 };
 
-const DoneButton = styled(Button)`
-  ${({ $ }) => `margin-bottom: ${$.spacing(1)};`}
-`;
+const DoneButton = styled(Button)``;
 
 const MultiSelectOption = ({ num }) => {
   const {
@@ -129,7 +117,6 @@ const MultiSelectOption = ({ num }) => {
     questionId,
   } = useRecoilValue(atoms.questions)[num];
   const hasResponded = useRecoilValue(atoms.questionResponseStates)[questionId];
-  const $ = useTheme();
 
   const [checkedMap, setCheckedMap] = useState(
     [...Array(optionNum)].fill(false)
@@ -175,7 +162,6 @@ const MultiSelectOption = ({ num }) => {
           )
         )}
         <DoneButton
-          $={$}
           color="primary"
           disabled={hasResponded}
           onClick={handleRespond}

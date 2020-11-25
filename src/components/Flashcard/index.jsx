@@ -2,7 +2,6 @@ import React, { useEffect } from 'react';
 import prop from 'prop-types';
 import { useRecoilValue } from 'recoil';
 import styled from 'styled-components';
-import { useTheme } from '@material-ui/core/styles';
 import atoms from '../../atoms';
 
 import Util from '../../util';
@@ -10,15 +9,17 @@ import QuestionCard from './QuestionCard';
 import AnswerCard from './AnswerCard';
 
 const Wrapper = styled.div`
-  ${({ $ }) => `  
+  ${({ theme: $ }) => `  
   background-color: transparent;
   height: auto;
   perspective: 999px;
-  margin: ${$.spacing(4)} 0;
   position: relative;
   text-align: center;
   overflow: hidden;
   position: relative;
+  & > * {
+    margin: ${$.spacing(2)};
+  }
   `}
 `;
 
@@ -34,9 +35,8 @@ const Flashcard = ({ num }) => {
   const renderQuestion = Util.useDelayUnmount(!isFlipped, 250);
   const renderAnswer = Util.useDelayUnmount(isFlipped, 250);
 
-  const $ = useTheme();
-
   useEffect(() => {
+    // eslint-disable-next-line no-unused-vars
     const payload = {
       route: 'respond',
       data: {
@@ -55,11 +55,10 @@ const Flashcard = ({ num }) => {
       },
     };
     // TODO: Websocket emit
-    console.log(payload);
   }, [hasResponded]);
 
   return (
-    <Wrapper $={$}>
+    <Wrapper>
       {renderAnswer && hasResponded && (
         <AnswerCard
           num={num}

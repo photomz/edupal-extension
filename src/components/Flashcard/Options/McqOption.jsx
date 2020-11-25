@@ -3,7 +3,6 @@ import styled from 'styled-components';
 import { useRecoilValue, useSetRecoilState } from 'recoil';
 import prop from 'prop-types';
 
-import { useTheme } from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
 import Avatar from '@material-ui/core/Avatar';
@@ -23,7 +22,7 @@ const alphabet = [
 ];
 
 const StyledAvatar = styled(Avatar)`
-  ${({ $, colour }) => `
+  ${({ theme: $, colour }) => `
   
   margin: ${$.spacing(1)};
   background-color: ${$.palette[colour].main};
@@ -44,7 +43,7 @@ const StyledAvatar = styled(Avatar)`
 `;
 
 const StyledButton = styled(Button)`
-  ${({ $ }) => ` 
+  ${({ theme: $ }) => ` 
   padding: ${$.spacing(1)} ${$.spacing(2)};
   margin: 0 ${$.spacing(1)};
   margin-top: ${$.spacing(1)};
@@ -54,19 +53,15 @@ const StyledButton = styled(Button)`
   `}
 `;
 
-const LetterFab = ({ i, handleRespond }) => {
-  const $ = useTheme();
-  return (
-    <StyledAvatar
-      $={$}
-      colour={alphabet[i][1]}
-      sizes="large"
-      onClick={() => handleRespond(i)}
-    >
-      {alphabet[i][0]}
-    </StyledAvatar>
-  );
-};
+const LetterFab = ({ i, handleRespond }) => (
+  <StyledAvatar
+    colour={alphabet[i][1]}
+    sizes="large"
+    onClick={() => handleRespond(i)}
+  >
+    {alphabet[i][0]}
+  </StyledAvatar>
+);
 
 LetterFab.defaultProps = {
   handleRespond: () => {},
@@ -77,31 +72,26 @@ LetterFab.propTypes = {
   handleRespond: prop.func,
 };
 
-const TextOption = ({ i, text, handleRespond }) => {
-  const $ = useTheme();
-
-  return (
-    <Grid
-      container
-      item
-      xs={12}
-      direction="row"
-      justify="space-between"
-      alignItems="stretch"
-      wrap="nowrap"
+const TextOption = ({ i, text, handleRespond }) => (
+  <Grid
+    container
+    item
+    xs={12}
+    direction="row"
+    justify="space-between"
+    alignItems="stretch"
+    wrap="nowrap"
+  >
+    <LetterFab i={i} handleRespond={handleRespond} />
+    <StyledButton
+      variant="outlined"
+      color="default"
+      onClick={() => handleRespond(i)}
     >
-      <LetterFab i={i} handleRespond={handleRespond} />
-      <StyledButton
-        $={$}
-        variant="outlined"
-        color="default"
-        onClick={() => handleRespond(i)}
-      >
-        <Typography>{text}</Typography>
-      </StyledButton>
-    </Grid>
-  );
-};
+      <Typography>{text}</Typography>
+    </StyledButton>
+  </Grid>
+);
 
 TextOption.propTypes = {
   i: prop.number.isRequired,
