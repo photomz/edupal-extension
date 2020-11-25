@@ -100,7 +100,7 @@ SplitButton.defaultProps = {
 };
 
 SplitButton.propTypes = {
-  options: prop.arrayOf(prop.string),
+  options: prop.arrayOf(prop.arrayOf(prop.string)),
   value: prop.string.isRequired,
   setValue: prop.func.isRequired,
 };

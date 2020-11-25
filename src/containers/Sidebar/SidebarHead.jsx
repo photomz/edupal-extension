@@ -19,7 +19,7 @@ const FlexContainer = styled(Container)`
 const SidebarHead = () => {
   return (
     <FlexContainer>
-      <Image src={logo}} />
+      <Image src={logo} />
     </FlexContainer>
   );
 };

@@ -54,11 +54,7 @@ const StyledButton = styled(Button)`
 `;
 
 const LetterFab = ({ i, handleRespond }) => (
-  <StyledAvatar
-    colour={alphabet[i][1]}
-    sizes="large"
-    onClick={() => handleRespond(i)}
-  >
+  <StyledAvatar colour={alphabet[i][1]} onClick={() => handleRespond(i)}>
     {alphabet[i][0]}
   </StyledAvatar>
 );

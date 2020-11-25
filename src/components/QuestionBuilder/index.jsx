@@ -40,31 +40,25 @@ const StyledButton = styled(IconButton)`
   }
 `;
 
+const typeMap = {
+  MCQ: [McqOption, { optionNum: 4, options: ['', '', '', '', ''] }],
+  ShortAnswer: [null, {}],
+  MultiSelect: [
+    MultiSelectOption,
+    { optionNum: 4, options: ['', '', '', '', ''] },
+  ],
+  TrueFalse: [null, {}],
+};
+
 const QuestionBuilder = () => {
   const [type, setType] = useState('MCQ');
+  const [Option, defaultMeta] = typeMap[type];
   const [title, setTitle] = useState('');
   const [isOpen, setOpen] = useRecoilState(atoms.isUploaderOpen);
-  const [meta, setMeta] = useState({});
+  const [meta, setMeta] = useState(defaultMeta);
+  const [answer, setAnswer] = useState(null);
 
-  console.log(type);
-
-  let OptionComponent;
-  switch (type) {
-    case 'MCQ':
-      OptionComponent = McqOption;
-      break;
-    case 'ShortAnswer':
-      OptionComponent = null;
-      break;
-    case 'MultiSelect':
-      OptionComponent = MultiSelectOption;
-      break;
-    case 'TrueFalse':
-      OptionComponent = null;
-      break;
-    default:
-      throw new Error('Invalid question type');
-  }
+  console.log(meta);
 
   // TODO: useEffect to construct response object, send to websocket
 
@@ -114,7 +108,12 @@ const QuestionBuilder = () => {
       </CardContent>
 
       <CardActions>
-        <OptionComponent meta={meta} setMeta={setMeta} />
+        <Option
+          meta={meta}
+          setMeta={setMeta}
+          answer={answer}
+          setAnswer={setAnswer}
+        />
       </CardActions>
     </StyledCard>
   );

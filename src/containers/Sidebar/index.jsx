@@ -25,7 +25,7 @@ const DrawerPaper = styled(Drawer)`
     transition: ${$.transitions.create('width')};
     border: 0;
     `}
-  ${({ $, $isClosed }) =>
+  ${({ theme: $, $isClosed }) =>
     $isClosed &&
     `overflow-x: hidden;
     width: ${$.spacing(7)}px;
