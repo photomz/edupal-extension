@@ -36,6 +36,7 @@ const ShortAnswerOption = ({ num }) => {
       value={text}
       onChange={(e) => setText(e.target.value)}
       disabled={hasResponded}
+      fullWidth
       InputProps={{
         endAdornment: (
           <InputAdornment position="end">

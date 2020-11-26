@@ -97,6 +97,30 @@ const role = atom({
 
 const isUploaderOpen = atom({ key: 'isUploaderOpen', default: false });
 
+const typeMap = {
+  MCQ: [{ optionNum: 4, options: ['', '', '', '', ''] }, 0],
+  ShortAnswer: [{}, ''],
+  MultiSelect: [
+    { optionNum: 4, options: ['', '', '', '', ''] },
+    [false, false, false, false, false],
+  ],
+  TrueFalse: [{}, false],
+};
+
+const builderType = atom({ key: 'builderType', default: 'MCQ' });
+const builderAnswer = atom({ key: 'builderAnswer', default: typeMap.MCQ[1] });
+const builderMeta = atom({ key: 'builderMeta', default: typeMap.MCQ[0] });
+
+const questionType = selector({
+  key: 'questionType',
+  get: ({ get }) => get(builderType),
+  set: ({ set }, newVal) => {
+    set(builderAnswer, typeMap[newVal][1]);
+    set(builderMeta, typeMap[newVal][0]);
+    set(builderType, newVal);
+  },
+});
+
 export default {
   meetData,
   isVisible,
@@ -115,4 +139,7 @@ export default {
   handleResponse,
   role,
   isUploaderOpen,
+  questionType,
+  builderAnswer,
+  builderMeta,
 };

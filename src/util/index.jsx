@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useMemo } from 'react';
 // import { useDispatch } from 'react-redux';
 // import { bindActionCreators } from 'redux';
 import shortid from 'shortid';
@@ -150,6 +150,11 @@ function useDelayUnmount(isMounted, delayTime) {
   }, [isMounted, delayTime, shouldRender]);
   return shouldRender;
 }
+
+const useComponentWillMount = (func) => {
+  useMemo(func, []);
+};
+
 // /**
 //  * Binds an array of actions or 1 action, and dispatches it using useDispatch.
 //  * @param {[Function]|Function} actions - Array or 1 action.
@@ -181,5 +186,6 @@ export default {
   contains,
   useDelayUnmount,
   parseDateToDayTime,
+  useComponentWillMount,
   // useActions,
 };

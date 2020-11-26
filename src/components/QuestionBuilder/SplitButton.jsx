@@ -10,19 +10,17 @@ import Popper from '@material-ui/core/Popper';
 import MenuItem from '@material-ui/core/MenuItem';
 import MenuList from '@material-ui/core/MenuList';
 
-const SplitButton = ({ options, value, setValue }) => {
+const SplitButton = ({ options, value, handleChange }) => {
   const [open, setOpen] = useState(false);
-  const [label, setLabel] = useState(options[0][1]);
   const anchorRef = useRef(null);
 
   const handleClick = () => {
     // eslint-disable-next-line no-console
-    console.info(`You clicked ${options[value]}`);
+    console.info(`You clicked ${value}`);
   };
 
-  const handleMenuItemClick = ([newVal, newLabel]) => {
-    setValue(newVal);
-    setLabel(newLabel);
+  const handleMenuItemClick = ([newVal]) => {
+    handleChange(newVal);
     setOpen(false);
   };
 
@@ -33,30 +31,32 @@ const SplitButton = ({ options, value, setValue }) => {
   };
 
   return (
-    <ButtonGroup
-      variant="contained"
-      color="primary"
-      ref={anchorRef}
-      aria-label="split button"
-    >
-      <Button onClick={handleClick}>{label}</Button>
-      <Button
+    <>
+      <ButtonGroup
+        variant="contained"
         color="primary"
-        size="small"
-        aria-controls={open ? 'split-button-menu' : undefined}
-        aria-expanded={open ? 'true' : undefined}
-        aria-label="select question type"
-        aria-haspopup="menu"
-        onClick={() => setOpen((prev) => !prev)}
+        ref={anchorRef}
+        aria-label="split button"
       >
-        <ArrowDropDownIcon />
-      </Button>
+        <Button onClick={handleClick}>{options[value]}</Button>
+        <Button
+          color="primary"
+          size="small"
+          aria-controls={open ? 'split-button-menu' : undefined}
+          aria-expanded={open ? 'true' : undefined}
+          aria-label="select question type"
+          aria-haspopup="menu"
+          onClick={() => setOpen((prev) => !prev)}
+        >
+          <ArrowDropDownIcon />
+        </Button>
+      </ButtonGroup>
       <Popper
         open={open}
         anchorEl={anchorRef.current}
-        role={undefined}
         transition
         disablePortal
+        style={{ zIndex: 10 }}
       >
         {({ TransitionProps, placement }) => (
           <Grow
@@ -65,13 +65,13 @@ const SplitButton = ({ options, value, setValue }) => {
             style={{
               transformOrigin:
                 placement === 'bottom' ? 'center top' : 'center bottom',
-              zIndex: 5000,
+              zIndex: 10000,
             }}
           >
             <Paper>
               <ClickAwayListener onClickAway={handleClose}>
                 <MenuList id="split-button-menu">
-                  {options.map((option) => (
+                  {Object.entries(options).map((option) => (
                     <MenuItem
                       key={option[0]}
                       selected={option[0] === value}
@@ -86,23 +86,23 @@ const SplitButton = ({ options, value, setValue }) => {
           </Grow>
         )}
       </Popper>
-    </ButtonGroup>
+    </>
   );
 };
 
 SplitButton.defaultProps = {
-  options: [
-    ['MCQ', 'Multiple Choice'],
-    ['MultiSelect', 'Multi-Select'],
-    ['TrueFalse', 'True or False'],
-    ['ShortAnswer', 'Short Answer'],
-  ],
+  options: {
+    MCQ: 'Multiple Choice',
+    MultiSelect: 'Multi-Select',
+    TrueFalse: 'True or False',
+    ShortAnswer: 'Short Answer',
+  },
 };
 
 SplitButton.propTypes = {
-  options: prop.arrayOf(prop.arrayOf(prop.string)),
+  options: prop.objectOf(prop.string),
   value: prop.string.isRequired,
-  setValue: prop.func.isRequired,
+  handleChange: prop.func.isRequired,
 };
 
 export default SplitButton;

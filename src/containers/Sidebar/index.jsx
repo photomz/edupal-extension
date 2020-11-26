@@ -3,9 +3,9 @@ import { useRecoilState, useRecoilValue } from 'recoil';
 import styled from 'styled-components';
 
 import Drawer from '@material-ui/core/Drawer';
-import Fab from '@material-ui/core/Fab';
+// import Fab from '@material-ui/core/Fab';
 
-import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
+// import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 
 import Util from '../../util';
 import atoms from '../../atoms';
@@ -36,40 +36,38 @@ const DrawerPaper = styled(Drawer)`
   }
 `;
 
-const PullFab = styled(Fab)`
-  ${({ theme: $ }) => `
-    position: absolute;
-    background-color: ${$.palette.common.white};
-    &&&{right: ${$.spacing(-4) + drawerWidth};}
-    top: ${$.spacing(12)};
-    padding: 0 ${$.spacing(5)} 0 ${$.spacing(2)};
-    transition: right ${$.transitions.duration.enteringScreen}ms ${
-    $.transitions.easing.easeOut
-  };`}
-  ${({ theme: $, $isClosed }) =>
-    $isClosed &&
-    `&&&{right: ${$.spacing(-4)}};
-      transition: right ${$.transitions.duration.leavingScreen}ms ${
-      $.transitions.easing.sharp
-    };
-     `}
-`;
+// const PullFab = styled(Fab)`
+//   ${({ theme: $ }) => `
+//     position: absolute;
+//     background-color: ${$.palette.common.white};
+//     &&&{right: ${$.spacing(-4) + drawerWidth};}
+//     top: ${$.spacing(12)};
+//     padding: 0 ${$.spacing(5)} 0 ${$.spacing(2)};
+//     transition: right ${$.transitions.duration.enteringScreen}ms ${
+//     $.transitions.easing.easeOut
+//   };`}
+//   ${({ theme: $, $isClosed }) =>
+//     $isClosed &&
+//     `&&&{right: ${$.spacing(-4)}};
+//       transition: right ${$.transitions.duration.leavingScreen}ms ${
+//       $.transitions.easing.sharp
+//     };
+//      `}
+// `;
 
 const Sidebar = () => {
   const [isDrawerOpen, setIsDrawerOpen] = useRecoilState(atoms.isDrawerOpen);
   const isUploaderOpen = useRecoilValue(atoms.isUploaderOpen);
-  const drawerRef = useRef(null);
-  const hamburgerRef = useRef(null);
-
+  const drawerRef = useRef(null); // const hamburgerRef = useRef(null);
   useEffect(() => {}, []);
 
-  Util.useOutsideClick([drawerRef, hamburgerRef], isUploaderOpen, () =>
+  Util.useOutsideClick([drawerRef], isUploaderOpen, () =>
     setIsDrawerOpen(false)
   );
 
   return (
     <Wrapper>
-      <PullFab
+      {/* <PullFab
         size="large"
         ref={hamburgerRef}
         variant="extended"
@@ -78,7 +76,7 @@ const Sidebar = () => {
         onClick={() => setIsDrawerOpen((prev) => !prev)}
       >
         <ChevronLeftIcon />
-      </PullFab>
+      </PullFab> */}
       <DrawerPaper
         ref={drawerRef}
         $isClosed={!isDrawerOpen}
@@ -86,10 +84,8 @@ const Sidebar = () => {
         anchor="right"
         variant="persistent"
       >
-        <div id="edupal-questionPanel">
-          <SidebarHead />
-          <TabBar />
-        </div>
+        <SidebarHead />
+        <TabBar />
       </DrawerPaper>
     </Wrapper>
   );

@@ -8,17 +8,19 @@ import CardHeader from '@material-ui/core/CardHeader';
 import CardContent from '@material-ui/core/CardContent';
 import CardActions from '@material-ui/core/CardActions';
 import TextField from '@material-ui/core/TextField';
-import ButtonGroup from '@material-ui/core/ButtonGroup';
 import IconButton from '@material-ui/core/IconButton';
-// import Typography from '@material-ui/core/Typography';
 import { DropzoneDialog } from 'material-ui-dropzone';
 
 import PhotoIcon from '@material-ui/icons/AddPhotoAlternate';
 import SendIcon from '@material-ui/icons/Send';
 import Grid from '@material-ui/core/Grid';
 
-import { McqOption, MultiSelectOption } from './Options';
-
+import {
+  McqOption,
+  MultiSelectOption,
+  TrueFalseOption,
+  ShortAnswerOption,
+} from './Options';
 import atoms from '../../atoms';
 import SplitButton from './SplitButton';
 
@@ -32,33 +34,29 @@ const StyledTextField = styled(TextField)`
   margin-bottom: ${({ theme }) => theme.spacing(2)};
 `;
 
-const StyledButtonGroup = styled(ButtonGroup)``;
-
 const StyledButton = styled(IconButton)`
   &&& {
     margin-left: ${({ theme }) => theme.spacing(2)};
   }
 `;
 
-const typeMap = {
-  MCQ: [McqOption, { optionNum: 4, options: ['', '', '', '', ''] }],
-  ShortAnswer: [null, {}],
-  MultiSelect: [
-    MultiSelectOption,
-    { optionNum: 4, options: ['', '', '', '', ''] },
-  ],
-  TrueFalse: [null, {}],
+const optionComponentMap = {
+  MCQ: McqOption,
+  ShortAnswer: ShortAnswerOption,
+  MultiSelect: MultiSelectOption,
+  TrueFalse: TrueFalseOption,
 };
 
 const QuestionBuilder = () => {
-  const [type, setType] = useState('MCQ');
-  const [Option, defaultMeta] = typeMap[type];
+  const [type, setType] = useRecoilState(atoms.questionType);
+  // Question type dictates interface of meta and answer;
+  const Option = optionComponentMap[type];
+
+  const [meta, setMeta] = useRecoilState(atoms.builderMeta);
+  const [answer, setAnswer] = useRecoilState(atoms.builderAnswer);
+
   const [title, setTitle] = useState('');
   const [isOpen, setOpen] = useRecoilState(atoms.isUploaderOpen);
-  const [meta, setMeta] = useState(defaultMeta);
-  const [answer, setAnswer] = useState(null);
-
-  console.log(meta);
 
   // TODO: useEffect to construct response object, send to websocket
 
@@ -67,12 +65,10 @@ const QuestionBuilder = () => {
       <CardHeader
         title={
           <Grid container direction="row" justify="space-between">
-            <StyledButtonGroup>
-              <SplitButton value={type} setValue={setType} />
-              <StyledButton onClick={() => setOpen(true)}>
-                <PhotoIcon />
-              </StyledButton>
-            </StyledButtonGroup>
+            <SplitButton value={type} handleChange={setType} />
+            <StyledButton onClick={() => setOpen(true)}>
+              <PhotoIcon />
+            </StyledButton>
             <StyledButton color="primary">
               <SendIcon />
             </StyledButton>

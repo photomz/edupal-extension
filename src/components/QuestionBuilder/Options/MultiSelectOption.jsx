@@ -1,23 +1,13 @@
+/* eslint-disable react/jsx-curly-newline */
 import React, { useState } from 'react';
 import styled from 'styled-components';
-import { useRecoilValue, useSetRecoilState } from 'recoil';
 import prop from 'prop-types';
 
 import Grid from '@material-ui/core/Grid';
+import TextField from '@material-ui/core/TextField';
+import Slider from '@material-ui/core/Slider';
 import Typography from '@material-ui/core/Typography';
 import Checkbox from '@material-ui/core/Checkbox';
-import Button from '@material-ui/core/Button';
-import atoms from '../../../atoms';
-
-const Wrapper = styled.div``;
-
-const alphabet = [
-  ['A', 'primary'],
-  ['B', 'red'],
-  ['C', 'green'],
-  ['D', 'secondary'],
-  ['E', 'yellow'],
-];
 
 const StyledCheckbox = styled(Checkbox)`
   ${({ theme: $, colour }) => `
@@ -39,23 +29,57 @@ const StyledCheckbox = styled(Checkbox)`
 `}
 `;
 
-const StyledButton = styled(Button)`
-  ${({ theme: $ }) => ` 
-  padding: ${$.spacing(1)} ${$.spacing(2)};
-  margin: 0 ${$.spacing(1)};
-  margin-top: ${$.spacing(1)};
-  flex-grow: 10;
-  border-width: 1px;
-  text-transform: none;
-  `}
+const Wrapper = styled.div`
+  flex-grow: 1;
 `;
 
-const Check = ({ i, handleCheck, hasResponded, checked }) => (
+const alphabet = [
+  ['A', 'primary'],
+  ['B', 'red'],
+  ['C', 'green'],
+  ['D', 'secondary'],
+  ['E', 'yellow'],
+];
+
+const StyledTextField = styled(TextField)`
+  margin-bottom: ${({ theme }) => theme.spacing(2)};
+`;
+
+const StyledSlider = styled(Slider)`
+  color: ${({ theme }) => theme.palette.secondary.main};
+  height: 8;
+  margin-bottom: ${({ theme }) => theme.spacing(2)};
+  &&& .MuiSlider-thumb {
+    height: 24;
+    width: 24;
+    background-color: ${({ theme }) => theme.palette.common.white};
+    border: 2px solid currentColor;
+    margin-top: -8;
+    margin-left: -12;
+  }
+  &&& .MuiSlider-thumb:hover,
+  &&& .MuiSlider-thumb:active,
+  &&& .MuiSlider-thumb:focus {
+    box-shadow: inherit;
+  }
+  &&& .MuiSlider-valueLabel {
+    left: calc(50% - 16px);
+  }
+  &&& .MuiSlider-track {
+    height: 8;
+    border-radius: 4;
+  }
+  &&& .MuiSlider-rail {
+    height: 8;
+    border-radius: 4;
+  }
+`;
+
+const Check = ({ i, checked, handleCheck }) => (
   <StyledCheckbox
     colour={alphabet[i][1]}
     color="default"
     checked={checked}
-    disabled={hasResponded}
     onClick={() => handleCheck(i)}
     onChange={(e) => handleCheck(i, e.target.checked)}
   >
@@ -69,111 +93,86 @@ Check.defaultProps = {
 
 Check.propTypes = {
   i: prop.number.isRequired,
-  hasResponded: prop.bool.isRequired,
   checked: prop.bool.isRequired,
   handleCheck: prop.func,
 };
 
-const TextOption = ({ i, text, handleCheck, hasResponded, checked }) => (
-  <Grid
-    container
-    item
-    xs={12}
-    direction="row"
-    justify="space-between"
-    alignItems="stretch"
-    wrap="nowrap"
-  >
-    <Check
-      hasResponded={hasResponded}
-      i={i}
-      checked={checked}
-      handleCheck={handleCheck}
-    />
-    <StyledButton
-      variant="outlined"
-      color="default"
-      onClick={() => handleCheck(i)}
-    >
-      <Typography>{text}</Typography>
-    </StyledButton>
-  </Grid>
-);
+const McqOption = ({ meta, setMeta, answer, setAnswer }) => {
+  const [textInputs, setTextInputs] = useState(meta.options);
 
-TextOption.propTypes = {
-  i: prop.number.isRequired,
-  text: prop.oneOfType([prop.string, prop.number]).isRequired,
-  hasResponded: prop.bool.isRequired,
-  handleCheck: prop.func.isRequired,
-  checked: prop.bool.isRequired,
-};
-
-const DoneButton = styled(Button)``;
-
-const MultiSelectOption = ({ num }) => {
-  const {
-    meta: { optionNum, options },
-    questionId,
-  } = useRecoilValue(atoms.questions)[num];
-  const hasResponded = useRecoilValue(atoms.questionResponseStates)[questionId];
-
-  const [checkedMap, setCheckedMap] = useState(
-    [...Array(optionNum)].fill(false)
-  );
-
-  const hasOptionsText = options !== null;
   const handleCheck = (i, checked) => {
-    if (hasResponded) return;
-    setCheckedMap((prevMap) => {
-      const newMap = [...prevMap];
-      newMap[i] = checked !== undefined ? checked : !prevMap[i];
-      return newMap;
+    setAnswer((prevArr) => {
+      const newArr = [...prevArr];
+      newArr[i] = checked !== undefined ? checked : !prevArr[i];
+      return newArr;
     });
-  };
-
-  const handleResponse = useSetRecoilState(atoms.handleResponse);
-  const handleRespond = () => {
-    handleResponse({ questionId, obj: checkedMap });
   };
 
   return (
     <Wrapper>
+      <Typography>Number of Options</Typography>
+      <StyledSlider
+        defaultValue={4}
+        marks
+        step={1}
+        min={2}
+        max={5}
+        value={meta.optionNum}
+        valueLabelDisplay="auto"
+        onChange={(_, optionNum) => setMeta((prev) => ({ ...prev, optionNum }))}
+      />
       <Grid container spacing={1} justify="center">
-        {[...Array(optionNum)].map((_, i) =>
-          hasOptionsText ? (
-            <TextOption
-              key={i}
-              i={i}
-              text={options[i]}
-              checked={checkedMap[i]}
-              handleCheck={handleCheck}
-              hasResponded={hasResponded || false}
-              // hasResponded is empty object on init so undefined, must default to false
-            />
-          ) : (
+        {[...Array(meta.optionNum)].map((_, i) => (
+          <Grid
+            key={i}
+            container
+            direction="row"
+            justify="space-between"
+            alignItems="stretch"
+            wrap="nowrap"
+          >
             <Check
-              key={i}
               i={i}
-              checked={checkedMap[i]}
+              checked={answer[i] || false}
               handleCheck={handleCheck}
-              hasResponded={hasResponded || false}
             />
-          )
-        )}
-        <DoneButton
-          color="primary"
-          disabled={hasResponded}
-          onClick={handleRespond}
-        >
-          Done
-        </DoneButton>
+            <StyledTextField
+              multiline
+              fullWidth
+              variant="outlined"
+              placeholder={`Option #${i + 1}`}
+              rowsMax={5}
+              value={textInputs[i]}
+              onBlur={() =>
+                setMeta((prev) => ({ ...prev, options: [...textInputs] }))
+              }
+              onChange={(e) =>
+                setTextInputs((prev) => {
+                  const newVal = [...prev];
+                  newVal[i] = e.target.value;
+                  return newVal;
+                })
+              }
+            />
+          </Grid>
+        ))}
       </Grid>
     </Wrapper>
   );
 };
 
-MultiSelectOption.propTypes = {
-  num: prop.number.isRequired,
+McqOption.defaultProps = {
+  answer: [],
 };
 
-export default MultiSelectOption;
+McqOption.propTypes = {
+  meta: prop.shape({
+    optionNum: prop.number,
+    options: prop.arrayOf(prop.string),
+  }).isRequired,
+  setMeta: prop.func.isRequired,
+  answer: prop.arrayOf(prop.bool),
+  setAnswer: prop.func.isRequired,
+};
+
+export default McqOption;
