@@ -3,9 +3,6 @@ import { useRecoilState, useRecoilValue } from 'recoil';
 import styled from 'styled-components';
 
 import Drawer from '@material-ui/core/Drawer';
-// import Fab from '@material-ui/core/Fab';
-
-// import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 
 import Util from '../../util';
 import atoms from '../../atoms';
@@ -33,32 +30,13 @@ const DrawerPaper = styled(Drawer)`
   & > .MuiPaper-root {
     width: ${drawerWidth};
     border: 0;
+    overflow-x: hidden;
   }
 `;
-
-// const PullFab = styled(Fab)`
-//   ${({ theme: $ }) => `
-//     position: absolute;
-//     background-color: ${$.palette.common.white};
-//     &&&{right: ${$.spacing(-4) + drawerWidth};}
-//     top: ${$.spacing(12)};
-//     padding: 0 ${$.spacing(5)} 0 ${$.spacing(2)};
-//     transition: right ${$.transitions.duration.enteringScreen}ms ${
-//     $.transitions.easing.easeOut
-//   };`}
-//   ${({ theme: $, $isClosed }) =>
-//     $isClosed &&
-//     `&&&{right: ${$.spacing(-4)}};
-//       transition: right ${$.transitions.duration.leavingScreen}ms ${
-//       $.transitions.easing.sharp
-//     };
-//      `}
-// `;
-
 const Sidebar = () => {
   const [isDrawerOpen, setIsDrawerOpen] = useRecoilState(atoms.isDrawerOpen);
   const isUploaderOpen = useRecoilValue(atoms.isUploaderOpen);
-  const drawerRef = useRef(null); // const hamburgerRef = useRef(null);
+  const drawerRef = useRef(null);
   useEffect(() => {}, []);
 
   Util.useOutsideClick([drawerRef], isUploaderOpen, () =>
@@ -67,16 +45,6 @@ const Sidebar = () => {
 
   return (
     <Wrapper>
-      {/* <PullFab
-        size="large"
-        ref={hamburgerRef}
-        variant="extended"
-        $isClosed={!isDrawerOpen}
-        aria-label="Open sidebar"
-        onClick={() => setIsDrawerOpen((prev) => !prev)}
-      >
-        <ChevronLeftIcon />
-      </PullFab> */}
       <DrawerPaper
         ref={drawerRef}
         $isClosed={!isDrawerOpen}

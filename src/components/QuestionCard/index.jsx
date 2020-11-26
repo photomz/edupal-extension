@@ -18,12 +18,10 @@ import InfoIcon from '@material-ui/icons/Info';
 import OpenIcon from '@material-ui/icons/OpenInNew';
 import RightIcon from '@material-ui/icons/ChevronRight';
 
-import {
-  McqOption,
-  MultiSelectOption,
-  ShortAnswerOption,
-  TrueFalseOption,
-} from './Options';
+import McqOption from './McqOption';
+import MultiSelectOption from './MultiSelectOption';
+import ShortAnswerOption from './ShortAnswerOption';
+import TrueFalseOption from './TrueFalseOption';
 import atoms from '../../atoms';
 import Util from '../../util';
 import slide from '../../styles/animate';
@@ -70,7 +68,7 @@ const QuestionCard = ({ num, animationStyle }) => {
     questionId,
   } = useRecoilValue(atoms.questions)[num];
   const setFlashcardFlip = useSetRecoilState(atoms.flipFlashcard);
-  const hasResponded = useRecoilValue(atoms.flipResponse)[questionId];
+  const hasResponded = useRecoilValue(atoms.hasResponded(questionId));
   const [popoverAnchor, setPopoverAnchor] = useState(null);
 
   let OptionComponent;

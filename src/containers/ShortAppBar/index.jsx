@@ -1,7 +1,7 @@
 /* eslint-disable react/jsx-curly-newline */
 import React, { useState } from 'react';
 import styled from 'styled-components';
-import { useRecoilState, useSetRecoilState } from 'recoil';
+import { useRecoilState, useSetRecoilState, useRecoilValue } from 'recoil';
 
 import SpeedDial from '@material-ui/lab/SpeedDial';
 import SpeedDialAction from '@material-ui/lab/SpeedDialAction';
@@ -17,12 +17,9 @@ import atoms from '../../atoms';
 
 const drawerWidth = 400;
 
-const StyledImg = styled.img`
-  /* color: ${({ theme }) => theme.palette.primary.main}; */
-`;
 const EdupalIcon = () => (
   <Icon>
-    <StyledImg src={EdupalSvg} height={52} width={50} />
+    <img src={EdupalSvg} height={52} width={50} alt="Edu-pal Icon" />
   </Icon>
 );
 
@@ -43,6 +40,9 @@ const StyledSpeedDial = styled(SpeedDial)`
     width: 1.5em;
     height: 1.5em;
   }
+  & .MuiFab-root:hover {
+    box-shadow: ${({ theme }) => theme.shadows[8]};
+  }
 `;
 
 const actions = [
@@ -54,6 +54,7 @@ const actions = [
 
 const ShortAppBar = () => {
   const [isDrawerOpen, setIsDrawerOpen] = useRecoilState(atoms.isDrawerOpen);
+  const role = useRecoilValue(atoms.role);
   const setQuestionType = useSetRecoilState(atoms.questionType);
   const [open, setOpen] = useState(false);
 
@@ -74,65 +75,18 @@ const ShortAppBar = () => {
         onClick={() => setIsDrawerOpen(true)}
         open={open}
       >
-        {actions.map(({ name, icon, value }) => (
-          <SpeedDialAction
-            key={name}
-            icon={icon}
-            tooltipTitle={name}
-            onClick={() => handleDialClick(value)}
-          />
-        ))}
+        {role === 'TEACHER' &&
+          actions.map(({ name, icon, value }) => (
+            <SpeedDialAction
+              key={name}
+              icon={icon}
+              tooltipTitle={name}
+              onClick={() => handleDialClick(value)}
+            />
+          ))}
       </StyledSpeedDial>
     </Wrapper>
   );
 };
 
 export default ShortAppBar;
-
-// import React from 'react';
-// import { useRecoilState } from 'recoil';
-// import styled from 'styled-components';
-// import Fab from '@material-ui/core/Fab';
-
-// import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
-
-// import atoms from '../../atoms';
-
-// const drawerWidth = 400;
-
-// const PullFab = styled(Fab)`
-//   ${({ theme: $ }) => `
-//     position: absolute;
-//     background-color: ${$.palette.common.white};
-//     &&&{right: ${$.spacing(-4) + drawerWidth};}
-//     top: ${$.spacing(12)};
-//     padding: 0 ${$.spacing(5)} 0 ${$.spacing(2)};
-//     transition: right ${$.transitions.duration.enteringScreen}ms ${
-//     $.transitions.easing.easeOut
-//   };`}
-//   ${({ theme: $, $isClosed }) =>
-//     $isClosed &&
-//     `&&&{right: ${$.spacing(-4)}};
-//       transition: right ${$.transitions.duration.leavingScreen}ms ${
-//       $.transitions.easing.sharp
-//     };
-//      `}
-// `;
-
-// const Sidebar = () => {
-//   const [isDrawerOpen, setIsDrawerOpen] = useRecoilState(atoms.isDrawerOpen);
-
-//   return (
-//     <PullFab
-//       size="large"
-//       variant="extended"
-//       $isClosed={!isDrawerOpen}
-//       aria-label="Open sidebar"
-//       onClick={() => setIsDrawerOpen((prev) => !prev)}
-//     >
-//       <ChevronLeftIcon />
-//     </PullFab>
-//   );
-// };
-
-// export default Sidebar;

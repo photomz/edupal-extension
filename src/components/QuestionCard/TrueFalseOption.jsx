@@ -5,7 +5,7 @@ import prop from 'prop-types';
 
 import Grid from '@material-ui/core/Grid';
 import Button from '@material-ui/core/Button';
-import atoms from '../../../atoms';
+import atoms from '../../atoms';
 
 const StyledButton = styled(Button)`
   ${({ theme: $, colour }) => ` 
@@ -24,7 +24,7 @@ const StyledButton = styled(Button)`
 
 const TrueFalseOption = ({ num }) => {
   const { questionId } = useRecoilValue(atoms.questions)[num];
-  const hasResponded = useRecoilValue(atoms.questionResponseStates)[questionId];
+  const hasResponded = useRecoilValue(atoms.hasResponded(questionId));
 
   const handleResponse = useSetRecoilState(atoms.handleResponse);
   const handleRespond = (obj) => {

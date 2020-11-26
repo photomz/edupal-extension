@@ -1,5 +1,13 @@
-import { atom, selector } from 'recoil';
+import { atom, selector, selectorFamily } from 'recoil';
 import mockMeetData from './data.json';
+
+const role = atom({
+  key: 'role',
+  default: 'STUDENT',
+  persistence_UNSTABLE: {
+    type: 'role',
+  },
+});
 
 const meetData = atom({
   key: 'meetData',
@@ -77,21 +85,22 @@ const respondTimestampSelector = selector({
     set(respondTimestamp, (prev) => ({ ...prev, ...resObj })),
 });
 
+const hasResponded = selectorFamily({
+  key: 'hasResponded',
+  get: (questionId) => ({ get }) => {
+    if (get(role) === 'TEACHER') return true;
+    return get(questionResponseStates)[questionId];
+  },
+});
+
 const handleResponse = selector({
   key: 'handleResponse',
-  set: ({ set }, { questionId, obj }) => {
+  set: ({ set, get }, { questionId, obj }) => {
+    if (get(hasResponded(questionId))) return;
     set(flipResponse, questionId);
     set(responseSelector, { [questionId]: obj });
     set(respondTimestampSelector, { [questionId]: new Date().toISOString() });
     set(flipFlashcard, questionId);
-  },
-});
-
-const role = atom({
-  key: 'role',
-  default: 'STUDENT',
-  persistence_UNSTABLE: {
-    type: 'role',
   },
 });
 
@@ -142,4 +151,5 @@ export default {
   questionType,
   builderAnswer,
   builderMeta,
+  hasResponded,
 };

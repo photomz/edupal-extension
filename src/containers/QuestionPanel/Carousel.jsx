@@ -5,8 +5,8 @@ import styled from 'styled-components';
 import atoms from '../../atoms';
 
 import Util from '../../util';
-import QuestionCard from './QuestionCard';
-import AnswerCard from './AnswerCard';
+import QuestionCard from '../../components/QuestionCard';
+import AnswerCard from '../../components/AnswerCard';
 
 const Wrapper = styled.div`
   ${({ theme: $ }) => `  
@@ -23,9 +23,9 @@ const Wrapper = styled.div`
   `}
 `;
 
-const Flashcard = ({ num }) => {
+const Carousel = ({ num }) => {
   const { questionId } = useRecoilValue(atoms.questions)[num];
-  const hasResponded = useRecoilValue(atoms.flipResponse)[questionId];
+  const hasResponded = useRecoilValue(atoms.hasResponded(questionId));
   const isFlipped = useRecoilValue(atoms.flipFlashcard)[questionId];
   const response = useRecoilValue(atoms.response)[questionId];
   const meetData = useRecoilValue(atoms.meetData);
@@ -76,8 +76,8 @@ const Flashcard = ({ num }) => {
   );
 };
 
-Flashcard.propTypes = {
+Carousel.propTypes = {
   num: prop.number.isRequired,
 };
 
-export default Flashcard;
+export default Carousel;

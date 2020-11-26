@@ -15,12 +15,10 @@ import PhotoIcon from '@material-ui/icons/AddPhotoAlternate';
 import SendIcon from '@material-ui/icons/Send';
 import Grid from '@material-ui/core/Grid';
 
-import {
-  McqOption,
-  MultiSelectOption,
-  TrueFalseOption,
-  ShortAnswerOption,
-} from './Options';
+import McqOption from './McqOption';
+import MultiSelectOption from './MultiSelectOption';
+import ShortAnswerOption from './ShortAnswerOption';
+import TrueFalseOption from './TrueFalseOption';
 import atoms from '../../atoms';
 import SplitButton from './SplitButton';
 

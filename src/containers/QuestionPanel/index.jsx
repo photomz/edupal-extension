@@ -3,7 +3,7 @@ import { useSetRecoilState, useRecoilValue, useResetRecoilState } from 'recoil';
 import styled from 'styled-components';
 import atoms from '../../atoms';
 
-import Flashcard from '../../components/Flashcard';
+import Carousel from './Carousel';
 import QuestionBuilder from '../../components/QuestionBuilder';
 
 import mockWebsocketData from './data.json';
@@ -48,7 +48,7 @@ const QuestionPanel = () => {
   return (
     <FlexContainer ref={panelHeight}>
       {[...Array(numQuestions)].map((_, i) => (
-        <Flashcard key={i} num={i} />
+        <Carousel key={i} num={i} />
       ))}
       {role === 'TEACHER' && <QuestionBuilder />}
       <div ref={panelBottom} />
