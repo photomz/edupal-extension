@@ -46,12 +46,12 @@ const optionComponentMap = {
 };
 
 const QuestionBuilder = () => {
-  const [type, setType] = useRecoilState(a.questionType);
+  const [type, setType] = useRecoilState(a.builderType);
   // Question type dictates interface of meta and answer;
   const Option = optionComponentMap[type];
 
-  const [meta, setMeta] = useRecoilState(a.builderMeta);
-  const [answer, setAnswer] = useRecoilState(a.builderAnswer);
+  const [meta, setMeta] = useRecoilState(a.builderMeta(type));
+  const [answer, setAnswer] = useRecoilState(a.builderAnswer(type));
 
   const [title, setTitle] = useState('');
   const [isOpen, setOpen] = useRecoilState(a.isUploaderOpen);

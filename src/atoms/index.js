@@ -1,4 +1,4 @@
-import { atom, selector, selectorFamily } from 'recoil';
+import { atom, selector, selectorFamily, atomFamily } from 'recoil';
 import mockMeetData from './data.json';
 
 const role = atom({
@@ -19,75 +19,40 @@ const meetData = atom({
 
 const isDrawerOpen = atom({ key: 'isDrawerOpen', default: false });
 
-const questions = atom({ key: 'questions', default: {} });
-const questionNum = atom({ key: 'questionNum', default: 0 });
+const questions = atomFamily({ key: 'questions', default: {} });
 const questionIds = atom({ key: 'questionIds', default: [] });
 
-const questionSelector = selectorFamily({
-  key: 'questionSelector',
-  get: (questionId) => ({ get }) => get(questions)[questionId],
-  set: () => ({ set, get }, { questionId, ...rest }) => {
-    set(questions, (prev) => ({
-      ...prev,
-      [questionId]: { num: get(questionNum), ...rest },
-    }));
-    set(questionNum, (prev) => prev + 1);
+const addQuestion = selector({
+  key: 'addQuestion',
+  set: ({ set, get }, { questionId, ...rest }) => {
+    set(questions(questionId), { num: get(questionIds).length, ...rest });
     set(questionIds, (prev) => prev.concat(questionId));
   },
 });
 
-const carouselOrderAtom = atom({ key: 'carouselOrder', default: {} });
+const carouselOrder = atomFamily({ key: 'carouselOrder', default: 0 });
 
-// TODO: Migrate to selectorFamily which supports get arguments
-const carouselOrder = selectorFamily({
-  key: 'carouselOrder',
-  get: (questionId) => ({ get }) => get(carouselOrderAtom)[questionId],
-  // Toggle flipping for flashcard, by questionId key
-  set: (questionId) => ({ set, get }) => {
-    const prev = get(carouselOrderAtom)[questionId];
-    set(carouselOrderAtom, (prevMap) => ({
-      ...prevMap,
-      [questionId]: !prev,
-    }));
-  },
+const hasResponded = atomFamily({
+  key: 'hasResponded',
+  default: false,
 });
 
-const hasRespondedAtom = atom({
-  key: 'hasRespondedAtom',
+const response = atomFamily({
+  key: 'response',
   default: {},
 });
 
-const response = atom({ key: 'response', default: {} });
-
-const responseSelector = selectorFamily({
-  key: 'responseSelector',
-  get: (questionId) => ({ get }) => get(response)[questionId] || {},
-  set: (questionId) => ({ set }, resObj) =>
-    set(response, (prev) => ({ ...prev, [questionId]: resObj })),
-});
-
-const hasResponded = selectorFamily({
-  key: 'hasResponded',
-  get: (questionId) => ({ get }) => {
-    if (get(role) === 'TEACHER') return true;
-    return !!get(hasRespondedAtom)[questionId];
-  },
-  set: ({ set }, questionId) =>
-    set(hasRespondedAtom, (prevMap) => ({
-      ...prevMap,
-      [questionId]: true,
-    })),
-});
-
-const handleResponse = selector({
+const handleResponse = selectorFamily({
   key: 'handleResponse',
-  set: ({ set, get }, { questionId, obj }) => {
+  set: (questionId) => ({ set, get }, obj) => {
     if (get(hasResponded(questionId))) return;
-    set(hasResponded, questionId);
-    set(responseSelector, {
-      [questionId]: { ...obj, respondTimestamp: new Date().toISOString() },
+    console.log(questionId, obj);
+    set(hasResponded(questionId), true);
+    set(response(questionId), {
+      ...obj,
+      respondTimestamp: new Date().toISOString(),
     });
-    set(carouselOrder, questionId);
+    set(carouselOrder(questionId), 1);
   },
 });
 
@@ -104,17 +69,13 @@ const typeMap = {
 };
 
 const builderType = atom({ key: 'builderType', default: 'MCQ' });
-const builderAnswer = atom({ key: 'builderAnswer', default: typeMap.MCQ[1] });
-const builderMeta = atom({ key: 'builderMeta', default: typeMap.MCQ[0] });
-
-const questionType = selector({
-  key: 'questionType',
-  get: ({ get }) => get(builderType),
-  set: ({ set }, newVal) => {
-    set(builderAnswer, typeMap[newVal][1]);
-    set(builderMeta, typeMap[newVal][0]);
-    set(builderType, newVal);
-  },
+const builderAnswer = atomFamily({
+  key: 'builderAnswer',
+  default: (type) => typeMap[type][1],
+});
+const builderMeta = atomFamily({
+  key: 'builderMeta',
+  default: (type) => typeMap[type][0],
 });
 
 export default {
@@ -122,16 +83,13 @@ export default {
   isDrawerOpen,
   questions,
   questionIds,
-  questionSelector,
-  carouselOrderAtom,
+  addQuestion,
   carouselOrder,
-  hasRespondedAtom,
   response,
-  responseSelector,
   handleResponse,
   role,
   isUploaderOpen,
-  questionType,
+  builderType,
   builderAnswer,
   builderMeta,
   hasResponded,

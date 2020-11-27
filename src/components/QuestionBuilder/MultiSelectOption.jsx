@@ -2,12 +2,14 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
 import prop from 'prop-types';
+import { useRecoilState } from 'recoil';
 
 import Grid from '@material-ui/core/Grid';
 import TextField from '@material-ui/core/TextField';
 import Slider from '@material-ui/core/Slider';
 import Typography from '@material-ui/core/Typography';
 import Checkbox from '@material-ui/core/Checkbox';
+import a from '../../atoms';
 
 const StyledCheckbox = styled(Checkbox)`
   ${({ theme: $, colour }) => `
@@ -97,7 +99,9 @@ Check.propTypes = {
   handleCheck: prop.func,
 };
 
-const McqOption = ({ meta, setMeta, answer, setAnswer }) => {
+const McqOption = () => {
+  const [meta, setMeta] = useRecoilState(a.builderMeta('MultiSelect'));
+  const [answer, setAnswer] = useRecoilState(a.builderAnswer('MultiSelect'));
   const [textInputs, setTextInputs] = useState(meta.options);
 
   const handleCheck = (i, checked) => {
@@ -159,20 +163,6 @@ const McqOption = ({ meta, setMeta, answer, setAnswer }) => {
       </Grid>
     </Wrapper>
   );
-};
-
-McqOption.defaultProps = {
-  answer: [],
-};
-
-McqOption.propTypes = {
-  meta: prop.shape({
-    optionNum: prop.number,
-    options: prop.arrayOf(prop.string),
-  }).isRequired,
-  setMeta: prop.func.isRequired,
-  answer: prop.arrayOf(prop.bool),
-  setAnswer: prop.func.isRequired,
 };
 
 export default McqOption;

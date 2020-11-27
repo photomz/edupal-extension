@@ -98,13 +98,9 @@ TextOption.propTypes = {
 const McqOption = ({ qid }) => {
   const {
     meta: { optionNum, options },
-    questionId,
-  } = useRecoilValue(a.questionSelector(qid));
-  const handleResponse = useSetRecoilState(a.handleResponse);
+  } = useRecoilValue(a.questions(qid));
+  const handleResponse = useSetRecoilState(a.handleResponse(qid));
 
-  const handleRespond = (obj) => {
-    handleResponse({ questionId, obj });
-  };
   const hasOptionsText = options !== null;
 
   return (
@@ -116,10 +112,10 @@ const McqOption = ({ qid }) => {
               key={i}
               i={i}
               text={options[i]}
-              handleRespond={handleRespond}
+              handleRespond={handleResponse}
             />
           ) : (
-            <LetterFab key={i} i={i} handleRespond={handleRespond} />
+            <LetterFab key={i} i={i} handleRespond={handleResponse} />
           )
         )}
       </Grid>

@@ -2,11 +2,15 @@ import React, { useEffect } from 'react';
 import prop from 'prop-types';
 import { useRecoilValue } from 'recoil';
 import styled from 'styled-components';
+import Card from '@material-ui/core/Card';
 import a from '../../atoms';
 
 import Util from '../../util';
+import slide from '../../styles/animate';
 import QuestionCard from '../../components/QuestionCard';
+import SummaryCard from '../../components/SummaryCard';
 import AnswerCard from '../../components/AnswerCard';
+import ReportCard from '../../components/ReportCard';
 
 const Wrapper = styled.div`
   ${({ theme: $ }) => `  
@@ -23,20 +27,24 @@ const Wrapper = styled.div`
   `}
 `;
 
+const StyledCard = styled(Card)`
+  animation: ${({ $animationStyle }) => slide[$animationStyle]};
+  padding-bottom: ${({ theme }) => theme.spacing(1)};
+`;
+
 const Carousel = ({ qid }) => {
   const hasResponded = useRecoilValue(a.hasResponded(qid));
   const role = useRecoilValue(a.role);
-  const isFlipped = useRecoilValue(a.carouselOrder(qid));
-  const { respondTimestamp, ...response } = useRecoilValue(
-    a.responseSelector(qid)
-  );
+  const carouselOrder = useRecoilValue(a.carouselOrder(qid));
+  const { respondTimestamp, ...response } = useRecoilValue(a.response(qid));
   const meetData = useRecoilValue(a.meetData);
-  const question = useRecoilValue(a.questionSelector(qid));
+  const question = useRecoilValue(a.questions(qid));
 
-  const renderQuestion = Util.useDelayUnmount(!isFlipped, 250);
-  const renderAnswer = Util.useDelayUnmount(isFlipped, 250);
+  const renderFirst = Util.useDelayUnmount(carouselOrder === 0, 250);
+  const renderSecond = Util.useDelayUnmount(carouselOrder === 1, 250);
 
   useEffect(() => {
+    if (!hasResponded) return;
     // eslint-disable-next-line no-unused-vars
     const payload = {
       route: 'respond',
@@ -58,19 +66,26 @@ const Carousel = ({ qid }) => {
     // TODO: Websocket emit
   }, [hasResponded]);
 
+  const CardOne =
+    role === 'STUDENT' ? QuestionCard : role === 'TEACHER' && SummaryCard;
+  const CardTwo =
+    role === 'STUDENT' ? AnswerCard : role === 'TEACHER' && ReportCard;
+
   return (
     <Wrapper>
-      {role === 'STUDENT' && renderAnswer && hasResponded && (
-        <AnswerCard
-          qid={qid}
-          animationStyle={isFlipped ? 'inright' : 'outright'}
-        />
+      {renderFirst && (
+        <StyledCard
+          $animationStyle={carouselOrder === 0 ? 'inright' : 'outright'}
+        >
+          <CardOne qid={qid} />
+        </StyledCard>
       )}
-      {role === 'STUDENT' && renderQuestion && (
-        <QuestionCard
-          qid={qid}
-          animationStyle={!isFlipped ? 'inleft' : 'outleft'}
-        />
+      {renderSecond && hasResponded && (
+        <StyledCard
+          $animationStyle={carouselOrder === 1 ? 'inleft' : 'outleft'}
+        >
+          <CardTwo qid={qid} />
+        </StyledCard>
       )}
     </Wrapper>
   );

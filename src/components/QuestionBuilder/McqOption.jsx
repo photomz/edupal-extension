@@ -1,13 +1,14 @@
 /* eslint-disable react/jsx-curly-newline */
 import React, { useState } from 'react';
+import { useRecoilState } from 'recoil';
 import styled from 'styled-components';
-import prop from 'prop-types';
 
 import Grid from '@material-ui/core/Grid';
 import Radio from '@material-ui/core/Radio';
 import TextField from '@material-ui/core/TextField';
 import Slider from '@material-ui/core/Slider';
 import Typography from '@material-ui/core/Typography';
+import a from '../../atoms';
 
 const Wrapper = styled.div`
   flex-grow: 1;
@@ -81,7 +82,9 @@ const StyledSlider = styled(Slider)`
   }
 `;
 
-const McqOption = ({ meta, setMeta, answer, setAnswer }) => {
+const McqOption = () => {
+  const [meta, setMeta] = useRecoilState(a.builderMeta('MCQ'));
+  const [answer, setAnswer] = useRecoilState(a.builderAnswer('MCQ'));
   const [textInputs, setTextInputs] = useState(meta.options);
 
   return (
@@ -143,20 +146,6 @@ const McqOption = ({ meta, setMeta, answer, setAnswer }) => {
       </Grid>
     </Wrapper>
   );
-};
-
-McqOption.defaultProps = {
-  answer: null,
-};
-
-McqOption.propTypes = {
-  meta: prop.shape({
-    optionNum: prop.number,
-    options: prop.arrayOf(prop.string),
-  }).isRequired,
-  setMeta: prop.func.isRequired,
-  answer: prop.number,
-  setAnswer: prop.func.isRequired,
 };
 
 export default McqOption;

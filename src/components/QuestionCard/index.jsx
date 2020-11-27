@@ -5,7 +5,6 @@ import styled from 'styled-components';
 import prop from 'prop-types';
 import { useRecoilValue, useSetRecoilState } from 'recoil';
 
-import Card from '@material-ui/core/Card';
 import CardHeader from '@material-ui/core/CardHeader';
 import CardMedia from '@material-ui/core/CardMedia';
 import CardActions from '@material-ui/core/CardActions';
@@ -24,12 +23,6 @@ import ShortAnswerOption from './ShortAnswerOption';
 import TrueFalseOption from './TrueFalseOption';
 import a from '../../atoms';
 import Util from '../../util';
-import slide from '../../styles/animate';
-
-const StyledCard = styled(Card)`
-  animation: ${({ $animationStyle }) => slide[$animationStyle]};
-  padding-bottom: ${({ theme }) => theme.spacing(1)};
-`;
 
 const PaddedTypography = styled(Typography)`
   ${({ theme: $ }) => `padding-left: ${$.spacing(2)}`}
@@ -59,17 +52,12 @@ const CornerIconButton = styled(IconButton)`
   `}
 `;
 
-const QuestionCard = ({ qid, animationStyle }) => {
-  const {
-    avatar,
-    teacher,
-    askTimestamp,
-    question,
-    questionId,
-    num,
-  } = useRecoilValue(a.questionSelector(qid));
+const QuestionCard = ({ qid }) => {
+  const { avatar, teacher, askTimestamp, question, num } = useRecoilValue(
+    a.questions(qid)
+  );
   const switchCard = useSetRecoilState(a.carouselOrder(qid));
-  const hasResponded = useRecoilValue(a.hasResponded(questionId));
+  const hasResponded = useRecoilValue(a.hasResponded(qid));
 
   const [popoverAnchor, setPopoverAnchor] = useState(null);
 
@@ -94,7 +82,7 @@ const QuestionCard = ({ qid, animationStyle }) => {
   // TODO: useEffect to construct response object, send to websocket
 
   return (
-    <StyledCard $animationStyle={animationStyle}>
+    <>
       <CardHeader
         avatar={<Avatar src={avatar} />}
         action={
@@ -109,7 +97,7 @@ const QuestionCard = ({ qid, animationStyle }) => {
             <IconButton
               aria-label="See other card"
               disabled={!hasResponded}
-              onClick={() => hasResponded && switchCard()}
+              onClick={() => hasResponded && switchCard(1)}
             >
               <RightIcon />
             </IconButton>
@@ -152,20 +140,19 @@ const QuestionCard = ({ qid, animationStyle }) => {
       >
         <Typography>
           {process.env.NODE_ENV === 'development'
-            ? `{questionId: ${questionId}, askTimestamp: ${askTimestamp}, teacher.id: ${teacher.id} }`
+            ? `{questionId: ${qid}, askTimestamp: ${askTimestamp}, teacher.id: ${teacher.id} }`
             : 'Nothing to see here...'}
         </Typography>
       </StyledPopover>
       <CardActions>
         <OptionComponent qid={qid} />
       </CardActions>
-    </StyledCard>
+    </>
   );
 };
 
 QuestionCard.propTypes = {
   qid: prop.string.isRequired,
-  animationStyle: prop.string.isRequired,
 };
 
 export default QuestionCard;

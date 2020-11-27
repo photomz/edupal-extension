@@ -1,13 +1,14 @@
 /* eslint-disable react/jsx-wrap-multilines */
 /* eslint-disable react/jsx-curly-newline */
 import React from 'react';
+import { useRecoilState } from 'recoil';
 import styled from 'styled-components';
-import prop from 'prop-types';
 
 import Grid from '@material-ui/core/Grid';
 import Radio from '@material-ui/core/Radio';
 import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
+import a from '../../atoms';
 
 const StyledRadio = styled(Radio)`
   ${({ theme: $, colour }) => `
@@ -48,45 +49,39 @@ const StyledTypography = styled(Typography)`
   font-weight: ${({ theme }) => theme.typography.fontWeightMedium};
 `;
 
-const TrueFalseOption = ({ answer, setAnswer }) => (
-  <Grid
-    container
-    direction="row"
-    justify="center"
-    alignItems="stretch"
-    wrap="nowrap"
-  >
-    {[
-      [true, 'True', 'primary'],
-      [false, 'False', 'red'],
-    ].map((el) => (
-      <StyledButton
-        key={el[1]}
-        variant="contained"
-        color="default"
-        colour={el[2]}
-        onClick={() => setAnswer((prev) => (prev === el[0] ? null : el[0]))}
-      >
-        <Grid container direction="row" justify="center" alignItems="center">
-          <StyledRadio
-            colour={el[2]}
-            checked={answer === el[0]}
-            value={el[0]}
-          />
-          <StyledTypography variant="body2">{el[1]}</StyledTypography>
-        </Grid>
-      </StyledButton>
-    ))}
-  </Grid>
-);
-
-TrueFalseOption.defaultProps = {
-  answer: null,
-};
-
-TrueFalseOption.propTypes = {
-  answer: prop.bool,
-  setAnswer: prop.func.isRequired,
+const TrueFalseOption = () => {
+  const [answer, setAnswer] = useRecoilState(a.builderAnswer('TrueFalse'));
+  return (
+    <Grid
+      container
+      direction="row"
+      justify="center"
+      alignItems="stretch"
+      wrap="nowrap"
+    >
+      {[
+        [true, 'True', 'primary'],
+        [false, 'False', 'red'],
+      ].map((el) => (
+        <StyledButton
+          key={el[1]}
+          variant="contained"
+          color="default"
+          colour={el[2]}
+          onClick={() => setAnswer((prev) => (prev === el[0] ? null : el[0]))}
+        >
+          <Grid container direction="row" justify="center" alignItems="center">
+            <StyledRadio
+              colour={el[2]}
+              checked={answer === el[0]}
+              value={el[0]}
+            />
+            <StyledTypography variant="body2">{el[1]}</StyledTypography>
+          </Grid>
+        </StyledButton>
+      ))}
+    </Grid>
+  );
 };
 
 export default TrueFalseOption;

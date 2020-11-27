@@ -17,14 +17,10 @@ const StyledTextField = styled(TextField)`
 `;
 
 const ShortAnswerOption = ({ qid }) => {
-  const { questionId } = useRecoilValue(a.questionSelector(qid));
-  const hasResponded = useRecoilValue(a.hasResponded(questionId));
+  const hasResponded = useRecoilValue(a.hasResponded(qid));
   const [text, setText] = useState('');
 
-  const handleResponse = useSetRecoilState(a.handleResponse);
-  const handleRespond = () => {
-    handleResponse({ questionId, obj: text });
-  };
+  const handleResponse = useSetRecoilState(a.handleResponse(qid));
 
   return (
     <StyledTextField
@@ -40,7 +36,7 @@ const ShortAnswerOption = ({ qid }) => {
       InputProps={{
         endAdornment: (
           <InputAdornment position="end">
-            <IconButton tabIndex={0} onClick={handleRespond}>
+            <IconButton tabIndex={0} onClick={() => handleResponse(text)}>
               <SendIcon />
             </IconButton>
           </InputAdornment>

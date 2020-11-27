@@ -113,28 +113,23 @@ const DoneButton = styled(Button)``;
 const MultiSelectOption = ({ qid }) => {
   const {
     meta: { optionNum, options },
-    questionId,
-  } = useRecoilValue(a.questionSelector(qid));
-  const hasResponded = useRecoilValue(a.hasResponded(questionId));
+  } = useRecoilValue(a.questions(qid));
+  const hasResponded = useRecoilValue(a.hasResponded(qid));
 
-  const [checkedMap, setCheckedMap] = useState(
+  const [checkedArr, setCheckedArr] = useState(
     [...Array(optionNum)].fill(false)
   );
 
   const hasOptionsText = options !== null;
   const handleCheck = (i, checked) => {
-    if (hasResponded) return;
-    setCheckedMap((prevMap) => {
+    setCheckedArr((prevMap) => {
       const newMap = [...prevMap];
       newMap[i] = checked !== undefined ? checked : !prevMap[i];
       return newMap;
     });
   };
 
-  const handleResponse = useSetRecoilState(a.handleResponse);
-  const handleRespond = () => {
-    handleResponse({ questionId, obj: checkedMap });
-  };
+  const handleResponse = useSetRecoilState(a.handleResponse(qid));
 
   return (
     <Wrapper>
@@ -145,7 +140,7 @@ const MultiSelectOption = ({ qid }) => {
               key={i}
               i={i}
               text={options[i]}
-              checked={checkedMap[i]}
+              checked={checkedArr[i]}
               handleCheck={handleCheck}
               hasResponded={hasResponded || false}
               // hasResponded is empty object on init so undefined, must default to false
@@ -154,7 +149,7 @@ const MultiSelectOption = ({ qid }) => {
             <Check
               key={i}
               i={i}
-              checked={checkedMap[i]}
+              checked={checkedArr[i]}
               handleCheck={handleCheck}
               hasResponded={hasResponded || false}
             />
@@ -163,7 +158,7 @@ const MultiSelectOption = ({ qid }) => {
         <DoneButton
           color="primary"
           disabled={hasResponded}
-          onClick={handleRespond}
+          onClick={() => handleResponse(checkedArr)}
         >
           Done
         </DoneButton>

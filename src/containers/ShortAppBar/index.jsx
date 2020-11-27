@@ -55,7 +55,7 @@ const actions = [
 const ShortAppBar = () => {
   const [isDrawerOpen, setIsDrawerOpen] = useRecoilState(a.isDrawerOpen);
   const role = useRecoilValue(a.role);
-  const setQuestionType = useSetRecoilState(a.questionType);
+  const setQuestionType = useSetRecoilState(a.builderType);
   const [open, setOpen] = useState(false);
 
   const handleDialClick = (value) => {

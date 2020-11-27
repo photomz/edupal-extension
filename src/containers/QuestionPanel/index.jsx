@@ -1,5 +1,5 @@
 import React, { useEffect, useRef } from 'react';
-import { useSetRecoilState, useRecoilValue, useResetRecoilState } from 'recoil';
+import { useSetRecoilState, useRecoilValue } from 'recoil';
 import styled from 'styled-components';
 import a from '../../atoms';
 
@@ -16,8 +16,7 @@ const QuestionPanel = () => {
   const questionIds = useRecoilValue(a.questionIds);
   const isDrawerOpen = useRecoilValue(a.isDrawerOpen);
 
-  const addQuestion = useSetRecoilState(a.questionSelector());
-  const resetCarousel = useResetRecoilState(a.carouselOrderAtom);
+  const addQuestion = useSetRecoilState(a.addQuestion);
   const role = useRecoilValue(a.role);
 
   const panelBottom = useRef(null);
@@ -26,10 +25,6 @@ const QuestionPanel = () => {
   useEffect(() => {
     panelBottom.current.scrollIntoView({ behavior: 'smooth' });
   }, [isDrawerOpen, panelHeight]);
-
-  useEffect(() => {
-    if (!isDrawerOpen) resetCarousel();
-  }, [isDrawerOpen]);
 
   // TODO: Websocket
   useEffect(() => {

@@ -1,11 +1,10 @@
 /* eslint-disable react/jsx-wrap-multilines */
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useRecoilValue, useSetRecoilState } from 'recoil';
 import styled from 'styled-components';
 import prop from 'prop-types';
 
 import Grid from '@material-ui/core/Grid';
-import Card from '@material-ui/core/Card';
 import CardHeader from '@material-ui/core/CardHeader';
 import CardContent from '@material-ui/core/CardContent';
 import Avatar from '@material-ui/core/Avatar';
@@ -22,12 +21,7 @@ import LeftIcon from '@material-ui/icons/ChevronLeft';
 
 import a from '../../atoms';
 import Util from '../../util';
-import slide from '../../styles/animate';
 
-const StyledCard = styled(Card)`
-  animation: ${({ $animationStyle }) => slide[$animationStyle]};
-  transition: 0.3s all ease-in-out;
-`;
 const StyledPopover = styled(Popover)`
   pointer-events: none;
 `;
@@ -53,15 +47,14 @@ const largeIconMap = {
   null: [UngradedIcon, 'primary'],
 };
 
-const AnswerCard = ({ qid, animationStyle }) => {
+const AnswerCard = ({ qid }) => {
   const { avatar, userId } = useRecoilValue(a.meetData);
-  const { question, num } = useRecoilValue(a.questionSelector(qid));
+  const { question, num } = useRecoilValue(a.questions(qid));
   const { respondTimestamp, ...response } = useRecoilValue(a.response(qid));
   const switchCard = useSetRecoilState(a.carouselOrder(qid));
 
   const [isLoading, setIsLoading] = useState(true);
   const [popoverAnchor, setPopoverAnchor] = useState(null);
-  const wrapperRef = useRef(null);
 
   const answer = {
     isCorrect: true,
@@ -76,7 +69,7 @@ const AnswerCard = ({ qid, animationStyle }) => {
   const [Icon, colour] = largeIconMap[answer.isCorrect];
 
   return (
-    <StyledCard ref={wrapperRef} $animationStyle={animationStyle}>
+    <>
       <CardHeader
         avatar={<Avatar src={avatar} />}
         action={
@@ -88,7 +81,10 @@ const AnswerCard = ({ qid, animationStyle }) => {
             >
               <InfoIcon />
             </IconButton>
-            <IconButton aria-label="See other card" onClick={switchCard}>
+            <IconButton
+              aria-label="See other card"
+              onClick={() => switchCard(0)}
+            >
               <LeftIcon />
             </IconButton>
           </>
@@ -149,13 +145,12 @@ const AnswerCard = ({ qid, animationStyle }) => {
           )}
         </Grid>
       </CardContent>
-    </StyledCard>
+    </>
   );
 };
 
 AnswerCard.propTypes = {
   qid: prop.string.isRequired,
-  animationStyle: prop.string.isRequired,
 };
 
 export default AnswerCard;

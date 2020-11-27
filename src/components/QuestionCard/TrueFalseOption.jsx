@@ -23,13 +23,9 @@ const StyledButton = styled(Button)`
 `;
 
 const TrueFalseOption = ({ qid }) => {
-  const { questionId } = useRecoilValue(a.questionSelector(qid));
-  const hasResponded = useRecoilValue(a.hasResponded(questionId));
+  const hasResponded = useRecoilValue(a.hasResponded(qid));
 
-  const handleResponse = useSetRecoilState(a.handleResponse);
-  const handleRespond = (obj) => {
-    handleResponse({ questionId, obj });
-  };
+  const handleResponse = useSetRecoilState(a.handleResponse(qid));
 
   return (
     <Grid
@@ -51,7 +47,7 @@ const TrueFalseOption = ({ qid }) => {
           color="default"
           colour={el[2]}
           disabled={hasResponded}
-          onClick={() => handleRespond(el[0])}
+          onClick={() => handleResponse(el[0])}
         >
           {el[1]}
         </StyledButton>
