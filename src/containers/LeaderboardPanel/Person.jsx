@@ -1,5 +1,3 @@
-/* eslint-disable no-unused-vars */
-/* eslint-disable react/jsx-wrap-multilines */
 import React from 'react';
 import styled from 'styled-components';
 import prop from 'prop-types';

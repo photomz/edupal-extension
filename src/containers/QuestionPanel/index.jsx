@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect } from 'react';
 import { useSetRecoilState, useRecoilValue } from 'recoil';
 import styled from 'styled-components';
 import a from '../../atoms';
@@ -13,18 +13,11 @@ const FlexContainer = styled.div`
 `;
 
 const QuestionPanel = () => {
+  // Most recent questions at top
   const questionIds = useRecoilValue(a.questionIds);
-  const isDrawerOpen = useRecoilValue(a.isDrawerOpen);
-
   const addQuestion = useSetRecoilState(a.addQuestion);
+  const addResponse = useSetRecoilState(a.addResponse);
   const role = useRecoilValue(a.role);
-
-  const panelBottom = useRef(null);
-  const panelHeight = useRef(null);
-
-  useEffect(() => {
-    panelBottom.current.scrollIntoView({ behavior: 'smooth' });
-  }, [isDrawerOpen, panelHeight]);
 
   // TODO: Websocket
   useEffect(() => {
@@ -34,6 +27,9 @@ const QuestionPanel = () => {
           // TODO: Fill a.questionResponseStates with questionIds on init
           addQuestion(data);
           break;
+        case 'receiveResponse':
+          addResponse(data);
+          break;
         default:
           break;
       }
@@ -41,12 +37,11 @@ const QuestionPanel = () => {
   }, []);
 
   return (
-    <FlexContainer ref={panelHeight}>
+    <FlexContainer>
       {questionIds.map((qid) => (
         <Carousel key={qid} qid={qid} />
       ))}
       {role === 'TEACHER' && <QuestionBuilder />}
-      <div ref={panelBottom} />
     </FlexContainer>
   );
 };

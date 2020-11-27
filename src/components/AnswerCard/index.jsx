@@ -1,4 +1,3 @@
-/* eslint-disable react/jsx-wrap-multilines */
 import React, { useState, useEffect } from 'react';
 import { useRecoilValue, useSetRecoilState } from 'recoil';
 import styled from 'styled-components';
@@ -50,7 +49,7 @@ const largeIconMap = {
 const AnswerCard = ({ qid }) => {
   const { avatar, userId } = useRecoilValue(a.meetData);
   const { question, num } = useRecoilValue(a.questions(qid));
-  const { respondTimestamp, ...response } = useRecoilValue(a.response(qid));
+  const { respondTimestamp, ...response } = useRecoilValue(a.myResponse(qid));
   const switchCard = useSetRecoilState(a.carouselOrder(qid));
 
   const [isLoading, setIsLoading] = useState(true);

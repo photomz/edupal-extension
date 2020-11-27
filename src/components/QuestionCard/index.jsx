@@ -1,5 +1,3 @@
-/* eslint-disable no-nested-ternary */
-/* eslint-disable react/jsx-wrap-multilines */
 import React, { useState } from 'react';
 import styled from 'styled-components';
 import prop from 'prop-types';
@@ -57,7 +55,7 @@ const QuestionCard = ({ qid }) => {
     a.questions(qid)
   );
   const switchCard = useSetRecoilState(a.carouselOrder(qid));
-  const hasResponded = useRecoilValue(a.hasResponded(qid));
+  const hasResponded = useRecoilValue(a.iHaveResponded(qid));
 
   const [popoverAnchor, setPopoverAnchor] = useState(null);
 

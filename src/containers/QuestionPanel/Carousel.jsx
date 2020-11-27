@@ -33,10 +33,10 @@ const StyledCard = styled(Card)`
 `;
 
 const Carousel = ({ qid }) => {
-  const hasResponded = useRecoilValue(a.hasResponded(qid));
+  const hasResponded = useRecoilValue(a.iHaveResponded(qid));
   const role = useRecoilValue(a.role);
   const carouselOrder = useRecoilValue(a.carouselOrder(qid));
-  const { respondTimestamp, ...response } = useRecoilValue(a.response(qid));
+  const { respondTimestamp, ...response } = useRecoilValue(a.myResponse(qid));
   const meetData = useRecoilValue(a.meetData);
   const question = useRecoilValue(a.questions(qid));
 

@@ -26,29 +26,46 @@ const addQuestion = selector({
   key: 'addQuestion',
   set: ({ set, get }, { questionId, ...rest }) => {
     set(questions(questionId), { num: get(questionIds).length, ...rest });
-    set(questionIds, (prev) => prev.concat(questionId));
+    set(questionIds, (prev) => {
+      const newArr = [...prev];
+      newArr.unshift(questionId);
+      return newArr;
+    });
+  },
+});
+
+const responses = atomFamily({ key: 'responses', default: [] });
+const responseStudentIds = atomFamily({
+  key: 'responseStudentIds',
+  default: [],
+});
+const addResponse = selector({
+  key: 'addResponse',
+  set: ({ set }, { questionId, ...rest }) => {
+    set(responses(questionId), (prev) => prev.concat(rest));
+    set(responseStudentIds(questionId), (prev) => prev.concat(rest.student.id));
   },
 });
 
 const carouselOrder = atomFamily({ key: 'carouselOrder', default: 0 });
 
-const hasResponded = atomFamily({
-  key: 'hasResponded',
+const iHaveResponded = atomFamily({
+  key: 'iHaveResponded',
   default: false,
 });
 
-const response = atomFamily({
-  key: 'response',
+const myResponse = atomFamily({
+  key: 'myResponse',
   default: {},
 });
 
-const handleResponse = selectorFamily({
-  key: 'handleResponse',
+const saveMyResponse = selectorFamily({
+  key: 'saveMyResponse',
   set: (questionId) => ({ set, get }, obj) => {
-    if (get(hasResponded(questionId))) return;
+    if (get(iHaveResponded(questionId))) return;
     console.log(questionId, obj);
-    set(hasResponded(questionId), true);
-    set(response(questionId), {
+    set(iHaveResponded(questionId), true);
+    set(myResponse(questionId), {
       ...obj,
       respondTimestamp: new Date().toISOString(),
     });
@@ -68,15 +85,29 @@ const typeMap = {
   TrueFalse: [{}, false],
 };
 
-const builderImage = atom({ key: 'builderImage', default: '' });
-const builderType = atom({ key: 'builderType', default: 'MCQ' });
+const builderImage = atom({
+  key: 'builderImage',
+  default: '',
+  persistence_UNSTABLE: { type: 'builderImage' },
+});
+const builderType = atom({
+  key: 'builderType',
+  default: 'MCQ',
+  persistence_UNSTABLE: { type: 'builderType' },
+});
 const builderAnswer = atomFamily({
   key: 'builderAnswer',
   default: (type) => typeMap[type][1],
+  persistence_UNSTABLE: {
+    type: 'builderAnswer',
+  },
 });
 const builderMeta = atomFamily({
   key: 'builderMeta',
   default: (type) => typeMap[type][0],
+  persistence_UNSTABLE: {
+    type: 'buildMeta',
+  },
 });
 
 export default {
@@ -86,13 +117,16 @@ export default {
   questionIds,
   addQuestion,
   carouselOrder,
-  response,
-  handleResponse,
+  myResponse,
+  saveMyResponse,
   role,
   isUploaderOpen,
   builderType,
   builderAnswer,
   builderMeta,
   builderImage,
-  hasResponded,
+  iHaveResponded,
+  responses,
+  responseStudentIds,
+  addResponse,
 };
