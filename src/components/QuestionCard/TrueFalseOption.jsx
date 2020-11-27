@@ -5,7 +5,7 @@ import prop from 'prop-types';
 
 import Grid from '@material-ui/core/Grid';
 import Button from '@material-ui/core/Button';
-import atoms from '../../atoms';
+import a from '../../atoms';
 
 const StyledButton = styled(Button)`
   ${({ theme: $, colour }) => ` 
@@ -22,11 +22,11 @@ const StyledButton = styled(Button)`
   `}
 `;
 
-const TrueFalseOption = ({ num }) => {
-  const { questionId } = useRecoilValue(atoms.questions)[num];
-  const hasResponded = useRecoilValue(atoms.hasResponded(questionId));
+const TrueFalseOption = ({ qid }) => {
+  const { questionId } = useRecoilValue(a.questionSelector(qid));
+  const hasResponded = useRecoilValue(a.hasResponded(questionId));
 
-  const handleResponse = useSetRecoilState(atoms.handleResponse);
+  const handleResponse = useSetRecoilState(a.handleResponse);
   const handleRespond = (obj) => {
     handleResponse({ questionId, obj });
   };
@@ -61,7 +61,7 @@ const TrueFalseOption = ({ num }) => {
 };
 
 TrueFalseOption.propTypes = {
-  num: prop.number.isRequired,
+  qid: prop.string.isRequired,
 };
 
 export default TrueFalseOption;

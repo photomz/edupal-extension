@@ -7,7 +7,7 @@ import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
-import atoms from '../../atoms';
+import a from '../../atoms';
 
 const Wrapper = styled.div`
   flex-grow: 1;
@@ -95,12 +95,12 @@ TextOption.propTypes = {
   handleRespond: prop.func.isRequired,
 };
 
-const McqOption = ({ num }) => {
+const McqOption = ({ qid }) => {
   const {
     meta: { optionNum, options },
     questionId,
-  } = useRecoilValue(atoms.questions)[num];
-  const handleResponse = useSetRecoilState(atoms.handleResponse);
+  } = useRecoilValue(a.questionSelector(qid));
+  const handleResponse = useSetRecoilState(a.handleResponse);
 
   const handleRespond = (obj) => {
     handleResponse({ questionId, obj });
@@ -128,7 +128,7 @@ const McqOption = ({ num }) => {
 };
 
 McqOption.propTypes = {
-  num: prop.number.isRequired,
+  qid: prop.string.isRequired,
 };
 
 export default McqOption;

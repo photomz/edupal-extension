@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import Container from '@material-ui/core/Container';
 import { useRecoilValue } from 'recoil';
 import Person from './Person';
-import atoms from '../../atoms';
+import a from '../../atoms';
 import mockHttpData from './data.json';
 
 const FlexContainer = styled(Container)`
@@ -12,12 +12,12 @@ const FlexContainer = styled(Container)`
 `;
 
 const LeaderboardPanel = () => {
-  const { userId } = useRecoilValue(atoms.meetData);
+  const { userId } = useRecoilValue(a.meetData);
   const [board, setBoard] = useState([]);
 
   useEffect(() => {
     // TODO: HTTP backend call
-    const sortedLeaderboard = mockHttpData.sort((a, b) => b.points - a.points);
+    const sortedLeaderboard = mockHttpData.sort((c, d) => d.points - c.points);
     setBoard(sortedLeaderboard);
   }, []);
 

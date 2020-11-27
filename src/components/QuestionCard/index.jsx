@@ -22,7 +22,7 @@ import McqOption from './McqOption';
 import MultiSelectOption from './MultiSelectOption';
 import ShortAnswerOption from './ShortAnswerOption';
 import TrueFalseOption from './TrueFalseOption';
-import atoms from '../../atoms';
+import a from '../../atoms';
 import Util from '../../util';
 import slide from '../../styles/animate';
 
@@ -59,16 +59,18 @@ const CornerIconButton = styled(IconButton)`
   `}
 `;
 
-const QuestionCard = ({ num, animationStyle }) => {
+const QuestionCard = ({ qid, animationStyle }) => {
   const {
     avatar,
     teacher,
     askTimestamp,
     question,
     questionId,
-  } = useRecoilValue(atoms.questions)[num];
-  const setFlashcardFlip = useSetRecoilState(atoms.flipFlashcard);
-  const hasResponded = useRecoilValue(atoms.hasResponded(questionId));
+    num,
+  } = useRecoilValue(a.questionSelector(qid));
+  const switchCard = useSetRecoilState(a.carouselOrder(qid));
+  const hasResponded = useRecoilValue(a.hasResponded(questionId));
+
   const [popoverAnchor, setPopoverAnchor] = useState(null);
 
   let OptionComponent;
@@ -107,7 +109,7 @@ const QuestionCard = ({ num, animationStyle }) => {
             <IconButton
               aria-label="See other card"
               disabled={!hasResponded}
-              onClick={() => hasResponded && setFlashcardFlip(questionId)}
+              onClick={() => hasResponded && switchCard()}
             >
               <RightIcon />
             </IconButton>
@@ -155,14 +157,14 @@ const QuestionCard = ({ num, animationStyle }) => {
         </Typography>
       </StyledPopover>
       <CardActions>
-        <OptionComponent num={num} />
+        <OptionComponent qid={qid} />
       </CardActions>
     </StyledCard>
   );
 };
 
 QuestionCard.propTypes = {
-  num: prop.number.isRequired,
+  qid: prop.string.isRequired,
   animationStyle: prop.string.isRequired,
 };
 

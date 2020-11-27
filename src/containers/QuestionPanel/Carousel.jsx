@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 import prop from 'prop-types';
 import { useRecoilValue } from 'recoil';
 import styled from 'styled-components';
-import atoms from '../../atoms';
+import a from '../../atoms';
 
 import Util from '../../util';
 import QuestionCard from '../../components/QuestionCard';
@@ -23,14 +23,15 @@ const Wrapper = styled.div`
   `}
 `;
 
-const Carousel = ({ num }) => {
-  const { questionId } = useRecoilValue(atoms.questions)[num];
-  const hasResponded = useRecoilValue(atoms.hasResponded(questionId));
-  const isFlipped = useRecoilValue(atoms.flipFlashcard)[questionId];
-  const response = useRecoilValue(atoms.response)[questionId];
-  const meetData = useRecoilValue(atoms.meetData);
-  const question = useRecoilValue(atoms.questions)[num];
-  const respondTimestamp = useRecoilValue(atoms.respondTimestamp)[questionId];
+const Carousel = ({ qid }) => {
+  const hasResponded = useRecoilValue(a.hasResponded(qid));
+  const role = useRecoilValue(a.role);
+  const isFlipped = useRecoilValue(a.carouselOrder(qid));
+  const { respondTimestamp, ...response } = useRecoilValue(
+    a.responseSelector(qid)
+  );
+  const meetData = useRecoilValue(a.meetData);
+  const question = useRecoilValue(a.questionSelector(qid));
 
   const renderQuestion = Util.useDelayUnmount(!isFlipped, 250);
   const renderAnswer = Util.useDelayUnmount(isFlipped, 250);
@@ -59,16 +60,15 @@ const Carousel = ({ num }) => {
 
   return (
     <Wrapper>
-      {renderAnswer && hasResponded && (
+      {role === 'STUDENT' && renderAnswer && hasResponded && (
         <AnswerCard
-          num={num}
-          questionId={questionId}
+          qid={qid}
           animationStyle={isFlipped ? 'inright' : 'outright'}
         />
       )}
-      {renderQuestion && (
+      {role === 'STUDENT' && renderQuestion && (
         <QuestionCard
-          num={num}
+          qid={qid}
           animationStyle={!isFlipped ? 'inleft' : 'outleft'}
         />
       )}
@@ -77,7 +77,7 @@ const Carousel = ({ num }) => {
 };
 
 Carousel.propTypes = {
-  num: prop.number.isRequired,
+  qid: prop.string.isRequired,
 };
 
 export default Carousel;

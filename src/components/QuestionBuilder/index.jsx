@@ -19,7 +19,7 @@ import McqOption from './McqOption';
 import MultiSelectOption from './MultiSelectOption';
 import ShortAnswerOption from './ShortAnswerOption';
 import TrueFalseOption from './TrueFalseOption';
-import atoms from '../../atoms';
+import a from '../../atoms';
 import SplitButton from './SplitButton';
 
 const StyledCard = styled(Card)`
@@ -46,15 +46,15 @@ const optionComponentMap = {
 };
 
 const QuestionBuilder = () => {
-  const [type, setType] = useRecoilState(atoms.questionType);
+  const [type, setType] = useRecoilState(a.questionType);
   // Question type dictates interface of meta and answer;
   const Option = optionComponentMap[type];
 
-  const [meta, setMeta] = useRecoilState(atoms.builderMeta);
-  const [answer, setAnswer] = useRecoilState(atoms.builderAnswer);
+  const [meta, setMeta] = useRecoilState(a.builderMeta);
+  const [answer, setAnswer] = useRecoilState(a.builderAnswer);
 
   const [title, setTitle] = useState('');
-  const [isOpen, setOpen] = useRecoilState(atoms.isUploaderOpen);
+  const [isOpen, setOpen] = useRecoilState(a.isUploaderOpen);
 
   // TODO: useEffect to construct response object, send to websocket
 

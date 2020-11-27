@@ -20,8 +20,8 @@ const PersonCard = styled(Card)`
     align-self: center;
     margin-right: ${({ theme }) => theme.spacing(1)};
   }
-  ${({ isMe, theme }) =>
-    isMe &&
+  ${({ $isMe, theme }) =>
+    $isMe &&
     `background-color: ${theme.palette.secondary.dark}; 
     box-shadow: ${theme.shadows[8]};
     &&& * {
@@ -104,7 +104,7 @@ const Person = ({ name, avatar, change, points, isMe, rank }) => {
   }
 
   return (
-    <PersonCard variant="outlined" isMe={isMe}>
+    <PersonCard variant="outlined" $isMe={isMe}>
       <CardHeader
         avatar={<Avatar src={avatar} />}
         action={

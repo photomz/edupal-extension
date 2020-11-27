@@ -7,10 +7,10 @@ import FormControl from '@material-ui/core/FormControl';
 import FormLabel from '@material-ui/core/FormLabel';
 import Box from '@material-ui/core/Box';
 import Typography from '@material-ui/core/Typography';
-import atoms from '../../atoms';
+import a from '../../atoms';
 
 const SettingsPanel = () => {
-  const [role, setRole] = useRecoilState(atoms.role);
+  const [role, setRole] = useRecoilState(a.role);
 
   return (
     <Box m={4}>

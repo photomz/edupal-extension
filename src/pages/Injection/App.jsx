@@ -3,10 +3,10 @@ import React, { useState, useEffect } from 'react';
 import { hot } from 'react-hot-loader';
 import useWebsocket from 'react-use-websocket';
 import styled from 'styled-components';
-import { useRecoilState, useSetRecoilState } from 'recoil';
+import { useRecoilState } from 'recoil';
 import global from '../../global';
 import Util from '../../util';
-import atoms from '../../atoms';
+import a from '../../atoms';
 
 import ShortAppBar from '../../containers/ShortAppBar';
 import Sidebar from '../../containers/Sidebar';
@@ -44,8 +44,7 @@ const App = () => {
     {},
     isSocketConnected
   );
-  const [meetData, setMeetData] = useRecoilState(atoms.meetData);
-  const setIsVisible = useSetRecoilState(atoms.isVisible);
+  const [meetData, setMeetData] = useRecoilState(a.meetData);
 
   // Get user data
   useEffect(() => {
@@ -68,13 +67,6 @@ const App = () => {
       sendJsonMessage({ route: 'ping' });
     }, 60000 * 9);
     return clearInterval(keepAlive);
-  }, []);
-
-  useEffect(() => {
-    if (!document) return;
-    document.addEventListener('visibilitychange', () => {
-      setIsVisible(document.visibilityState !== 'hidden');
-    });
   }, []);
 
   useEffect(() => {

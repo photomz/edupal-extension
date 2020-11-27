@@ -20,7 +20,7 @@ import WrongIcon from '@material-ui/icons/Cancel';
 import UngradedIcon from '@material-ui/icons/IndeterminateCheckBox';
 import LeftIcon from '@material-ui/icons/ChevronLeft';
 
-import atoms from '../../atoms';
+import a from '../../atoms';
 import Util from '../../util';
 import slide from '../../styles/animate';
 
@@ -53,14 +53,14 @@ const largeIconMap = {
   null: [UngradedIcon, 'primary'],
 };
 
-const AnswerCard = ({ num, animationStyle }) => {
-  const { avatar, userId } = useRecoilValue(atoms.meetData);
-  const [popoverAnchor, setPopoverAnchor] = useState(null);
-  const { questionId, question } = useRecoilValue(atoms.questions)[num];
-  const respondTimestamp = useRecoilValue(atoms.respondTimestamp)[questionId];
-  const response = useRecoilValue(atoms.response)[questionId];
+const AnswerCard = ({ qid, animationStyle }) => {
+  const { avatar, userId } = useRecoilValue(a.meetData);
+  const { question, num } = useRecoilValue(a.questionSelector(qid));
+  const { respondTimestamp, ...response } = useRecoilValue(a.response(qid));
+  const switchCard = useSetRecoilState(a.carouselOrder(qid));
+
   const [isLoading, setIsLoading] = useState(true);
-  const setFlashcardFlip = useSetRecoilState(atoms.flipFlashcard);
+  const [popoverAnchor, setPopoverAnchor] = useState(null);
   const wrapperRef = useRef(null);
 
   const answer = {
@@ -88,10 +88,7 @@ const AnswerCard = ({ num, animationStyle }) => {
             >
               <InfoIcon />
             </IconButton>
-            <IconButton
-              aria-label="See other card"
-              onClick={() => setFlashcardFlip(questionId)}
-            >
+            <IconButton aria-label="See other card" onClick={switchCard}>
               <LeftIcon />
             </IconButton>
           </>
@@ -115,7 +112,7 @@ const AnswerCard = ({ num, animationStyle }) => {
       >
         <Typography>
           {process.env.NODE_ENV === 'development'
-            ? `{questionId: ${questionId},
+            ? `{qid: ${qid},
             respondTimestamp: ${respondTimestamp},
             student.id: ${userId},
             response: ${JSON.stringify(response).slice(0, 100)} }`
@@ -157,7 +154,7 @@ const AnswerCard = ({ num, animationStyle }) => {
 };
 
 AnswerCard.propTypes = {
-  num: prop.number.isRequired,
+  qid: prop.string.isRequired,
   animationStyle: prop.string.isRequired,
 };
 

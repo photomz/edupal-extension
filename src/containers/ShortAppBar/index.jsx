@@ -13,7 +13,7 @@ import TrueFalseIcon from '@material-ui/icons/Beenhere';
 import ParagraphICon from '@material-ui/icons/ViewHeadline';
 import EdupalSvg from '../../assets/images/edupal_icon.svg';
 
-import atoms from '../../atoms';
+import a from '../../atoms';
 
 const drawerWidth = 400;
 
@@ -53,9 +53,9 @@ const actions = [
 ];
 
 const ShortAppBar = () => {
-  const [isDrawerOpen, setIsDrawerOpen] = useRecoilState(atoms.isDrawerOpen);
-  const role = useRecoilValue(atoms.role);
-  const setQuestionType = useSetRecoilState(atoms.questionType);
+  const [isDrawerOpen, setIsDrawerOpen] = useRecoilState(a.isDrawerOpen);
+  const role = useRecoilValue(a.role);
+  const setQuestionType = useSetRecoilState(a.questionType);
   const [open, setOpen] = useState(false);
 
   const handleDialClick = (value) => {

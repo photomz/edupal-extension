@@ -1,7 +1,7 @@
 import React, { useEffect, useRef } from 'react';
 import { useSetRecoilState, useRecoilValue, useResetRecoilState } from 'recoil';
 import styled from 'styled-components';
-import atoms from '../../atoms';
+import a from '../../atoms';
 
 import Carousel from './Carousel';
 import QuestionBuilder from '../../components/QuestionBuilder';
@@ -13,12 +13,12 @@ const FlexContainer = styled.div`
 `;
 
 const QuestionPanel = () => {
-  const numQuestions = useRecoilValue(atoms.numQuestions);
-  const isDrawerOpen = useRecoilValue(atoms.isDrawerOpen);
+  const questionIds = useRecoilValue(a.questionIds);
+  const isDrawerOpen = useRecoilValue(a.isDrawerOpen);
 
-  const addQuestion = useSetRecoilState(atoms.addQuestion);
-  const resetFlashcardFlip = useResetRecoilState(atoms.flashcardFlipStates);
-  const role = useRecoilValue(atoms.role);
+  const addQuestion = useSetRecoilState(a.questionSelector());
+  const resetCarousel = useResetRecoilState(a.carouselOrderAtom);
+  const role = useRecoilValue(a.role);
 
   const panelBottom = useRef(null);
   const panelHeight = useRef(null);
@@ -28,7 +28,7 @@ const QuestionPanel = () => {
   }, [isDrawerOpen, panelHeight]);
 
   useEffect(() => {
-    if (!isDrawerOpen) resetFlashcardFlip();
+    if (!isDrawerOpen) resetCarousel();
   }, [isDrawerOpen]);
 
   // TODO: Websocket
@@ -36,7 +36,7 @@ const QuestionPanel = () => {
     mockWebsocketData.forEach(({ action, data }) => {
       switch (action) {
         case 'receiveAsk':
-          // TODO: Fill atoms.questionResponseStates with questionIds on init
+          // TODO: Fill a.questionResponseStates with questionIds on init
           addQuestion(data);
           break;
         default:
@@ -47,8 +47,8 @@ const QuestionPanel = () => {
 
   return (
     <FlexContainer ref={panelHeight}>
-      {[...Array(numQuestions)].map((_, i) => (
-        <Carousel key={i} num={i} />
+      {questionIds.map((qid) => (
+        <Carousel key={qid} qid={qid} />
       ))}
       {role === 'TEACHER' && <QuestionBuilder />}
       <div ref={panelBottom} />

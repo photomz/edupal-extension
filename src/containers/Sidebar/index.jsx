@@ -5,7 +5,7 @@ import styled from 'styled-components';
 import Drawer from '@material-ui/core/Drawer';
 
 import Util from '../../util';
-import atoms from '../../atoms';
+import a from '../../atoms';
 import TabBar from './TabBar';
 import SidebarHead from './SidebarHead';
 
@@ -34,8 +34,8 @@ const DrawerPaper = styled(Drawer)`
   }
 `;
 const Sidebar = () => {
-  const [isDrawerOpen, setIsDrawerOpen] = useRecoilState(atoms.isDrawerOpen);
-  const isUploaderOpen = useRecoilValue(atoms.isUploaderOpen);
+  const [isDrawerOpen, setIsDrawerOpen] = useRecoilState(a.isDrawerOpen);
+  const isUploaderOpen = useRecoilValue(a.isUploaderOpen);
   const drawerRef = useRef(null);
   useEffect(() => {}, []);
 

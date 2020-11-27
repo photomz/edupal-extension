@@ -17,90 +17,77 @@ const meetData = atom({
       : process.env.NODE_ENV === 'production' && {},
 });
 
-const isVisible = atom({
-  key: 'isVisible',
-  default: true,
-});
-
 const isDrawerOpen = atom({ key: 'isDrawerOpen', default: false });
 
-const questions = atom({ key: 'questions', default: [] });
+const questions = atom({ key: 'questions', default: {} });
+const questionNum = atom({ key: 'questionNum', default: 0 });
+const questionIds = atom({ key: 'questionIds', default: [] });
 
-const addQuestion = selector({
-  key: 'addQuestion',
-  get: ({ get }) => get(questions),
-  set: ({ set }, newValue) => set(questions, (prev) => prev.concat([newValue])),
+const questionSelector = selectorFamily({
+  key: 'questionSelector',
+  get: (questionId) => ({ get }) => get(questions)[questionId],
+  set: () => ({ set, get }, { questionId, ...rest }) => {
+    set(questions, (prev) => ({
+      ...prev,
+      [questionId]: { num: get(questionNum), ...rest },
+    }));
+    set(questionNum, (prev) => prev + 1);
+    set(questionIds, (prev) => prev.concat(questionId));
+  },
 });
 
-const numQuestions = selector({
-  key: 'numQuestions',
-  get: ({ get }) => get(questions).length,
-});
-
-const flashcardFlipStates = atom({ key: 'flashcardFlipStates', default: {} });
+const carouselOrderAtom = atom({ key: 'carouselOrder', default: {} });
 
 // TODO: Migrate to selectorFamily which supports get arguments
-const flipFlashcard = selector({
-  key: 'flipFlashcard',
-  get: ({ get }) => get(flashcardFlipStates),
+const carouselOrder = selectorFamily({
+  key: 'carouselOrder',
+  get: (questionId) => ({ get }) => get(carouselOrderAtom)[questionId],
   // Toggle flipping for flashcard, by questionId key
-  set: ({ set, get }, questionId) => {
-    const prev = get(flashcardFlipStates)[questionId];
-    set(flashcardFlipStates, (prevMap) => ({
+  set: (questionId) => ({ set, get }) => {
+    const prev = get(carouselOrderAtom)[questionId];
+    set(carouselOrderAtom, (prevMap) => ({
       ...prevMap,
       [questionId]: !prev,
     }));
   },
 });
 
-const questionResponseStates = atom({
-  key: 'questionResponseStates',
+const hasRespondedAtom = atom({
+  key: 'hasRespondedAtom',
   default: {},
-});
-
-const flipResponse = selector({
-  key: 'flipResponse',
-  get: ({ get }) => get(questionResponseStates),
-  set: ({ set }, questionId) =>
-    set(questionResponseStates, (prevMap) => ({
-      ...prevMap,
-      [questionId]: true,
-    })),
 });
 
 const response = atom({ key: 'response', default: {} });
 
-const responseSelector = selector({
+const responseSelector = selectorFamily({
   key: 'responseSelector',
-  get: ({ get }) => get(response),
-  set: ({ set }, resObj) => set(response, (prev) => ({ ...prev, ...resObj })),
-});
-
-const respondTimestamp = atom({ key: 'respondTimestamp', default: {} });
-
-const respondTimestampSelector = selector({
-  key: 'respondTimestampSelector',
-  get: ({ get }) => get(respondTimestamp),
-  set: ({ set }, resObj) =>
-    set(respondTimestamp, (prev) => ({ ...prev, ...resObj })),
+  get: (questionId) => ({ get }) => get(response)[questionId] || {},
+  set: (questionId) => ({ set }, resObj) =>
+    set(response, (prev) => ({ ...prev, [questionId]: resObj })),
 });
 
 const hasResponded = selectorFamily({
   key: 'hasResponded',
   get: (questionId) => ({ get }) => {
     if (get(role) === 'TEACHER') return true;
-    return get(questionResponseStates)[questionId];
+    return !!get(hasRespondedAtom)[questionId];
   },
+  set: ({ set }, questionId) =>
+    set(hasRespondedAtom, (prevMap) => ({
+      ...prevMap,
+      [questionId]: true,
+    })),
 });
 
 const handleResponse = selector({
   key: 'handleResponse',
   set: ({ set, get }, { questionId, obj }) => {
     if (get(hasResponded(questionId))) return;
-    set(flipResponse, questionId);
-    set(responseSelector, { [questionId]: obj });
-    set(respondTimestampSelector, { [questionId]: new Date().toISOString() });
-    set(flipFlashcard, questionId);
+    set(hasResponded, questionId);
+    set(responseSelector, {
+      [questionId]: { ...obj, respondTimestamp: new Date().toISOString() },
+    });
+    set(carouselOrder, questionId);
   },
 });
 
@@ -132,19 +119,15 @@ const questionType = selector({
 
 export default {
   meetData,
-  isVisible,
   isDrawerOpen,
   questions,
-  addQuestion,
-  numQuestions,
-  flashcardFlipStates,
-  flipFlashcard,
-  questionResponseStates,
-  flipResponse,
+  questionIds,
+  questionSelector,
+  carouselOrderAtom,
+  carouselOrder,
+  hasRespondedAtom,
   response,
   responseSelector,
-  respondTimestamp,
-  respondTimestampSelector,
   handleResponse,
   role,
   isUploaderOpen,
