@@ -68,6 +68,7 @@ const typeMap = {
   TrueFalse: [{}, false],
 };
 
+const builderImage = atom({ key: 'builderImage', default: '' });
 const builderType = atom({ key: 'builderType', default: 'MCQ' });
 const builderAnswer = atomFamily({
   key: 'builderAnswer',
@@ -92,5 +93,6 @@ export default {
   builderType,
   builderAnswer,
   builderMeta,
+  builderImage,
   hasResponded,
 };

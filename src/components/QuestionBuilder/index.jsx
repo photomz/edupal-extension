@@ -9,11 +9,12 @@ import CardContent from '@material-ui/core/CardContent';
 import CardActions from '@material-ui/core/CardActions';
 import TextField from '@material-ui/core/TextField';
 import IconButton from '@material-ui/core/IconButton';
+import Grid from '@material-ui/core/Grid';
 import { DropzoneDialog } from 'material-ui-dropzone';
+import Tooltip from '@material-ui/core/Tooltip';
 
 import PhotoIcon from '@material-ui/icons/AddPhotoAlternate';
 import SendIcon from '@material-ui/icons/Send';
-import Grid from '@material-ui/core/Grid';
 
 import McqOption from './McqOption';
 import MultiSelectOption from './MultiSelectOption';
@@ -35,6 +36,7 @@ const StyledTextField = styled(TextField)`
 const StyledButton = styled(IconButton)`
   &&& {
     margin-left: ${({ theme }) => theme.spacing(2)};
+    padding: ${({ theme }) => theme.spacing(1)};
   }
 `;
 
@@ -52,6 +54,7 @@ const QuestionBuilder = () => {
 
   const [meta, setMeta] = useRecoilState(a.builderMeta(type));
   const [answer, setAnswer] = useRecoilState(a.builderAnswer(type));
+  const [image, setImage] = useRecoilState(a.builderImage);
 
   const [title, setTitle] = useState('');
   const [isOpen, setOpen] = useRecoilState(a.isUploaderOpen);
@@ -64,12 +67,22 @@ const QuestionBuilder = () => {
         title={
           <Grid container direction="row" justify="space-between">
             <SplitButton value={type} handleChange={setType} />
-            <StyledButton onClick={() => setOpen(true)}>
-              <PhotoIcon />
-            </StyledButton>
-            <StyledButton color="primary">
-              <SendIcon />
-            </StyledButton>
+            <Tooltip
+              title={
+                image === ''
+                  ? 'Attach an image'
+                  : image.split('/').slice(image.split('/').length - 1)
+              }
+            >
+              <StyledButton onClick={() => setOpen(true)} variant="extended">
+                <PhotoIcon />
+              </StyledButton>
+            </Tooltip>
+            <Tooltip title="Send question">
+              <StyledButton color="primary">
+                <SendIcon />
+              </StyledButton>
+            </Tooltip>
           </Grid>
         }
       />
@@ -92,8 +105,8 @@ const QuestionBuilder = () => {
           maxFileSize={3000000}
           open={isOpen}
           onClose={() => setOpen(false)}
-          onSave={(files) => {
-            console.log('Files:', files);
+          onSave={([file]) => {
+            setImage(file.path);
             setOpen(false);
           }}
           showPreviews={false}
