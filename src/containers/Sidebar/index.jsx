@@ -1,10 +1,9 @@
-import React, { useRef, useEffect } from 'react';
-import { useRecoilState, useRecoilValue } from 'recoil';
+import React from 'react';
+import { useRecoilValue } from 'recoil';
 import styled from 'styled-components';
 
 import Drawer from '@material-ui/core/Drawer';
 
-import Util from '../../util';
 import a from '../../atoms';
 import TabBar from './TabBar';
 import SidebarHead from './SidebarHead';
@@ -33,20 +32,13 @@ const DrawerPaper = styled(Drawer)`
     overflow-x: hidden;
   }
 `;
-const Sidebar = () => {
-  const [isDrawerOpen, setIsDrawerOpen] = useRecoilState(a.isDrawerOpen);
-  const isUploaderOpen = useRecoilValue(a.isUploaderOpen);
-  const drawerRef = useRef(null);
-  useEffect(() => {}, []);
-
-  Util.useOutsideClick([drawerRef], isUploaderOpen, () =>
-    setIsDrawerOpen(false)
-  );
+const Sidebar = React.forwardRef((_, ref) => {
+  const isDrawerOpen = useRecoilValue(a.isDrawerOpen);
 
   return (
     <Wrapper>
       <DrawerPaper
-        ref={drawerRef}
+        ref={ref}
         $isClosed={!isDrawerOpen}
         open={isDrawerOpen}
         anchor="right"
@@ -57,6 +49,6 @@ const Sidebar = () => {
       </DrawerPaper>
     </Wrapper>
   );
-};
+});
 
 export default Sidebar;

@@ -1,15 +1,15 @@
 /* eslint-disable no-console */
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { hot } from 'react-hot-loader';
+import { useRecoilValue, useSetRecoilState } from 'recoil';
 import useWebsocket from 'react-use-websocket';
 import styled from 'styled-components';
-import { useRecoilState } from 'recoil';
-import global from '../../global';
-import Util from '../../util';
-import a from '../../atoms';
 
+import global from '../../global';
 import ShortAppBar from '../../containers/ShortAppBar';
 import Sidebar from '../../containers/Sidebar';
+import a from '../../atoms';
+import Util from '../../util';
 
 const Container = styled.div`
   position: absolute;
@@ -20,41 +20,21 @@ const Container = styled.div`
   z-index: 999;
 `;
 
-const scrapeMeetData = () => {
-  const dataScript = Util.contains('script', 'accounts.google.com');
-  if (!dataScript[1] && process.env.NODE_ENV === 'development') return null;
-  const userData = JSON.parse(dataScript[1].text.match(/\[(.*?)\]/)[0]);
-  return {
-    meetingId: document
-      .querySelector('[data-unresolved-meeting-id]')
-      .getAttribute('data-unresolved-meeting-id'),
-    name: userData[6].split(' ')[0],
-    fullName: userData[6],
-    team: userData[28],
-    avatar: userData[5],
-    email: userData[4],
-    userId: userData[15],
-  };
-};
-
 const App = () => {
-  const [isSocketConnected, setIsSocketConnected] = useState(false);
-  const { sendJsonMessage } = useWebsocket(
-    global.socketUrl,
-    {},
-    isSocketConnected
-  );
-  const [meetData, setMeetData] = useRecoilState(a.meetData);
+  const [connect, setConnect] = useState(false);
+  const { sendJsonMessage } = useWebsocket(global.socketUrl, {}, connect);
+  const isUploaderOpen = useRecoilValue(a.isUploaderOpen);
+  const setDrawerOpen = useSetRecoilState(a.isDrawerOpen);
+  const appbarRef = useRef(null);
+  const sidebarRef = useRef(null);
 
-  // Get user data
-  useEffect(() => {
-    const scraped = scrapeMeetData();
-    if (scraped) setMeetData(scraped);
-  }, []);
+  Util.useOutsideClick([appbarRef, sidebarRef], isUploaderOpen, () =>
+    setDrawerOpen(false)
+  );
 
   // Websocket init
   useEffect(() => {
-    setIsSocketConnected(true);
+    setConnect(true);
     // TODO: JoinMeeting
     // Send console message
     console.log('%c Edu-pal Google Meet Extension has started up.');
@@ -84,17 +64,17 @@ const App = () => {
       //   route: 'disconnect',
       //   data: { id: meetData.meetingId },
       // });
-      setIsSocketConnected(false);
+      setConnect(false);
       // TODO: Wbs disconnect
     })();
-  }, [meetData]);
+  }, []);
 
-  if (!isSocketConnected) return <></>;
+  if (!connect) return <></>;
 
   return (
     <Container>
-      <ShortAppBar />
-      <Sidebar />
+      <ShortAppBar ref={appbarRef} />
+      <Sidebar ref={sidebarRef} />
     </Container>
   );
 };

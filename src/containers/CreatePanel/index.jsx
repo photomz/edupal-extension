@@ -45,14 +45,14 @@ const optionComponentMap = {
   TrueFalse: TrueFalseOption,
 };
 
-const QuestionBuilder = () => {
-  const [type, setType] = useRecoilState(a.builderType);
+const CreatePanel = () => {
+  const [type, setType] = useRecoilState(a.creatorType);
   // Question type dictates interface of meta and answer;
   const Option = optionComponentMap[type];
 
-  const [meta, setMeta] = useRecoilState(a.builderMeta(type));
-  const [answer, setAnswer] = useRecoilState(a.builderAnswer(type));
-  const [image, setImage] = useRecoilState(a.builderImage);
+  const [meta, setMeta] = useRecoilState(a.creatorMeta(type));
+  const [answer, setAnswer] = useRecoilState(a.creatorAnswer(type));
+  const [image, setImage] = useRecoilState(a.creatorImage);
 
   const [title, setTitle] = useState('');
   const [isOpen, setOpen] = useRecoilState(a.isUploaderOpen);
@@ -124,4 +124,4 @@ const QuestionBuilder = () => {
   );
 };
 
-export default QuestionBuilder;
+export default CreatePanel;

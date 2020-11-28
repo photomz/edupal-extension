@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import SwipeableViews from 'react-swipeable-views';
-import { useRecoilState } from 'recoil';
+import { useRecoilState, useRecoilValue } from 'recoil';
 
 import { useTheme } from '@material-ui/core/styles';
 import AppBar from '@material-ui/core/AppBar';
@@ -11,12 +11,14 @@ import Tab from '@material-ui/core/Tab';
 import QuestionIcon from '@material-ui/icons/QuestionAnswer';
 import LeaderboardIcon from '@material-ui/icons/EmojiEvents';
 import SettingsIcon from '@material-ui/icons/Settings';
+import CreateIcon from '@material-ui/icons/Create';
 
 import a from '../../atoms';
 import QuestionPanel from '../QuestionPanel';
 import LeaderboardPanel from '../LeaderboardPanel';
 import SettingsPanel from '../SettingsPanel';
 import ReportPanel from '../ReportPanel';
+import CreatePanel from '../CreatePanel';
 
 const TabPanel = ({ children, tabOrder, i }) => (
   <div
@@ -36,16 +38,38 @@ TabPanel.propTypes = {
 };
 
 const visibleTabs = [
-  { label: 'Questions', Icon: QuestionIcon, Panel: QuestionPanel },
-  { label: 'Leaderboard', Icon: LeaderboardIcon, Panel: LeaderboardPanel },
-  { label: 'Settings', Icon: SettingsIcon, Panel: SettingsPanel },
+  {
+    label: 'Create',
+    Icon: CreateIcon,
+    Panel: CreatePanel,
+    condition: (role) => role === 'TEACHER',
+  },
+  {
+    label: 'Questions',
+    Icon: QuestionIcon,
+    Panel: QuestionPanel,
+    condition: () => true,
+  },
+  {
+    label: 'Leaderboard',
+    Icon: LeaderboardIcon,
+    Panel: LeaderboardPanel,
+    condition: () => true,
+  },
+  {
+    label: 'Settings',
+    Icon: SettingsIcon,
+    Panel: SettingsPanel,
+    condition: () => true,
+  },
 ];
 
-const hiddenTabs = [{ Panel: ReportPanel }];
-const tabAs = [0, 1, 2, 0];
+const hiddenTabs = [{ Panel: ReportPanel, condition: () => true }];
+const tabAs = [0, 1, 2, 3, 0];
 
 const TabBar = () => {
   const [tabOrder, setTabOrder] = useRecoilState(a.tabOrder);
+  const role = useRecoilValue(a.role);
   const $ = useTheme();
 
   return (
@@ -58,9 +82,12 @@ const TabBar = () => {
           scrollButtons="auto"
           indicatorColor="primary"
         >
-          {visibleTabs.map(({ label, Icon }) => (
-            <Tab key={label} label={label} icon={<Icon />} />
-          ))}
+          {visibleTabs.map(
+            ({ label, Icon, condition }) =>
+              condition(role) && (
+                <Tab key={label} label={label} icon={<Icon />} />
+              )
+          )}
         </Tabs>
       </AppBar>
       <SwipeableViews
@@ -68,11 +95,14 @@ const TabBar = () => {
         index={tabOrder}
         onChangeIndex={(i) => setTabOrder(i)}
       >
-        {visibleTabs.concat(hiddenTabs).map(({ Panel }, i) => (
-          <TabPanel key={i} tabOrder={tabOrder} i={i}>
-            {tabOrder === i && <Panel />}
-          </TabPanel>
-        ))}
+        {visibleTabs.concat(hiddenTabs).map(
+          ({ Panel, condition }, i) =>
+            condition(role) && (
+              <TabPanel key={i} tabOrder={tabOrder} i={i}>
+                <Panel />
+              </TabPanel>
+            )
+        )}
       </SwipeableViews>
     </>
   );

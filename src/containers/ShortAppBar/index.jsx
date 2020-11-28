@@ -51,10 +51,10 @@ const actions = [
   { icon: <ParagraphICon />, name: 'Short Answer', value: 'ShortAnswer' },
 ];
 
-const ShortAppBar = () => {
+const ShortAppBar = React.forwardRef((_, ref) => {
   const [isDrawerOpen, setIsDrawerOpen] = useRecoilState(a.isDrawerOpen);
   const role = useRecoilValue(a.role);
-  const setQuestionType = useSetRecoilState(a.builderType);
+  const setQuestionType = useSetRecoilState(a.creatorType);
   const [open, setOpen] = useState(false);
 
   const handleDialClick = (value) => {
@@ -71,8 +71,9 @@ const ShortAppBar = () => {
         icon={<EdupalIcon />}
         onClose={() => setOpen(false)}
         onOpen={() => setOpen(true)}
-        onClick={() => setIsDrawerOpen(true)}
+        onClick={() => console.log('Click') && setIsDrawerOpen(true)}
         open={open}
+        ref={ref}
       >
         {role === 'TEACHER' &&
           actions.map(({ name, icon, value }) => (
@@ -86,6 +87,6 @@ const ShortAppBar = () => {
       </StyledSpeedDial>
     </Wrapper>
   );
-};
+});
 
 export default ShortAppBar;

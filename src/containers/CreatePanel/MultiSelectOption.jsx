@@ -1,36 +1,24 @@
 import React, { useState } from 'react';
-import { useRecoilState } from 'recoil';
 import styled from 'styled-components';
+import prop from 'prop-types';
+import { useRecoilState } from 'recoil';
 
 import Grid from '@material-ui/core/Grid';
-import Radio from '@material-ui/core/Radio';
 import TextField from '@material-ui/core/TextField';
 import Slider from '@material-ui/core/Slider';
 import Typography from '@material-ui/core/Typography';
+import Checkbox from '@material-ui/core/Checkbox';
 import a from '../../atoms';
 import g from '../../global';
 
-const Wrapper = styled.div`
-  flex-grow: 1;
-`;
-
-const StyledTextField = styled(TextField)`
-  margin-bottom: ${({ theme }) => theme.spacing(2)};
-`;
-
-const StyledRadio = styled(Radio)`
+const StyledCheckbox = styled(Checkbox)`
   ${({ theme: $, colour }) => `
-  
   margin: ${$.spacing(1)};
   background-color: ${$.palette[colour].main};
   transition: all 0.3s ease-in-out;
-  &:hover, &&&.Mui-checked {
-    color: ${$.palette.common.white};
+  &:hover {
     box-shadow: ${$.shadows[4]};
     background-color: ${$.palette[colour].dark};
-  }
-  &&&.Mui-checked:hover {
-    box-shadow: ${$.shadows[8]};
   }
   color: ${$.palette.common.white};
   font-weight: ${$.typography.fontWeightMedium};
@@ -40,8 +28,15 @@ const StyledRadio = styled(Radio)`
   justify-content: center;
   width: 45px;
   height: 45px;
-  margin-right: ${$.spacing(1)};
 `}
+`;
+
+const Wrapper = styled.div`
+  flex-grow: 1;
+`;
+
+const StyledTextField = styled(TextField)`
+  margin-bottom: ${({ theme }) => theme.spacing(2)};
 `;
 
 const StyledSlider = styled(Slider)`
@@ -74,10 +69,40 @@ const StyledSlider = styled(Slider)`
   }
 `;
 
+const Check = ({ i, checked, handleCheck }) => (
+  <StyledCheckbox
+    colour={g.alphabet[i][1]}
+    color="default"
+    checked={checked}
+    onClick={() => handleCheck(i)}
+    onChange={(e) => handleCheck(i, e.target.checked)}
+  >
+    {g.alphabet[i][0]}
+  </StyledCheckbox>
+);
+
+Check.defaultProps = {
+  handleCheck: () => {},
+};
+
+Check.propTypes = {
+  i: prop.number.isRequired,
+  checked: prop.bool.isRequired,
+  handleCheck: prop.func,
+};
+
 const McqOption = () => {
-  const [meta, setMeta] = useRecoilState(a.builderMeta('MCQ'));
-  const [answer, setAnswer] = useRecoilState(a.builderAnswer('MCQ'));
+  const [meta, setMeta] = useRecoilState(a.creatorMeta('MultiSelect'));
+  const [answer, setAnswer] = useRecoilState(a.creatorAnswer('MultiSelect'));
   const [textInputs, setTextInputs] = useState(meta.options);
+
+  const handleCheck = (i, checked) => {
+    setAnswer((prevArr) => {
+      const newArr = [...prevArr];
+      newArr[i] = checked !== undefined ? checked : !prevArr[i];
+      return newArr;
+    });
+  };
 
   return (
     <Wrapper>
@@ -102,18 +127,10 @@ const McqOption = () => {
             alignItems="stretch"
             wrap="nowrap"
           >
-            <StyledRadio
-              colour={g.alphabet[i][1]}
-              checked={answer === i}
-              value={i}
-              onClick={(e) =>
-                setAnswer((prev) => {
-                  // Uncheck if user clicks twice
-                  const value = parseInt(e.target.value, 10);
-                  if (prev === value) return null;
-                  return value;
-                })
-              }
+            <Check
+              i={i}
+              checked={answer[i] || false}
+              handleCheck={handleCheck}
             />
             <StyledTextField
               multiline

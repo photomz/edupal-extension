@@ -4,7 +4,6 @@ import styled from 'styled-components';
 import a from '../../atoms';
 
 import Carousel from './Carousel';
-import QuestionBuilder from '../../components/QuestionBuilder';
 
 import mockWebsocketData from './data.json';
 
@@ -17,7 +16,6 @@ const QuestionPanel = () => {
   const questionIds = useRecoilValue(a.questionIds);
   const addQuestion = useSetRecoilState(a.addQuestion);
   const addResponse = useSetRecoilState(a.addResponse);
-  const role = useRecoilValue(a.role);
 
   // TODO: Websocket
   useEffect(() => {
@@ -41,7 +39,6 @@ const QuestionPanel = () => {
       {questionIds.map((qid) => (
         <Carousel key={qid} qid={qid} />
       ))}
-      {role === 'TEACHER' && <QuestionBuilder />}
     </Wrapper>
   );
 };

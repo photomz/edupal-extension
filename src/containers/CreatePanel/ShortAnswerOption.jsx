@@ -10,7 +10,7 @@ const StyledTextField = styled(TextField)`
 `;
 
 const ShortAnswerOption = () => {
-  const [answer, setAnswer] = useRecoilState(a.builderAnswer('ShortAnswer'));
+  const [answer, setAnswer] = useRecoilState(a.creatorAnswer('ShortAnswer'));
   return (
     <StyledTextField
       multiline

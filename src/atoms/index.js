@@ -1,6 +1,7 @@
 import { atom, selector, selectorFamily, atomFamily } from 'recoil';
 import mockMeetData from './data.json';
 import g from '../global';
+// import Util from '../util';
 
 const role = atom({
   key: 'role',
@@ -9,6 +10,23 @@ const role = atom({
     type: 'role',
   },
 });
+
+// const scrapeMeetData = () => {
+//   const dataScript = Util.contains('script', 'accounts.google.com');
+//   if (!dataScript[1] && process.env.NODE_ENV === 'development') return null;
+//   const userData = JSON.parse(dataScript[1].text.match(/\[(.*?)\]/)[0]);
+//   return {
+//     meetingId: document
+//       .querySelector('[data-unresolved-meeting-id]')
+//       .getAttribute('data-unresolved-meeting-id'),
+//     name: userData[6].split(' ')[0],
+//     fullName: userData[6],
+//     team: userData[28],
+//     avatar: userData[5],
+//     email: userData[4],
+//     userId: userData[15],
+//   };
+// };
 
 const meetData = atom({
   key: 'meetData',
@@ -101,7 +119,7 @@ const numStudents = atom({
   default: 5,
 });
 
-// TODO: Set this when builder clicks send
+// TODO: Set this when creator clicks send
 const answers = atomFamily({ key: 'answers', default: null });
 
 const optionBar = selectorFamily({
@@ -163,25 +181,25 @@ const typeMap = {
   TrueFalse: [{}, false],
 };
 
-const builderImage = atom({
-  key: 'builderImage',
+const creatorImage = atom({
+  key: 'creatorImage',
   default: '',
-  persistence_UNSTABLE: { type: 'builderImage' },
+  persistence_UNSTABLE: { type: 'creatorImage' },
 });
-const builderType = atom({
-  key: 'builderType',
+const creatorType = atom({
+  key: 'creatorType',
   default: 'MCQ',
-  persistence_UNSTABLE: { type: 'builderType' },
+  persistence_UNSTABLE: { type: 'creatorType' },
 });
-const builderAnswer = atomFamily({
-  key: 'builderAnswer',
+const creatorAnswer = atomFamily({
+  key: 'creatorAnswer',
   default: (type) => typeMap[type][1],
   persistence_UNSTABLE: {
-    type: 'builderAnswer',
+    type: 'creatorAnswer',
   },
 });
-const builderMeta = atomFamily({
-  key: 'builderMeta',
+const creatorMeta = atomFamily({
+  key: 'creatorMeta',
   default: (type) => typeMap[type][0],
   persistence_UNSTABLE: {
     type: 'buildMeta',
@@ -193,7 +211,7 @@ const reportQuestion = atom({ key: 'reportQuestion', default: '' });
 const goToReport = selectorFamily({
   key: 'goToReport',
   set: (questionId) => ({ set }) => {
-    set(tabOrder, 3);
+    set(tabOrder, 4);
     set(reportQuestion, questionId);
   },
 });
@@ -209,10 +227,10 @@ export default {
   saveMyResponse,
   role,
   isUploaderOpen,
-  builderType,
-  builderAnswer,
-  builderMeta,
-  builderImage,
+  creatorType,
+  creatorAnswer,
+  creatorMeta,
+  creatorImage,
   iHaveResponded,
   responses,
   responseStudentIds,

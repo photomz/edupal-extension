@@ -48,7 +48,7 @@ const StyledTypography = styled(Typography)`
 `;
 
 const TrueFalseOption = () => {
-  const [answer, setAnswer] = useRecoilState(a.builderAnswer('TrueFalse'));
+  const [answer, setAnswer] = useRecoilState(a.creatorAnswer('TrueFalse'));
   return (
     <Grid
       container
