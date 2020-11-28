@@ -10,6 +10,7 @@ import ShortAppBar from '../../containers/ShortAppBar';
 import Sidebar from '../../containers/Sidebar';
 import a from '../../atoms';
 import Util from '../../util';
+import useSocketActions from '../../util/useSocketActions';
 
 const Container = styled.div`
   position: absolute;
@@ -26,6 +27,7 @@ const App = () => {
   const isUploaderOpen = useRecoilValue(a.isUploaderOpen);
   const setDrawerOpen = useSetRecoilState(a.isDrawerOpen);
   const fireMessage = useRecoilValue(a.fireMessage);
+  useSocketActions();
   const appbarRef = useRef(null);
   const sidebarRef = useRef(null);
 

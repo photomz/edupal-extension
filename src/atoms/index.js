@@ -241,6 +241,8 @@ const goToReport = selectorFamily({
 
 const loadingAnswer = atomFamily({ key: 'loadingAnswer', default: false });
 
+const leaderboard = atom({ key: 'leaderboard', default: [] });
+
 export default {
   meetData,
   isDrawerOpen,
@@ -269,4 +271,5 @@ export default {
   goToReport,
   loadingAnswer,
   fireMessage,
+  leaderboard,
 };

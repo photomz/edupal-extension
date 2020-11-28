@@ -1,10 +1,10 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import styled from 'styled-components';
 import Container from '@material-ui/core/Container';
-import { useRecoilValue } from 'recoil';
+import { useRecoilValue, useSetRecoilState } from 'recoil';
 import Person from '../../components/Person';
 import a from '../../atoms';
-import mockHttpData from './data.json';
+// import mockHttpData from './data.json';
 
 const FlexContainer = styled(Container)`
   overflow: hidden;
@@ -12,14 +12,20 @@ const FlexContainer = styled(Container)`
 `;
 
 const LeaderboardPanel = () => {
-  const { userId } = useRecoilValue(a.meetData);
-  const [board, setBoard] = useState([]);
+  const { userId, meetingId } = useRecoilValue(a.meetData);
+  const board = useRecoilValue(a.leaderboard);
+  const fireMessage = useSetRecoilState(a.fireMessage);
 
   useEffect(() => {
-    // TODO: HTTP backend call
-    const sortedLeaderboard = mockHttpData.sort((c, d) => d.points - c.points);
-    setBoard(sortedLeaderboard);
+    fireMessage({ route: 'getLeaderboard', data: { meetingId } });
   }, []);
+
+  // useEffect(() => {
+  //   fireMessage({ route: 'getLeaderboard', data: { meetingId } });
+  //   // TODO: HTTP backend call
+  //   const sortedLeaderboard = mockHttpData.sort((c, d) => d.points - c.points);
+  //   setBoard(sortedLeaderboard);
+  // }, []);
 
   return (
     <FlexContainer>

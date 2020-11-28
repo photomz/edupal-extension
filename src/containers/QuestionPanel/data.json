@@ -113,7 +113,7 @@
 		}
 	},
 	{
-		"action": "receiveResponse",
+		"action": "receiveRespond",
 		"data": {
 			"questionId": "vZOLdGzg9",
 			"response": 1,
@@ -128,7 +128,7 @@
 		}
 	},
 	{
-		"action": "receiveResponse",
+		"action": "receiveRespond",
 		"data": {
 			"questionId": "vZOLdGzg9",
 			"response": 3,
@@ -143,7 +143,7 @@
 		}
 	},
 	{
-		"action": "receiveResponse",
+		"action": "receiveRespond",
 		"data": {
 			"questionId": "vZOLdGzg9",
 			"response": 2,
@@ -158,7 +158,7 @@
 		}
 	},
 	{
-		"action": "receiveResponse",
+		"action": "receiveRespond",
 		"data": {
 			"questionId": "E3dD2oLFg",
 			"response": false,
@@ -173,7 +173,7 @@
 		}
 	},
 	{
-		"action": "receiveResponse",
+		"action": "receiveRespond",
 		"data": {
 			"questionId": "E3dD2oLFg",
 			"response": true,
@@ -188,7 +188,7 @@
 		}
 	},
 	{
-		"action": "receiveResponse",
+		"action": "receiveRespond",
 		"data": {
 			"questionId": "E3dD2ghLFg",
 			"response": 1,
@@ -203,7 +203,7 @@
 		}
 	},
 	{
-		"action": "receiveResponse",
+		"action": "receiveRespond",
 		"data": {
 			"questionId": "E3dD2ghLFg",
 			"response": 3,
@@ -218,7 +218,7 @@
 		}
 	},
 	{
-		"action": "receiveResponse",
+		"action": "receiveRespond",
 		"data": {
 			"questionId": "vZsgkjwerazg9",
 			"response": [
@@ -238,7 +238,7 @@
 		}
 	},
 	{
-		"action": "receiveResponse",
+		"action": "receiveRespond",
 		"data": {
 			"questionId": "vZsgkjwerazg9",
 			"response": [
@@ -258,7 +258,7 @@
 		}
 	},
 	{
-		"action": "receiveResponse",
+		"action": "receiveRespond",
 		"data": {
 			"questionId": "vZOLsdfdfGzg9",
 			"response": "To a major extent, Appeasement was not justified because ....",
@@ -273,7 +273,7 @@
 		}
 	},
 	{
-		"action": "receiveResponse",
+		"action": "receiveRespond",
 		"data": {
 			"questionId": "vZOLsdfdfGzg9",
 			"response": "To a minor extent, Appeasement was justified because ....",
