@@ -1,7 +1,7 @@
 import { atom, selector, selectorFamily, atomFamily } from 'recoil';
 import mockMeetData from './data.json';
 import g from '../global';
-// import Util from '../util';
+import Util from '../util';
 
 const role = atom({
   key: 'role',
@@ -11,29 +11,29 @@ const role = atom({
   },
 });
 
-// const scrapeMeetData = () => {
-//   const dataScript = Util.contains('script', 'accounts.google.com');
-//   if (!dataScript[1] && process.env.NODE_ENV === 'development') return null;
-//   const userData = JSON.parse(dataScript[1].text.match(/\[(.*?)\]/)[0]);
-//   return {
-//     meetingId: document
-//       .querySelector('[data-unresolved-meeting-id]')
-//       .getAttribute('data-unresolved-meeting-id'),
-//     name: userData[6].split(' ')[0],
-//     fullName: userData[6],
-//     team: userData[28],
-//     avatar: userData[5],
-//     email: userData[4],
-//     userId: userData[15],
-//   };
-// };
+const scrapeMeetData = () => {
+  const dataScript = Util.contains('script', 'accounts.google.com');
+  if (!dataScript[1] && process.env.NODE_ENV === 'development') return null;
+  const userData = JSON.parse(dataScript[1].text.match(/\[(.*?)\]/)[0]);
+  return {
+    meetingId: document
+      .querySelector('[data-unresolved-meeting-id]')
+      .getAttribute('data-unresolved-meeting-id'),
+    name: userData[6].split(' ')[0],
+    fullName: userData[6],
+    team: userData[28],
+    avatar: userData[5],
+    email: userData[4],
+    userId: userData[15],
+  };
+};
 
 const meetData = atom({
   key: 'meetData',
   default:
     process.env.NODE_ENV === 'development'
       ? mockMeetData
-      : process.env.NODE_ENV === 'production' && {},
+      : process.env.NODE_ENV === 'production' && scrapeMeetData(),
 });
 
 const isDrawerOpen = atom({ key: 'isDrawerOpen', default: false });
@@ -63,11 +63,10 @@ const addResponse = selector({
   key: 'addResponse',
   set: ({ set, get }, { questionId, ...rest }) => {
     const texts = get(questions(questionId)).meta;
-    console.log(texts);
     let responseText;
     switch (typeof rest.response) {
       case 'boolean':
-        responseText = [rest.response.toString().toUpperCase()];
+        responseText = Util.capitalise([rest.response.toString()]);
         break;
       case 'number':
         responseText =
@@ -91,7 +90,6 @@ const addResponse = selector({
       default:
         throw new Error('Unexpected response type');
     }
-    console.log(rest.response, responseText);
     set(responses(questionId), (prev) =>
       prev.concat({ responseText, ...rest })
     );

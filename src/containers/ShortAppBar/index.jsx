@@ -71,7 +71,7 @@ const ShortAppBar = React.forwardRef((_, ref) => {
         icon={<EdupalIcon />}
         onClose={() => setOpen(false)}
         onOpen={() => setOpen(true)}
-        onClick={() => console.log('Click') && setIsDrawerOpen(true)}
+        onClick={() => console.log('Click') || setIsDrawerOpen(true)}
         open={open}
         ref={ref}
       >

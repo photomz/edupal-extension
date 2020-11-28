@@ -162,6 +162,8 @@ const useComponentWillMount = (func) => {
   useMemo(func, []);
 };
 
+const capitalise = (str) => str[0].toUpperCase() + str.slice(1);
+
 // /**
 //  * Binds an array of actions or 1 action, and dispatches it using useDispatch.
 //  * @param {[Function]|Function} actions - Array or 1 action.
@@ -195,5 +197,6 @@ export default {
   parseDateToDayTime,
   useComponentWillMount,
   formatTimeDiff,
+  capitalise,
   // useActions,
 };

@@ -64,8 +64,13 @@ const visibleTabs = [
   },
 ];
 
-const hiddenTabs = [{ Panel: ReportPanel, condition: () => true }];
-const tabAs = [0, 1, 2, 3, 0];
+const hiddenTabs = [
+  { Panel: ReportPanel, condition: (role) => role === 'TEACHER' },
+];
+const tabAs = {
+  STUDENT: [0, 1, 2],
+  TEACHER: [0, 1, 2, 3, 1],
+};
 
 const TabBar = () => {
   const [tabOrder, setTabOrder] = useRecoilState(a.tabOrder);
@@ -76,18 +81,17 @@ const TabBar = () => {
     <>
       <AppBar position="sticky" color="secondary">
         <Tabs
-          value={tabAs[tabOrder]}
+          value={tabAs[role][tabOrder]}
           onChange={(_, newValue) => setTabOrder(newValue)}
           variant="scrollable"
           scrollButtons="auto"
           indicatorColor="primary"
         >
-          {visibleTabs.map(
-            ({ label, Icon, condition }) =>
-              condition(role) && (
-                <Tab key={label} label={label} icon={<Icon />} />
-              )
-          )}
+          {visibleTabs
+            .filter(({ condition }) => condition(role))
+            .map(({ label, Icon }) => (
+              <Tab key={label} label={label} icon={<Icon />} />
+            ))}
         </Tabs>
       </AppBar>
       <SwipeableViews
@@ -95,14 +99,14 @@ const TabBar = () => {
         index={tabOrder}
         onChangeIndex={(i) => setTabOrder(i)}
       >
-        {visibleTabs.concat(hiddenTabs).map(
-          ({ Panel, condition }, i) =>
-            condition(role) && (
-              <TabPanel key={i} tabOrder={tabOrder} i={i}>
-                <Panel />
-              </TabPanel>
-            )
-        )}
+        {visibleTabs
+          .concat(hiddenTabs)
+          .filter(({ condition }) => condition(role))
+          .map(({ Panel }, i) => (
+            <TabPanel key={i} tabOrder={tabOrder} i={i}>
+              <Panel />
+            </TabPanel>
+          ))}
       </SwipeableViews>
     </>
   );

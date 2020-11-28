@@ -139,7 +139,8 @@ Person.propTypes = {
   subheader: prop.string,
   highlighted: prop.bool,
   children: prop.oneOfType([prop.string, prop.element, prop.node]),
-  Icon: prop.element,
+  // eslint-disable-next-line react/forbid-prop-types
+  Icon: prop.object,
   iconColor: prop.string,
 };
 
