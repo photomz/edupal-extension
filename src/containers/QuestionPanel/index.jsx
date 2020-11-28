@@ -1,19 +1,18 @@
 import React, { useEffect } from 'react';
 import { useSetRecoilState, useRecoilValue } from 'recoil';
+import LazyLoad from 'react-lazyload';
 import styled from 'styled-components';
-import a from '../../atoms';
 
+import a from '../../atoms';
 import Carousel from './Carousel';
 
 import mockWebsocketData from './data.json';
 
-const Wrapper = styled.div`
-  overflow: hidden;
-`;
+const Wrapper = styled.div``;
 
 const QuestionPanel = () => {
   // Most recent questions at top
-  const questionIds = useRecoilValue(a.questionIds);
+  const qids = useRecoilValue(a.questionIds);
   const addQuestion = useSetRecoilState(a.addQuestion);
   const addResponse = useSetRecoilState(a.addResponse);
 
@@ -35,9 +34,18 @@ const QuestionPanel = () => {
   }, []);
 
   return (
-    <Wrapper>
-      {questionIds.map((qid) => (
-        <Carousel key={qid} qid={qid} />
+    <Wrapper id="edupal-questionPanel">
+      {qids.map((qid) => (
+        <LazyLoad
+          key={qid}
+          once
+          scrollContainer="edupal-questionPanel"
+          height="100%"
+          overflow
+          throttle
+        >
+          <Carousel qid={qid} />
+        </LazyLoad>
       ))}
     </Wrapper>
   );

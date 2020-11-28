@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import prop from 'prop-types';
 import { useRecoilValue } from 'recoil';
 import styled from 'styled-components';
@@ -35,35 +35,9 @@ const Carousel = ({ qid }) => {
   const hasResponded = useRecoilValue(a.iHaveResponded(qid));
   const role = useRecoilValue(a.role);
   const carouselOrder = useRecoilValue(a.carouselOrder(qid));
-  const { respondTimestamp, ...response } = useRecoilValue(a.myResponse(qid));
-  const meetData = useRecoilValue(a.meetData);
-  const question = useRecoilValue(a.questions(qid));
 
   const renderFirst = Util.useDelayUnmount(carouselOrder === 0, 250);
   const renderSecond = Util.useDelayUnmount(carouselOrder === 1, 250);
-
-  useEffect(() => {
-    if (!hasResponded) return;
-    // eslint-disable-next-line no-unused-vars
-    const payload = {
-      route: 'respond',
-      data: {
-        student: {
-          name: meetData.name,
-          id: meetData.userId,
-        },
-        answerCrypt: question.answerCrypt,
-        avatar: meetData.avatar,
-        questionId: question.questionId,
-        meetingId: meetData.meetingId,
-        classId: 'null', // TODO: Class join show get UI UX in V2
-        response: JSON.stringify(response),
-        askTimestamp: question.askTimestamp,
-        respondTimestamp,
-      },
-    };
-    // TODO: Websocket emit
-  }, [hasResponded]);
 
   const CardOne =
     role === 'STUDENT' ? QuestionCard : role === 'TEACHER' && SummaryCard;

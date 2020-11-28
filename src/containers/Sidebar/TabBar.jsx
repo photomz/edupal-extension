@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 import React from 'react';
 import PropTypes from 'prop-types';
 import SwipeableViews from 'react-swipeable-views';
@@ -94,20 +95,14 @@ const TabBar = () => {
             ))}
         </Tabs>
       </AppBar>
-      <SwipeableViews
-        axis={$.direction === 'rtl' ? 'x-reverse' : 'x'}
-        index={tabOrder}
-        onChangeIndex={(i) => setTabOrder(i)}
-      >
-        {visibleTabs
-          .concat(hiddenTabs)
-          .filter(({ condition }) => condition(role))
-          .map(({ Panel }, i) => (
-            <TabPanel key={i} tabOrder={tabOrder} i={i}>
-              <Panel />
-            </TabPanel>
-          ))}
-      </SwipeableViews>
+      {visibleTabs
+        .concat(hiddenTabs)
+        .filter(({ condition }) => condition(role))
+        .map(({ Panel }, i) => (
+          <TabPanel key={i} tabOrder={tabOrder} i={i}>
+            <Panel />
+          </TabPanel>
+        ))}
     </>
   );
 };

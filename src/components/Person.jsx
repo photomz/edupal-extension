@@ -4,13 +4,13 @@ import prop from 'prop-types';
 
 import Card from '@material-ui/core/Card';
 import CardHeader from '@material-ui/core/CardHeader';
-import Avatar from '@material-ui/core/Avatar';
 import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
 
 import TrophyIcon from '@material-ui/icons/EmojiEvents';
 import UpIcon from '@material-ui/icons/KeyboardArrowUp';
 import DownIcon from '@material-ui/icons/KeyboardArrowDown';
+import LazyAvatar from './LazyAvatar';
 
 const PersonCard = styled(Card)`
   margin: ${({ theme }) => theme.spacing(1)} 0;
@@ -31,7 +31,7 @@ const PersonCard = styled(Card)`
 
 const StyledGrid = styled(Grid)``;
 
-const IconWrapper = styled(Avatar)`
+const IconWrapper = styled(LazyAvatar)`
   ${({ theme, colour }) => `
 	color: #fff;
 	align-self: center;
@@ -97,7 +97,7 @@ const Person = ({
   return (
     <PersonCard variant="outlined" $highlighted={highlighted}>
       <CardHeader
-        avatar={<Avatar src={avatar} />}
+        avatar={<LazyAvatar src={avatar} />}
         action={
           <IconWrapper colour={iconColor}>
             <Icon />

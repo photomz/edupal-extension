@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { useRecoilValue, useSetRecoilState } from 'recoil';
 import styled from 'styled-components';
 import prop from 'prop-types';
@@ -6,20 +6,18 @@ import prop from 'prop-types';
 import Grid from '@material-ui/core/Grid';
 import CardHeader from '@material-ui/core/CardHeader';
 import CardContent from '@material-ui/core/CardContent';
-import Avatar from '@material-ui/core/Avatar';
 import IconButton from '@material-ui/core/IconButton';
 import Typography from '@material-ui/core/Typography';
 import Popover from '@material-ui/core/Popover';
 import Skeleton from '@material-ui/lab/Skeleton';
 
 import InfoIcon from '@material-ui/icons/Info';
-import CorrectIcon from '@material-ui/icons/CheckCircle';
-import WrongIcon from '@material-ui/icons/Cancel';
-import UngradedIcon from '@material-ui/icons/IndeterminateCheckBox';
 import LeftIcon from '@material-ui/icons/ChevronLeft';
+import LazyAvatar from '../LazyAvatar';
 
 import a from '../../atoms';
 import Util from '../../util';
+import g from '../../global';
 
 const StyledPopover = styled(Popover)`
   pointer-events: none;
@@ -40,19 +38,13 @@ const StyledGrid = styled(Grid)`
 `}
 `;
 
-const largeIconMap = {
-  true: [CorrectIcon, 'green'],
-  false: [WrongIcon, 'red'],
-  null: [UngradedIcon, 'primary'],
-};
-
 const AnswerCard = ({ qid }) => {
   const { avatar, userId } = useRecoilValue(a.meetData);
   const { question, num } = useRecoilValue(a.questions(qid));
   const { respondTimestamp, ...response } = useRecoilValue(a.myResponse(qid));
   const switchCard = useSetRecoilState(a.carouselOrder(qid));
+  const isLoading = useRecoilValue(a.loadingAnswer(qid));
 
-  const [isLoading, setIsLoading] = useState(true);
   const [popoverAnchor, setPopoverAnchor] = useState(null);
 
   const answer = {
@@ -60,17 +52,12 @@ const AnswerCard = ({ qid }) => {
     pointsEarned: 3,
   };
 
-  // TODO: Set by websocket receive response action
-  useEffect(() => {
-    setTimeout(() => setIsLoading(false), 1000);
-  }, []);
-
-  const [Icon, colour] = largeIconMap[answer.isCorrect];
+  const { Icon, colour } = g.correctness[answer.isCorrect];
 
   return (
     <>
       <CardHeader
-        avatar={<Avatar src={avatar} />}
+        avatar={<LazyAvatar src={avatar} />}
         action={
           <>
             <IconButton
@@ -125,18 +112,13 @@ const AnswerCard = ({ qid }) => {
         >
           <StyledGrid colour={colour}>
             {isLoading ? (
-              <Skeleton
-                animation="wave"
-                variant="circle"
-                width={50}
-                height={50}
-              />
+              <Skeleton variant="circle" width={50} height={50} />
             ) : (
               <Icon />
             )}
           </StyledGrid>
           {isLoading ? (
-            <Skeleton animation="wave" variant="rect" width={80} height={20} />
+            <Skeleton variant="rect" width={80} height={20} />
           ) : (
             <Typography variant="h5" component="h3">
               {`+${answer.pointsEarned} Points!`}

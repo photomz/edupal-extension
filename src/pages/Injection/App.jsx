@@ -25,6 +25,7 @@ const App = () => {
   const { sendJsonMessage } = useWebsocket(global.socketUrl, {}, connect);
   const isUploaderOpen = useRecoilValue(a.isUploaderOpen);
   const setDrawerOpen = useSetRecoilState(a.isDrawerOpen);
+  const fireMessage = useRecoilValue(a.fireMessage);
   const appbarRef = useRef(null);
   const sidebarRef = useRef(null);
 
@@ -48,6 +49,10 @@ const App = () => {
     }, 60000 * 9);
     return clearInterval(keepAlive);
   }, []);
+
+  useEffect(() => {
+    console.log(fireMessage);
+  }, [fireMessage]);
 
   useEffect(() => {
     (async () => {

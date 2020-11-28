@@ -4,12 +4,12 @@ import { useRecoilValue } from 'recoil';
 import prop from 'prop-types';
 
 import Grid from '@material-ui/core/Grid';
-import Avatar from '@material-ui/core/Avatar';
 import Tooltip from '@material-ui/core/Tooltip';
+import LazyAvatar from '../LazyAvatar';
 import a from '../../atoms';
 import g from '../../global';
 
-const StyledAvatar = styled(Avatar)`
+const StyledAvatar = styled(LazyAvatar)`
   ${({ theme: $, colour }) => `
   background-color: ${$.palette[colour].main};
   color: ${$.palette.common.white};
@@ -47,7 +47,7 @@ const BarChartRow = ({ i, qid, isTf }) => {
     a.optionBar({ questionId: qid, option: isTf ? !!i : i })
   );
 
-  const colour = isCorrect === null ? 'secondary' : isCorrect ? 'green' : 'red';
+  const { colour } = g.correctness[isCorrect];
   const avatarStyles = isTf ? g.trueFalse : g.alphabet;
 
   return (

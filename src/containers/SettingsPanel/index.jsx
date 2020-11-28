@@ -1,5 +1,5 @@
 import React from 'react';
-import { useRecoilState } from 'recoil';
+import { useRecoilState, useSetRecoilState } from 'recoil';
 import Radio from '@material-ui/core/Radio';
 import RadioGroup from '@material-ui/core/RadioGroup';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
@@ -11,6 +11,7 @@ import a from '../../atoms';
 
 const SettingsPanel = () => {
   const [role, setRole] = useRecoilState(a.role);
+  const setTabs = useSetRecoilState(a.tabOrder);
 
   return (
     <Box m={4}>
@@ -20,7 +21,11 @@ const SettingsPanel = () => {
           aria-label="role"
           name="role"
           value={role}
-          onChange={(e) => setRole(e.target.value)}
+          onChange={(e) => {
+            const newRole = e.target.value;
+            setRole(newRole);
+            setTabs(newRole === 'TEACHER' ? 3 : newRole === 'STUDENT' && 2);
+          }}
         >
           <FormControlLabel
             value="STUDENT"

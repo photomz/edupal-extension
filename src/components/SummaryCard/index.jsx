@@ -5,13 +5,13 @@ import { useRecoilValue, useSetRecoilState } from 'recoil';
 
 import CardHeader from '@material-ui/core/CardHeader';
 import CardActions from '@material-ui/core/CardActions';
-import Avatar from '@material-ui/core/Avatar';
 import IconButton from '@material-ui/core/IconButton';
 import Typography from '@material-ui/core/Typography';
 import Popover from '@material-ui/core/Popover';
 
 import InfoIcon from '@material-ui/icons/Info';
 import RightIcon from '@material-ui/icons/ChevronRight';
+import LazyAvatar from '../LazyAvatar';
 
 import BarChart from './BarChart';
 import a from '../../atoms';
@@ -43,7 +43,7 @@ const SummaryCard = ({ qid }) => {
   return (
     <>
       <CardHeader
-        avatar={<Avatar src={avatar} />}
+        avatar={<LazyAvatar src={avatar} />}
         action={
           <>
             <IconButton

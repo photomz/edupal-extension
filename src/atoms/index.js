@@ -10,6 +10,7 @@ const role = atom({
     type: 'role',
   },
 });
+const fireMessage = atom({ key: 'fireMessage', default: '' });
 
 const scrapeMeetData = () => {
   const dataScript = Util.contains('script', 'accounts.google.com');
@@ -159,11 +160,35 @@ const saveMyResponse = selectorFamily({
   set: (questionId) => ({ set, get }, obj) => {
     if (get(iHaveResponded(questionId))) return;
     set(iHaveResponded(questionId), true);
-    set(myResponse(questionId), {
-      ...obj,
-      respondTimestamp: new Date().toISOString(),
-    });
     set(carouselOrder(questionId), 1);
+
+    const response = obj;
+    const respondTimestamp = new Date().toISOString();
+    set(myResponse(questionId), {
+      response,
+      respondTimestamp,
+    });
+
+    const user = get(meetData);
+    const question = get(questions(questionId));
+    const payload = {
+      route: 'respond',
+      data: {
+        student: {
+          name: user.name,
+          id: user.userId,
+        },
+        answerCrypt: question.answerCrypt,
+        avatar: user.avatar,
+        questionId: question.questionId,
+        meetingId: user.meetingId,
+        classId: 'null', // TODO: Class join show get UI UX in V2
+        response: JSON.stringify(response),
+        askTimestamp: question.askTimestamp,
+        respondTimestamp,
+      },
+    };
+    set(fireMessage, payload);
   },
 });
 
@@ -214,6 +239,8 @@ const goToReport = selectorFamily({
   },
 });
 
+const loadingAnswer = atomFamily({ key: 'loadingAnswer', default: false });
+
 export default {
   meetData,
   isDrawerOpen,
@@ -240,4 +267,6 @@ export default {
   tabOrder,
   reportQuestion,
   goToReport,
+  loadingAnswer,
+  fireMessage,
 };

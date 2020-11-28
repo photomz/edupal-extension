@@ -7,6 +7,7 @@ import {
   ThemeProvider as MuiThemeProvider,
 } from '@material-ui/core/styles';
 import CssBaseline from '@material-ui/core/CssBaseline';
+
 import recoilPersist from 'recoil-persist';
 import App from './App';
 import themeTemplate from '../../styles/theme';

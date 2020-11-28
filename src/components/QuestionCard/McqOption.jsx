@@ -5,8 +5,8 @@ import prop from 'prop-types';
 
 import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
-import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
+import LazyAvatar from '../LazyAvatar';
 import a from '../../atoms';
 import g from '../../global';
 
@@ -14,7 +14,7 @@ const Wrapper = styled.div`
   flex-grow: 1;
 `;
 
-const StyledAvatar = styled(Avatar)`
+const StyledAvatar = styled(LazyAvatar)`
   ${({ theme: $, colour }) => `
   
   margin: ${$.spacing(1)};

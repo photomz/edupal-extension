@@ -25,7 +25,7 @@ const LeaderboardPanel = () => {
     <FlexContainer>
       {board.map(({ name, id, avatar, change, points }, i) => {
         let trophyColor;
-        switch (i) {
+        switch (i + 1) {
           case 1:
             trophyColor = 'gold';
             break;
