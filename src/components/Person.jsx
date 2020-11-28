@@ -18,8 +18,8 @@ const PersonCard = styled(Card)`
     align-self: center;
     margin-right: ${({ theme }) => theme.spacing(1)};
   }
-  ${({ $isMe, theme }) =>
-    $isMe &&
+  ${({ $highlighted, theme }) =>
+    $highlighted &&
     `background-color: ${theme.palette.secondary.dark}; 
     box-shadow: ${theme.shadows[8]};
     &&& * {
@@ -31,7 +31,7 @@ const PersonCard = styled(Card)`
 
 const StyledGrid = styled(Grid)``;
 
-const Trophy = styled(Avatar)`
+const IconWrapper = styled(Avatar)`
   ${({ theme, colour }) => `
 	color: #fff;
 	align-self: center;
@@ -84,31 +84,24 @@ ChangeIndicator.propTypes = {
 };
 
 // Change in position index, not points
-const Person = ({ name, avatar, change, points, isMe, rank }) => {
-  let trophyColor;
-  switch (rank) {
-    case 1:
-      trophyColor = 'gold';
-      break;
-    case 2:
-      trophyColor = 'silver';
-      break;
-    case 3:
-      trophyColor = 'bronze';
-      break;
-    default:
-      trophyColor = 'merit';
-      break;
-  }
-
+const Person = ({
+  name,
+  avatar,
+  change,
+  subheader,
+  highlighted,
+  children,
+  Icon,
+  iconColor,
+}) => {
   return (
-    <PersonCard variant="outlined" $isMe={isMe}>
+    <PersonCard variant="outlined" $highlighted={highlighted}>
       <CardHeader
         avatar={<Avatar src={avatar} />}
         action={
-          <Trophy colour={trophyColor}>
-            <TrophyIcon />
-          </Trophy>
+          <IconWrapper colour={iconColor}>
+            <Icon />
+          </IconWrapper>
         }
         title={
           <StyledGrid
@@ -121,19 +114,33 @@ const Person = ({ name, avatar, change, points, isMe, rank }) => {
             <ChangeIndicator change={change} />
           </StyledGrid>
         }
-        subheader={`${points} Points`}
+        subheader={subheader}
       />
+      {children}
     </PersonCard>
   );
 };
 
+Person.defaultProps = {
+  name: 'John',
+  avatar: '',
+  change: 2,
+  subheader: '45 Points',
+  highlighted: false,
+  children: <></>,
+  Icon: TrophyIcon,
+  iconColor: 'gold',
+};
+
 Person.propTypes = {
-  name: prop.string.isRequired,
-  avatar: prop.string.isRequired,
-  change: prop.number.isRequired,
-  points: prop.number.isRequired,
-  isMe: prop.bool.isRequired,
-  rank: prop.number.isRequired,
+  name: prop.string,
+  avatar: prop.string,
+  change: prop.number,
+  subheader: prop.string,
+  highlighted: prop.bool,
+  children: prop.oneOfType([prop.string, prop.element, prop.node]),
+  Icon: prop.element,
+  iconColor: prop.string,
 };
 
 export default Person;

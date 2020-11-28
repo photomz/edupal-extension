@@ -8,18 +8,11 @@ import Typography from '@material-ui/core/Typography';
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
 import a from '../../atoms';
+import g from '../../global';
 
 const Wrapper = styled.div`
   flex-grow: 1;
 `;
-
-const alphabet = [
-  ['A', 'primary'],
-  ['B', 'red'],
-  ['C', 'green'],
-  ['D', 'secondary'],
-  ['E', 'yellow'],
-];
 
 const StyledAvatar = styled(Avatar)`
   ${({ theme: $, colour }) => `
@@ -54,8 +47,8 @@ const StyledButton = styled(Button)`
 `;
 
 const LetterFab = ({ i, handleRespond }) => (
-  <StyledAvatar colour={alphabet[i][1]} onClick={() => handleRespond(i)}>
-    {alphabet[i][0]}
+  <StyledAvatar colour={g.alphabet[i][1]} onClick={() => handleRespond(i)}>
+    {g.alphabet[i][0]}
   </StyledAvatar>
 );
 

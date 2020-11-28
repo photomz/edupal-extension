@@ -1,6 +1,7 @@
-import React, { useState } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import SwipeableViews from 'react-swipeable-views';
+import { useRecoilState } from 'recoil';
 
 import { useTheme } from '@material-ui/core/styles';
 import AppBar from '@material-ui/core/AppBar';
@@ -11,64 +12,69 @@ import QuestionIcon from '@material-ui/icons/QuestionAnswer';
 import LeaderboardIcon from '@material-ui/icons/EmojiEvents';
 import SettingsIcon from '@material-ui/icons/Settings';
 
+import a from '../../atoms';
 import QuestionPanel from '../QuestionPanel';
 import LeaderboardPanel from '../LeaderboardPanel';
 import SettingsPanel from '../SettingsPanel';
+import ReportPanel from '../ReportPanel';
 
-const TabPanel = ({ children, selectedTabNum, i }) => (
+const TabPanel = ({ children, tabOrder, i }) => (
   <div
     role="tabpanel"
-    hidden={selectedTabNum !== i}
+    hidden={tabOrder !== i}
     id={`simple-tabpanel-${i}`}
     aria-labelledby={`simple-tab-${i}`}
   >
-    {selectedTabNum === i && children}
+    {tabOrder === i && children}
   </div>
 );
 
 TabPanel.propTypes = {
   children: PropTypes.node.isRequired,
-  selectedTabNum: PropTypes.number.isRequired,
+  tabOrder: PropTypes.number.isRequired,
   i: PropTypes.number.isRequired,
 };
 
-const tabMeta = [
+const visibleTabs = [
   { label: 'Questions', Icon: QuestionIcon, Panel: QuestionPanel },
   { label: 'Leaderboard', Icon: LeaderboardIcon, Panel: LeaderboardPanel },
   { label: 'Settings', Icon: SettingsIcon, Panel: SettingsPanel },
 ];
 
+const hiddenTabs = [{ Panel: ReportPanel }];
+const tabAs = [0, 1, 2, 0];
+
 const TabBar = () => {
-  const [selectedTabNum, setSelectedTabNum] = useState(0);
+  const [tabOrder, setTabOrder] = useRecoilState(a.tabOrder);
   const $ = useTheme();
 
   return (
-    <div>
+    <>
       <AppBar position="sticky" color="secondary">
         <Tabs
-          value={selectedTabNum}
-          onChange={(_, newValue) => setSelectedTabNum(newValue)}
+          value={tabAs[tabOrder]}
+          onChange={(_, newValue) => setTabOrder(newValue)}
           variant="scrollable"
           scrollButtons="auto"
           indicatorColor="primary"
         >
-          {tabMeta.map(({ label, Icon }) => (
+          {visibleTabs.map(({ label, Icon }) => (
             <Tab key={label} label={label} icon={<Icon />} />
           ))}
         </Tabs>
       </AppBar>
       <SwipeableViews
         axis={$.direction === 'rtl' ? 'x-reverse' : 'x'}
-        index={selectedTabNum}
-        onChangeIndex={(i) => setSelectedTabNum(i)}
+        index={tabOrder}
+        onChangeIndex={(i) => setTabOrder(i)}
       >
-        {tabMeta.map(({ Panel }, i) => (
-          <TabPanel key={i} selectedTabNum={selectedTabNum} i={i}>
-            <Panel />
+        {visibleTabs.concat(hiddenTabs).map(({ Panel }, i) => (
+          <TabPanel key={i} tabOrder={tabOrder} i={i}>
+            {tabOrder === i && <Panel />}
           </TabPanel>
         ))}
       </SwipeableViews>
-    </div>
+    </>
   );
 };
 

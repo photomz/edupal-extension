@@ -136,6 +136,13 @@ const contains = (selector, text) => {
   );
 };
 
+const formatTimeDiff = (sec) => {
+  const h = Math.floor(sec / 3600);
+  const m = Math.floor(sec / 60) % 60;
+  const s = Math.floor(sec % 60);
+  return `${h ? `${h}h` : ''} ${m ? `${m}m` : ''} ${s}s`;
+};
+
 function useDelayUnmount(isMounted, delayTime) {
   const [shouldRender, setShouldRender] = useState(false);
 
@@ -187,5 +194,6 @@ export default {
   useDelayUnmount,
   parseDateToDayTime,
   useComponentWillMount,
+  formatTimeDiff,
   // useActions,
 };

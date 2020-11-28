@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import Container from '@material-ui/core/Container';
 import { useRecoilValue } from 'recoil';
-import Person from './Person';
+import Person from '../../components/Person';
 import a from '../../atoms';
 import mockHttpData from './data.json';
 
@@ -23,17 +23,34 @@ const LeaderboardPanel = () => {
 
   return (
     <FlexContainer>
-      {board.map(({ name, id, avatar, change, points }, i) => (
-        <Person
-          key={id}
-          name={name}
-          avatar={avatar}
-          change={change}
-          points={points}
-          rank={i + 1}
-          isMe={id === userId}
-        />
-      ))}
+      {board.map(({ name, id, avatar, change, points }, i) => {
+        let trophyColor;
+        switch (i) {
+          case 1:
+            trophyColor = 'gold';
+            break;
+          case 2:
+            trophyColor = 'silver';
+            break;
+          case 3:
+            trophyColor = 'bronze';
+            break;
+          default:
+            trophyColor = 'merit';
+            break;
+        }
+        return (
+          <Person
+            key={id}
+            name={name}
+            avatar={avatar}
+            change={change}
+            subheader={`${points} Points`}
+            highlighted={id === userId}
+            iconColor={trophyColor}
+          />
+        );
+      })}
     </FlexContainer>
   );
 };

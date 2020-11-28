@@ -8,18 +8,11 @@ import TextField from '@material-ui/core/TextField';
 import Slider from '@material-ui/core/Slider';
 import Typography from '@material-ui/core/Typography';
 import a from '../../atoms';
+import g from '../../global';
 
 const Wrapper = styled.div`
   flex-grow: 1;
 `;
-
-const alphabet = [
-  ['A', 'primary'],
-  ['B', 'red'],
-  ['C', 'green'],
-  ['D', 'secondary'],
-  ['E', 'yellow'],
-];
 
 const StyledTextField = styled(TextField)`
   margin-bottom: ${({ theme }) => theme.spacing(2)};
@@ -110,7 +103,7 @@ const McqOption = () => {
             wrap="nowrap"
           >
             <StyledRadio
-              colour={alphabet[i][1]}
+              colour={g.alphabet[i][1]}
               checked={answer === i}
               value={i}
               onClick={(e) =>

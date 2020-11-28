@@ -9,6 +9,7 @@ import Slider from '@material-ui/core/Slider';
 import Typography from '@material-ui/core/Typography';
 import Checkbox from '@material-ui/core/Checkbox';
 import a from '../../atoms';
+import g from '../../global';
 
 const StyledCheckbox = styled(Checkbox)`
   ${({ theme: $, colour }) => `
@@ -33,14 +34,6 @@ const StyledCheckbox = styled(Checkbox)`
 const Wrapper = styled.div`
   flex-grow: 1;
 `;
-
-const alphabet = [
-  ['A', 'primary'],
-  ['B', 'red'],
-  ['C', 'green'],
-  ['D', 'secondary'],
-  ['E', 'yellow'],
-];
 
 const StyledTextField = styled(TextField)`
   margin-bottom: ${({ theme }) => theme.spacing(2)};
@@ -78,13 +71,13 @@ const StyledSlider = styled(Slider)`
 
 const Check = ({ i, checked, handleCheck }) => (
   <StyledCheckbox
-    colour={alphabet[i][1]}
+    colour={g.alphabet[i][1]}
     color="default"
     checked={checked}
     onClick={() => handleCheck(i)}
     onChange={(e) => handleCheck(i, e.target.checked)}
   >
-    {alphabet[i][0]}
+    {g.alphabet[i][0]}
   </StyledCheckbox>
 );
 

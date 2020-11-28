@@ -4,7 +4,6 @@ import prop from 'prop-types';
 import { useRecoilValue, useSetRecoilState } from 'recoil';
 
 import CardHeader from '@material-ui/core/CardHeader';
-import CardMedia from '@material-ui/core/CardMedia';
 import CardActions from '@material-ui/core/CardActions';
 import Avatar from '@material-ui/core/Avatar';
 import IconButton from '@material-ui/core/IconButton';
@@ -12,72 +11,34 @@ import Typography from '@material-ui/core/Typography';
 import Popover from '@material-ui/core/Popover';
 
 import InfoIcon from '@material-ui/icons/Info';
-import OpenIcon from '@material-ui/icons/OpenInNew';
 import RightIcon from '@material-ui/icons/ChevronRight';
 
-import McqOption from './McqOption';
-import MultiSelectOption from './MultiSelectOption';
-import ShortAnswerOption from './ShortAnswerOption';
-import TrueFalseOption from './TrueFalseOption';
+import BarChart from './BarChart';
 import a from '../../atoms';
 import Util from '../../util';
-
-const PaddedTypography = styled(Typography)`
-  ${({ theme: $ }) => `padding-left: ${$.spacing(2)}`}
-`;
 
 const StyledPopover = styled(Popover)`
   pointer-events: none;
 `;
 
-const PositionedCardMedia = styled(CardMedia)`
-  height: 0;
-  padding-top: 56.25%; /* 16:9 */
-  position: relative;
+const GreyLabel = styled(Typography)`
+  color: ${({ theme: $ }) => $.palette.grey[600]};
+  margin-bottom: ${({ theme: $ }) => $.spacing(1)};
 `;
 
-const CornerIconButton = styled(IconButton)`
-  ${({ theme: $ }) => `  
-  position: absolute;
-  bottom: 5px;
-  right: 8px;
-  color: #efefefbb;
-  background-color: rgba(0,0,0,0.35);
-  &:hover {
-    box-shadow: ${$.shadows[8]};
-    background-color: rgba(0,0,0,0.65);
-  }
-  `}
+const ActionsWrapper = styled.div`
+  flex-grow: 1;
+  margin: 0 ${({ theme: $ }) => $.spacing(1)};
 `;
 
-const QuestionCard = ({ qid }) => {
+const SummaryCard = ({ qid }) => {
   const { avatar, teacher, askTimestamp, question, num } = useRecoilValue(
     a.questions(qid)
   );
-  const switchCard = useSetRecoilState(a.carouselOrder(qid));
-  const hasResponded = useRecoilValue(a.iHaveResponded(qid));
+  const goToReport = useSetRecoilState(a.goToReport(qid));
+  const avgTime = useRecoilValue(a.responseSpeed(qid));
 
   const [popoverAnchor, setPopoverAnchor] = useState(null);
-
-  let OptionComponent;
-  switch (question.type) {
-    case 'MCQ':
-      OptionComponent = McqOption;
-      break;
-    case 'ShortAnswer':
-      OptionComponent = ShortAnswerOption;
-      break;
-    case 'MultiSelect':
-      OptionComponent = MultiSelectOption;
-      break;
-    case 'TrueFalse':
-      OptionComponent = TrueFalseOption;
-      break;
-    default:
-      throw new Error('Invalid question type');
-  }
-
-  // TODO: useEffect to construct response object, send to websocket
 
   return (
     <>
@@ -92,36 +53,14 @@ const QuestionCard = ({ qid }) => {
             >
               <InfoIcon />
             </IconButton>
-            <IconButton
-              aria-label="See other card"
-              disabled={!hasResponded}
-              onClick={() => hasResponded && switchCard(1)}
-            >
+            <IconButton aria-label="See other card" onClick={goToReport}>
               <RightIcon />
             </IconButton>
           </>
         }
-        title={teacher.name}
+        title={question.text || `Question ${num + 1}`}
         subheader={Util.parseDateToDayTime(askTimestamp)}
       />
-      <PaddedTypography
-        component="h4"
-        variant="h5"
-        color="initial"
-        gutterBottom
-      >
-        {question.text || `Question ${num + 1}`}
-      </PaddedTypography>
-      {question.image !== null && (
-        <PositionedCardMedia image={question.image} title="Question image">
-          <CornerIconButton
-            title="Open image in new tab"
-            onClick={() => window.open(question.image)}
-          >
-            <OpenIcon />
-          </CornerIconButton>
-        </PositionedCardMedia>
-      )}
       <StyledPopover
         anchorEl={popoverAnchor}
         open={!!popoverAnchor}
@@ -143,14 +82,19 @@ const QuestionCard = ({ qid }) => {
         </Typography>
       </StyledPopover>
       <CardActions>
-        <OptionComponent qid={qid} />
+        <ActionsWrapper>
+          <GreyLabel>
+            {`Average time taken: ${Util.formatTimeDiff(avgTime)}`}
+          </GreyLabel>
+          {question.type !== 'ShortAnswer' && <BarChart qid={qid} />}
+        </ActionsWrapper>
       </CardActions>
     </>
   );
 };
 
-QuestionCard.propTypes = {
+SummaryCard.propTypes = {
   qid: prop.string.isRequired,
 };
 
-export default QuestionCard;
+export default SummaryCard;

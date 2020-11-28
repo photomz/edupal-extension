@@ -8,7 +8,7 @@ import QuestionBuilder from '../../components/QuestionBuilder';
 
 import mockWebsocketData from './data.json';
 
-const FlexContainer = styled.div`
+const Wrapper = styled.div`
   overflow: hidden;
 `;
 
@@ -37,12 +37,12 @@ const QuestionPanel = () => {
   }, []);
 
   return (
-    <FlexContainer>
+    <Wrapper>
       {questionIds.map((qid) => (
         <Carousel key={qid} qid={qid} />
       ))}
       {role === 'TEACHER' && <QuestionBuilder />}
-    </FlexContainer>
+    </Wrapper>
   );
 };
 

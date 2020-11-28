@@ -12,8 +12,8 @@ export default {
     },
     // Purple
     secondary: {
-      light: '#96f',
-      main: '#56f',
+      light: '#9966ff',
+      main: '#5566ff',
       dark: '#4436ff',
     },
     green: {

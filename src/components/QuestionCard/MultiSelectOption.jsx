@@ -8,16 +8,9 @@ import Typography from '@material-ui/core/Typography';
 import Checkbox from '@material-ui/core/Checkbox';
 import Button from '@material-ui/core/Button';
 import a from '../../atoms';
+import g from '../../global';
 
 const Wrapper = styled.div``;
-
-const alphabet = [
-  ['A', 'primary'],
-  ['B', 'red'],
-  ['C', 'green'],
-  ['D', 'secondary'],
-  ['E', 'yellow'],
-];
 
 const StyledCheckbox = styled(Checkbox)`
   ${({ theme: $, colour }) => `
@@ -52,14 +45,14 @@ const StyledButton = styled(Button)`
 
 const Check = ({ i, handleCheck, hasResponded, checked }) => (
   <StyledCheckbox
-    colour={alphabet[i][1]}
+    colour={g.alphabet[i][1]}
     color="default"
     checked={checked}
     disabled={hasResponded}
     onClick={() => handleCheck(i)}
     onChange={(e) => handleCheck(i, e.target.checked)}
   >
-    {alphabet[i][0]}
+    {g.alphabet[i][0]}
   </StyledCheckbox>
 );
 

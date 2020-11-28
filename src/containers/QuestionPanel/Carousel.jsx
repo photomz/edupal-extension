@@ -10,7 +10,6 @@ import slide from '../../styles/animate';
 import QuestionCard from '../../components/QuestionCard';
 import SummaryCard from '../../components/SummaryCard';
 import AnswerCard from '../../components/AnswerCard';
-import ReportCard from '../../components/ReportCard';
 
 const Wrapper = styled.div`
   ${({ theme: $ }) => `  
@@ -68,8 +67,7 @@ const Carousel = ({ qid }) => {
 
   const CardOne =
     role === 'STUDENT' ? QuestionCard : role === 'TEACHER' && SummaryCard;
-  const CardTwo =
-    role === 'STUDENT' ? AnswerCard : role === 'TEACHER' && ReportCard;
+  const CardTwo = role === 'STUDENT' ? AnswerCard : null;
 
   return (
     <Wrapper>
