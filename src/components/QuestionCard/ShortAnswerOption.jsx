@@ -7,7 +7,7 @@ import TextField from '@material-ui/core/TextField';
 import InputAdornment from '@material-ui/core/InputAdornment';
 import IconButton from '@material-ui/core/IconButton';
 import SendIcon from '@material-ui/icons/Send';
-import a from '../../atoms';
+import { sendRespond, iHaveResponded } from '../../logic/response';
 
 const StyledTextField = styled(TextField)`
   ${({ theme: $ }) => `
@@ -17,10 +17,10 @@ const StyledTextField = styled(TextField)`
 `;
 
 const ShortAnswerOption = ({ qid }) => {
-  const hasResponded = useRecoilValue(a.iHaveResponded(qid));
+  const hasResponded = useRecoilValue(iHaveResponded(qid));
   const [text, setText] = useState('');
 
-  const handleResponse = useSetRecoilState(a.sendRespond(qid));
+  const handleResponse = useSetRecoilState(sendRespond(qid));
 
   return (
     <StyledTextField

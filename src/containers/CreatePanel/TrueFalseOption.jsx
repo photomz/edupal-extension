@@ -2,13 +2,13 @@ import React from 'react';
 import { useRecoilState } from 'recoil';
 import styled from 'styled-components';
 
-import Grid from '@material-ui/core/Grid';
-import Radio from '@material-ui/core/Radio';
-import Typography from '@material-ui/core/Typography';
-import Button from '@material-ui/core/Button';
-import a from '../../atoms';
+import MuiGrid from '@material-ui/core/Grid';
+import MuiRadio from '@material-ui/core/Radio';
+import MuiTypography from '@material-ui/core/Typography';
+import MuiButton from '@material-ui/core/Button';
+import { creatorAnswer } from '../../logic/create';
 
-const StyledRadio = styled(Radio)`
+const InnerRadio = styled(MuiRadio)`
   ${({ theme: $, colour }) => `
   background-color: ${$.palette[colour].main};
   transition: all 0.3s ease-in-out;
@@ -26,7 +26,7 @@ const StyledRadio = styled(Radio)`
 `}
 `;
 
-const StyledButton = styled(Button)`
+const Button = styled(MuiButton)`
   ${({ theme: $, colour }) => ` 
   padding: 0 ${$.spacing(2)};
   margin: 0 ${$.spacing(1)};
@@ -41,16 +41,16 @@ const StyledButton = styled(Button)`
   `}
 `;
 
-const StyledTypography = styled(Typography)`
+const Label = styled(MuiTypography)`
   margin-left: ${({ theme }) => theme.spacing(1)};
   margin-right: ${({ theme }) => theme.spacing(2)};
   font-weight: ${({ theme }) => theme.typography.fontWeightMedium};
 `;
 
 const TrueFalseOption = () => {
-  const [answer, setAnswer] = useRecoilState(a.creatorAnswer('TrueFalse'));
+  const [answer, setAnswer] = useRecoilState(creatorAnswer('TrueFalse'));
   return (
-    <Grid
+    <MuiGrid
       container
       direction="row"
       justify="center"
@@ -61,24 +61,29 @@ const TrueFalseOption = () => {
         [true, 'True', 'primary'],
         [false, 'False', 'red'],
       ].map((el) => (
-        <StyledButton
+        <Button
           key={el[1]}
           variant="contained"
           color="default"
           colour={el[2]}
           onClick={() => setAnswer((prev) => (prev === el[0] ? null : el[0]))}
         >
-          <Grid container direction="row" justify="center" alignItems="center">
-            <StyledRadio
+          <MuiGrid
+            container
+            direction="row"
+            justify="center"
+            alignItems="center"
+          >
+            <InnerRadio
               colour={el[2]}
               checked={answer === el[0]}
               value={el[0]}
             />
-            <StyledTypography variant="body2">{el[1]}</StyledTypography>
-          </Grid>
-        </StyledButton>
+            <Label variant="body2">{el[1]}</Label>
+          </MuiGrid>
+        </Button>
       ))}
-    </Grid>
+    </MuiGrid>
   );
 };
 

@@ -5,7 +5,7 @@ import prop from 'prop-types';
 
 import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
-import a from '../../atoms';
+import { questions } from '../../logic/question';
 import BarChartRow from './BarChartRow';
 
 const TextBlock = styled(Typography)`
@@ -21,7 +21,7 @@ const BarChart = ({ qid }) => {
   const {
     meta,
     question: { type },
-  } = useRecoilValue(a.questions(qid));
+  } = useRecoilValue(questions(qid));
 
   // True false question type has no meta, create fallback
   const { options, optionNum } = meta || {

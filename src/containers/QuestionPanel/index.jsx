@@ -3,13 +3,13 @@ import { useRecoilValue } from 'recoil';
 import LazyLoad from 'react-lazyload';
 import styled from 'styled-components';
 
-import a from '../../atoms';
 import Carousel from './Carousel';
+import { questionIds } from '../../logic/question';
 
 const Wrapper = styled.div``;
 
 const QuestionPanel = () => {
-  const qids = useRecoilValue(a.questionIds);
+  const qids = useRecoilValue(questionIds);
 
   return (
     <Wrapper id="edupal-questionPanel">

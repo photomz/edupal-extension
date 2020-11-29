@@ -3,16 +3,14 @@ import styled from 'styled-components';
 import { useRecoilValue, useSetRecoilState } from 'recoil';
 import prop from 'prop-types';
 
-import Grid from '@material-ui/core/Grid';
-import Typography from '@material-ui/core/Typography';
-import Button from '@material-ui/core/Button';
-import LazyAvatar from '../LazyAvatar';
-import a from '../../atoms';
-import g from '../../global';
+import MuiGrid from '@material-ui/core/Grid';
+import MuiTypography from '@material-ui/core/Typography';
+import MuiButton from '@material-ui/core/Button';
 
-const Wrapper = styled.div`
-  flex-grow: 1;
-`;
+import LazyAvatar from '../LazyAvatar';
+import { sendRespond } from '../../logic/response';
+import { questions } from '../../logic/question';
+import g from '../../global';
 
 const StyledAvatar = styled(LazyAvatar)`
   ${({ theme: $, colour }) => `
@@ -35,7 +33,7 @@ const StyledAvatar = styled(LazyAvatar)`
 `}
 `;
 
-const StyledButton = styled(Button)`
+const StyledButton = styled(MuiButton)`
   ${({ theme: $ }) => ` 
   padding: ${$.spacing(1)} ${$.spacing(2)};
   margin: 0 ${$.spacing(1)};
@@ -62,7 +60,7 @@ LetterFab.propTypes = {
 };
 
 const TextOption = ({ i, text, handleRespond }) => (
-  <Grid
+  <MuiGrid
     container
     item
     xs={12}
@@ -77,9 +75,9 @@ const TextOption = ({ i, text, handleRespond }) => (
       color="default"
       onClick={() => handleRespond(i)}
     >
-      <Typography>{text}</Typography>
+      <MuiTypography>{text}</MuiTypography>
     </StyledButton>
-  </Grid>
+  </MuiGrid>
 );
 
 TextOption.propTypes = {
@@ -91,28 +89,26 @@ TextOption.propTypes = {
 const McqOption = ({ qid }) => {
   const {
     meta: { optionNum, options },
-  } = useRecoilValue(a.questions(qid));
-  const handleResponse = useSetRecoilState(a.sendRespond(qid));
+  } = useRecoilValue(questions(qid));
+  const handleResponse = useSetRecoilState(sendRespond(qid));
 
   const hasOptionsText = options !== null;
 
   return (
-    <Wrapper>
-      <Grid container spacing={1} justify="center">
-        {[...Array(optionNum)].map((_, i) =>
-          hasOptionsText ? (
-            <TextOption
-              key={i}
-              i={i}
-              text={options[i]}
-              handleRespond={handleResponse}
-            />
-          ) : (
-            <LetterFab key={i} i={i} handleRespond={handleResponse} />
-          )
-        )}
-      </Grid>
-    </Wrapper>
+    <MuiGrid container spacing={1} justify="center">
+      {[...Array(optionNum)].map((_, i) =>
+        hasOptionsText ? (
+          <TextOption
+            key={i}
+            i={i}
+            text={options[i]}
+            handleRespond={handleResponse}
+          />
+        ) : (
+          <LetterFab key={i} i={i} handleRespond={handleResponse} />
+        )
+      )}
+    </MuiGrid>
   );
 };
 

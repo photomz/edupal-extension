@@ -2,9 +2,9 @@ import React, { useState } from 'react';
 import styled from 'styled-components';
 import { useRecoilState, useSetRecoilState, useRecoilValue } from 'recoil';
 
-import SpeedDial from '@material-ui/lab/SpeedDial';
-import SpeedDialAction from '@material-ui/lab/SpeedDialAction';
-import Icon from '@material-ui/core/Icon';
+import MuiSpeedDial from '@material-ui/lab/SpeedDial';
+import MuiSpeedDialAction from '@material-ui/lab/SpeedDialAction';
+import MuiIcon from '@material-ui/core/Icon';
 
 import RadioIcon from '@material-ui/icons/RadioButtonChecked';
 import CheckIcon from '@material-ui/icons/CheckBox';
@@ -12,21 +12,21 @@ import TrueFalseIcon from '@material-ui/icons/Beenhere';
 import ParagraphICon from '@material-ui/icons/ViewHeadline';
 import EdupalSvg from '../../assets/images/edupal_icon.svg';
 
-import a from '../../atoms';
+import { role, isDrawerOpen } from '../../logic/common';
+import { creatorType } from '../../logic/create';
 
 const drawerWidth = 400;
 
 const EdupalIcon = () => (
-  <Icon>
+  <MuiIcon>
     <img src={EdupalSvg} height={52} width={50} alt="Edu-pal Icon" />
-  </Icon>
+  </MuiIcon>
 );
 
 const Wrapper = styled.div`
   position: absolute;
   top: ${({ theme }) => theme.spacing(12)};
-  right: ${({ theme, $isClosed }) =>
-    theme.spacing(4) + (!$isClosed && drawerWidth)};
+  right: ${({ theme, $isOpen }) => theme.spacing(4) + ($isOpen && drawerWidth)};
   transform: translateZ(0);
   flex-grow: 1;
   transition: right
@@ -34,7 +34,7 @@ const Wrapper = styled.div`
     ${({ theme }) => theme.transitions.sharp};
 `;
 
-const StyledSpeedDial = styled(SpeedDial)`
+const SpeedDial = styled(MuiSpeedDial)`
   & .MuiIcon-root {
     width: 1.5em;
     height: 1.5em;
@@ -52,39 +52,39 @@ const actions = [
 ];
 
 const ShortAppBar = React.forwardRef((_, ref) => {
-  const [isDrawerOpen, setIsDrawerOpen] = useRecoilState(a.isDrawerOpen);
-  const role = useRecoilValue(a.role);
-  const setQuestionType = useSetRecoilState(a.creatorType);
-  const [open, setOpen] = useState(false);
+  const [open, setOpen] = useRecoilState(isDrawerOpen);
+  const userRole = useRecoilValue(role);
+  const setQuestionType = useSetRecoilState(creatorType);
+  const [speedDialOpen, setSpeedDialOpen] = useState(false);
 
   const handleDialClick = (value) => {
-    setOpen(false);
-    setIsDrawerOpen(true);
+    setSpeedDialOpen(false);
+    setOpen(true);
     setQuestionType(value);
   };
 
   return (
-    <Wrapper $isClosed={!isDrawerOpen}>
-      <StyledSpeedDial
+    <Wrapper $isOpen={open}>
+      <SpeedDial
         ariaLabel="speed-dial"
         direction="down"
         icon={<EdupalIcon />}
-        onClose={() => setOpen(false)}
-        onOpen={() => setOpen(true)}
-        onClick={() => console.log('Click') || setIsDrawerOpen(true)}
-        open={open}
+        onClose={() => setSpeedDialOpen(false)}
+        onOpen={() => setSpeedDialOpen(true)}
+        onClick={() => setOpen(true)}
+        open={speedDialOpen}
         ref={ref}
       >
-        {role === 'TEACHER' &&
+        {userRole === 'TEACHER' &&
           actions.map(({ name, icon, value }) => (
-            <SpeedDialAction
+            <MuiSpeedDialAction
               key={name}
               icon={icon}
               tooltipTitle={name}
               onClick={() => handleDialClick(value)}
             />
           ))}
-      </StyledSpeedDial>
+      </SpeedDial>
     </Wrapper>
   );
 });

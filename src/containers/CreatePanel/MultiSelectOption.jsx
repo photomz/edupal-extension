@@ -3,74 +3,25 @@ import styled from 'styled-components';
 import prop from 'prop-types';
 import { useRecoilState } from 'recoil';
 
-import Grid from '@material-ui/core/Grid';
-import TextField from '@material-ui/core/TextField';
-import Slider from '@material-ui/core/Slider';
-import Typography from '@material-ui/core/Typography';
-import Checkbox from '@material-ui/core/Checkbox';
-import a from '../../atoms';
-import g from '../../global';
+import MuiGrid from '@material-ui/core/Grid';
+import MuiTextField from '@material-ui/core/TextField';
+import MuiTypography from '@material-ui/core/Typography';
 
-const StyledCheckbox = styled(Checkbox)`
-  ${({ theme: $, colour }) => `
-  margin: ${$.spacing(1)};
-  background-color: ${$.palette[colour].main};
-  transition: all 0.3s ease-in-out;
-  &:hover {
-    box-shadow: ${$.shadows[4]};
-    background-color: ${$.palette[colour].dark};
-  }
-  color: ${$.palette.common.white};
-  font-weight: ${$.typography.fontWeightMedium};
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: center;
-  width: 45px;
-  height: 45px;
-`}
-`;
+import Slider from '../../components/Slider';
+import ColourfulCheckbox from '../../components/ColourfulCheckbox';
+import { creatorMeta, creatorAnswer } from '../../logic/create';
+import g from '../../global';
 
 const Wrapper = styled.div`
   flex-grow: 1;
 `;
 
-const StyledTextField = styled(TextField)`
+const TextField = styled(MuiTextField)`
   margin-bottom: ${({ theme }) => theme.spacing(2)};
-`;
-
-const StyledSlider = styled(Slider)`
-  color: ${({ theme }) => theme.palette.secondary.main};
-  height: 8;
-  margin-bottom: ${({ theme }) => theme.spacing(2)};
-  &&& .MuiSlider-thumb {
-    height: 24;
-    width: 24;
-    background-color: ${({ theme }) => theme.palette.common.white};
-    border: 2px solid currentColor;
-    margin-top: -8;
-    margin-left: -12;
-  }
-  &&& .MuiSlider-thumb:hover,
-  &&& .MuiSlider-thumb:active,
-  &&& .MuiSlider-thumb:focus {
-    box-shadow: inherit;
-  }
-  &&& .MuiSlider-valueLabel {
-    left: calc(50% - 16px);
-  }
-  &&& .MuiSlider-track {
-    height: 8;
-    border-radius: 4;
-  }
-  &&& .MuiSlider-rail {
-    height: 8;
-    border-radius: 4;
-  }
 `;
 
 const Check = ({ i, checked, handleCheck }) => (
-  <StyledCheckbox
+  <ColourfulCheckbox
     colour={g.alphabet[i][1]}
     color="default"
     checked={checked}
@@ -78,7 +29,7 @@ const Check = ({ i, checked, handleCheck }) => (
     onChange={(e) => handleCheck(i, e.target.checked)}
   >
     {g.alphabet[i][0]}
-  </StyledCheckbox>
+  </ColourfulCheckbox>
 );
 
 Check.defaultProps = {
@@ -92,8 +43,8 @@ Check.propTypes = {
 };
 
 const McqOption = () => {
-  const [meta, setMeta] = useRecoilState(a.creatorMeta('MultiSelect'));
-  const [answer, setAnswer] = useRecoilState(a.creatorAnswer('MultiSelect'));
+  const [meta, setMeta] = useRecoilState(creatorMeta('MultiSelect'));
+  const [answer, setAnswer] = useRecoilState(creatorAnswer('MultiSelect'));
   const [textInputs, setTextInputs] = useState(meta.options);
 
   const handleCheck = (i, checked) => {
@@ -106,8 +57,8 @@ const McqOption = () => {
 
   return (
     <Wrapper>
-      <Typography>Number of Options</Typography>
-      <StyledSlider
+      <MuiTypography>Number of Options</MuiTypography>
+      <Slider
         defaultValue={4}
         marks
         step={1}
@@ -117,9 +68,9 @@ const McqOption = () => {
         valueLabelDisplay="auto"
         onChange={(_, optionNum) => setMeta((prev) => ({ ...prev, optionNum }))}
       />
-      <Grid container spacing={1} justify="center">
+      <MuiGrid container spacing={1} justify="center">
         {[...Array(meta.optionNum)].map((_, i) => (
-          <Grid
+          <MuiGrid
             key={i}
             container
             direction="row"
@@ -129,10 +80,10 @@ const McqOption = () => {
           >
             <Check
               i={i}
-              checked={answer[i] || false}
+              checked={answer && answer[i]}
               handleCheck={handleCheck}
             />
-            <StyledTextField
+            <TextField
               multiline
               fullWidth
               variant="outlined"
@@ -150,9 +101,9 @@ const McqOption = () => {
                 })
               }
             />
-          </Grid>
+          </MuiGrid>
         ))}
-      </Grid>
+      </MuiGrid>
     </Wrapper>
   );
 };

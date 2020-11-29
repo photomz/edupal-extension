@@ -1,52 +1,54 @@
 import React from 'react';
 import { useRecoilState, useSetRecoilState } from 'recoil';
-import Radio from '@material-ui/core/Radio';
-import RadioGroup from '@material-ui/core/RadioGroup';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
-import FormControl from '@material-ui/core/FormControl';
-import FormLabel from '@material-ui/core/FormLabel';
-import Box from '@material-ui/core/Box';
-import Typography from '@material-ui/core/Typography';
-import a from '../../atoms';
+
+import MuiRadio from '@material-ui/core/Radio';
+import MuiRadioGroup from '@material-ui/core/RadioGroup';
+import MuiFormControlLabel from '@material-ui/core/FormControlLabel';
+import MuiFormControl from '@material-ui/core/FormControl';
+import MuiFormLabel from '@material-ui/core/FormLabel';
+import MuiBox from '@material-ui/core/Box';
+import MuiTypography from '@material-ui/core/Typography';
+
+import { role, tabOrder } from '../../logic/common';
 
 const SettingsPanel = () => {
-  const [role, setRole] = useRecoilState(a.role);
-  const setTabs = useSetRecoilState(a.tabOrder);
+  const [userRole, setUserRole] = useRecoilState(role);
+  const setTabs = useSetRecoilState(tabOrder);
 
   return (
-    <Box m={4}>
-      <FormControl component="fieldset">
-        <FormLabel component="legend">Role</FormLabel>
-        <RadioGroup
+    <MuiBox m={4}>
+      <MuiFormControl component="fieldset">
+        <MuiFormLabel component="legend">Role</MuiFormLabel>
+        <MuiRadioGroup
           aria-label="role"
           name="role"
-          value={role}
+          value={userRole}
           onChange={(e) => {
             const newRole = e.target.value;
-            setRole(newRole);
+            setUserRole(newRole);
             setTabs(newRole === 'TEACHER' ? 3 : newRole === 'STUDENT' && 2);
           }}
         >
-          <FormControlLabel
+          <MuiFormControlLabel
             value="STUDENT"
-            control={<Radio />}
+            control={<MuiRadio />}
             label="Student"
           />
-          <FormControlLabel
+          <MuiFormControlLabel
             value="TEACHER"
-            control={<Radio />}
+            control={<MuiRadio />}
             label="Teacher"
           />
-        </RadioGroup>
-      </FormControl>
+        </MuiRadioGroup>
+      </MuiFormControl>
 
-      <Typography style={{ marginTop: 16 }}>
+      <MuiTypography style={{ marginTop: 16 }}>
         Let us know how we&apos;re doing! Drop an email at&nbsp;
         <a href="mailto:edupal.group@gmail.com?subject=Beta Feedback">
           edupal.group@gmail.com
         </a>
-      </Typography>
-    </Box>
+      </MuiTypography>
+    </MuiBox>
   );
 };
 

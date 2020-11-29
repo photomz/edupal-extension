@@ -145,7 +145,8 @@ Person.propTypes = {
   subheader: prop.string,
   highlighted: prop.bool,
   children: prop.oneOfType([prop.string, prop.element, prop.node]),
-  fallback: prop.oneOfType([prop.string, prop.element, prop.node]),
+  // eslint-disable-next-line react/forbid-prop-types
+  fallback: prop.any,
   // eslint-disable-next-line react/forbid-prop-types
   Icon: prop.object,
   iconColor: prop.string,

@@ -2,17 +2,15 @@ import React from 'react';
 import { useRecoilValue } from 'recoil';
 import styled from 'styled-components';
 
-import Drawer from '@material-ui/core/Drawer';
+import MuiDrawer from '@material-ui/core/Drawer';
 
-import a from '../../atoms';
 import TabBar from './TabBar';
 import SidebarHead from './SidebarHead';
+import { isDrawerOpen } from '../../logic/common';
 
 const drawerWidth = 400;
 
-const Wrapper = styled.div``;
-
-const DrawerPaper = styled(Drawer)`
+const Drawer = styled(MuiDrawer)`
   ${({ theme: $ }) => `
     position: absolute;
     right: ${$.spacing(0)};
@@ -33,21 +31,19 @@ const DrawerPaper = styled(Drawer)`
   }
 `;
 const Sidebar = React.forwardRef((_, ref) => {
-  const isDrawerOpen = useRecoilValue(a.isDrawerOpen);
+  const open = useRecoilValue(isDrawerOpen);
 
   return (
-    <Wrapper>
-      <DrawerPaper
-        ref={ref}
-        $isClosed={!isDrawerOpen}
-        open={isDrawerOpen}
-        anchor="right"
-        variant="persistent"
-      >
-        <SidebarHead />
-        <TabBar />
-      </DrawerPaper>
-    </Wrapper>
+    <Drawer
+      ref={ref}
+      $isClosed={!open}
+      open={open}
+      anchor="right"
+      variant="persistent"
+    >
+      <SidebarHead />
+      <TabBar />
+    </Drawer>
   );
 });
 

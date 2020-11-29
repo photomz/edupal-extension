@@ -1,74 +1,75 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { useRecoilValue, useSetRecoilState } from 'recoil';
 import styled from 'styled-components';
 import prop from 'prop-types';
 
-import Grid from '@material-ui/core/Grid';
-import CardHeader from '@material-ui/core/CardHeader';
-import CardContent from '@material-ui/core/CardContent';
-import IconButton from '@material-ui/core/IconButton';
-import Typography from '@material-ui/core/Typography';
-import Popover from '@material-ui/core/Popover';
-import Skeleton from '@material-ui/lab/Skeleton';
+import MuiGrid from '@material-ui/core/Grid';
+import MuiCardHeader from '@material-ui/core/CardHeader';
+import MuiCardContent from '@material-ui/core/CardContent';
+import MuiIconButton from '@material-ui/core/IconButton';
+import MuiTypography from '@material-ui/core/Typography';
 
-import InfoIcon from '@material-ui/icons/Info';
 import LeftIcon from '@material-ui/icons/ChevronLeft';
-import LazyAvatar from '../LazyAvatar';
 
-import a from '../../atoms';
+import ErrorBoundary from '../ErrorBoundary';
+import CardSkeleton from '../CardSkeleton';
+import LazyAvatar from '../LazyAvatar';
 import Util from '../../util';
 import g from '../../global';
+import { meetData, carouselOrder } from '../../logic/common';
+import { questions } from '../../logic/question';
+import { myResponse, studentAnswer, loadingAnswer } from '../../logic/response';
 
-const StyledPopover = styled(Popover)`
-  pointer-events: none;
-`;
-
-const StyledGrid = styled(Grid)`
-  ${({ theme: $, colour }) => `
-  color: ${$.palette[colour].main};
+const LargeIconWrapper = styled(MuiGrid)`
+  color: ${({ theme: $, colour }) => $.palette[colour].main};
   display: flex;
   flex-direction: row;
   align-items: center;
   justify-content: center;
-  margin: 0 ${$.spacing(2)};
+  margin: 0 ${({ theme: $ }) => $.spacing(2)};
   &&& > svg {
     width: 50px;
     height: 50px;
   }
-`}
 `;
 
-const Body = styled(Typography)`
+const Body = styled(MuiTypography)`
   margin-bottom: ${({ theme: $ }) => $.spacing(1)};
   color: ${({ theme: $ }) => $.palette.green.main};
 `;
 
 const AnswerCard = ({ qid }) => {
-  const { avatar } = useRecoilValue(a.meetData);
-  const { question, num } = useRecoilValue(a.questions(qid));
-  const { respondTimestamp } = useRecoilValue(a.myResponse(qid));
+  const { avatar } = useRecoilValue(meetData);
+  const { question, num } = useRecoilValue(questions(qid));
+  const { respondTimestamp } = useRecoilValue(myResponse(qid));
   const { isCorrect, coinsEarned, answerText } = useRecoilValue(
-    a.studentAnswer(qid)
+    studentAnswer(qid)
   );
-  const switchCard = useSetRecoilState(a.carouselOrder(qid));
-  const isLoading = useRecoilValue(a.loadingAnswer(qid));
+  const switchCard = useSetRecoilState(carouselOrder(qid));
+  // eslint-disable-next-line no-unused-vars
+  const isLoading = useRecoilValue(loadingAnswer(qid));
+
+  if (isLoading) return <CardSkeleton />;
 
   const { Icon, colour } = g.correctness[isCorrect];
 
   return (
-    <>
-      <CardHeader
+    <ErrorBoundary fallback={CardSkeleton}>
+      <MuiCardHeader
         avatar={<LazyAvatar src={avatar} />}
         action={
-          <IconButton aria-label="See other card" onClick={() => switchCard(0)}>
+          <MuiIconButton
+            aria-label="See other card"
+            onClick={() => switchCard(0)}
+          >
             <LeftIcon />
-          </IconButton>
+          </MuiIconButton>
         }
         title={question.text || `Question ${num + 1}`}
         subheader={Util.parseDateToDayTime(respondTimestamp)}
       />
-      <CardContent>
-        <Grid
+      <MuiCardContent>
+        <MuiGrid
           container
           item
           direction="row"
@@ -76,28 +77,18 @@ const AnswerCard = ({ qid }) => {
           justify="center"
           styles={{ flexGrow: 1 }}
         >
-          <StyledGrid colour={colour}>
-            {isLoading ? (
-              <Skeleton variant="circle" width={50} height={50} />
-            ) : (
-              <Icon />
-            )}
-          </StyledGrid>
-          {isLoading ? (
-            <Skeleton variant="rect" width={80} height={20} />
-          ) : (
-            <>
-              <Typography variant="h5" component="h3">
-                {`+${coinsEarned} Points!`}
-              </Typography>
-              {answerText.map((el, i) => (
-                <Body key={`report-row-${i}`}>{el}</Body>
-              ))}
-            </>
-          )}
-        </Grid>
-      </CardContent>
-    </>
+          <LargeIconWrapper colour={colour}>
+            <Icon />
+          </LargeIconWrapper>
+          <MuiTypography variant="h5" component="h3">
+            {`+${coinsEarned} Points!`}
+          </MuiTypography>
+          {answerText.map((el, i) => (
+            <Body key={`report-row-${i}`}>{el}</Body>
+          ))}
+        </MuiGrid>
+      </MuiCardContent>
+    </ErrorBoundary>
   );
 };
 

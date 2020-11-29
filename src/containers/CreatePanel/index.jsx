@@ -1,15 +1,16 @@
 import React from 'react';
 import { useRecoilState, useSetRecoilState } from 'recoil';
 import styled from 'styled-components';
-import Card from '@material-ui/core/Card';
-import CardHeader from '@material-ui/core/CardHeader';
-import CardContent from '@material-ui/core/CardContent';
-import CardActions from '@material-ui/core/CardActions';
-import TextField from '@material-ui/core/TextField';
-import IconButton from '@material-ui/core/IconButton';
-import Grid from '@material-ui/core/Grid';
+
+import MuiCard from '@material-ui/core/Card';
+import MuiCardHeader from '@material-ui/core/CardHeader';
+import MuiCardContent from '@material-ui/core/CardContent';
+import MuiCardActions from '@material-ui/core/CardActions';
+import MuiTextField from '@material-ui/core/TextField';
+import MuiIconButton from '@material-ui/core/IconButton';
+import MuiGrid from '@material-ui/core/Grid';
+import MuiTooltip from '@material-ui/core/Tooltip';
 import { DropzoneDialog } from 'material-ui-dropzone';
-import Tooltip from '@material-ui/core/Tooltip';
 
 import PhotoIcon from '@material-ui/icons/AddPhotoAlternate';
 import SendIcon from '@material-ui/icons/Send';
@@ -18,20 +19,28 @@ import McqOption from './McqOption';
 import MultiSelectOption from './MultiSelectOption';
 import ShortAnswerOption from './ShortAnswerOption';
 import TrueFalseOption from './TrueFalseOption';
-import a from '../../atoms';
 import SplitButton from './SplitButton';
+import {
+  creatorType,
+  creatorMeta,
+  creatorAnswer,
+  creatorImage,
+  creatorText,
+  sendAsk,
+} from '../../logic/create';
+import { isUploaderOpen } from '../../logic/common';
 
-const StyledCard = styled(Card)`
+const Card = styled(MuiCard)`
   margin-top: ${({ theme }) => theme.spacing(2)};
   padding-bottom: ${({ theme }) => theme.spacing(2)};
   padding: ${({ theme }) => theme.spacing(1)};
 `;
 
-const StyledTextField = styled(TextField)`
+const TextField = styled(MuiTextField)`
   margin-bottom: ${({ theme }) => theme.spacing(2)};
 `;
 
-const StyledButton = styled(IconButton)`
+const Button = styled(MuiIconButton)`
   &&& {
     margin-left: ${({ theme }) => theme.spacing(2)};
     padding: ${({ theme }) => theme.spacing(1)};
@@ -46,45 +55,44 @@ const optionComponentMap = {
 };
 
 const CreatePanel = () => {
-  const [type, setType] = useRecoilState(a.creatorType);
+  const [type, setType] = useRecoilState(creatorType);
   // Question type dictates interface of meta and answer;
   const Option = optionComponentMap[type];
+  const [meta, setMeta] = useRecoilState(creatorMeta(type));
+  const [answer, setAnswer] = useRecoilState(creatorAnswer(type));
+  const [image, setImage] = useRecoilState(creatorImage);
+  const [title, setTitle] = useRecoilState(creatorText);
 
-  const [meta, setMeta] = useRecoilState(a.creatorMeta(type));
-  const [answer, setAnswer] = useRecoilState(a.creatorAnswer(type));
-  const [image, setImage] = useRecoilState(a.creatorImage);
-
-  const [title, setTitle] = useRecoilState(a.creatorText);
-  const [isOpen, setOpen] = useRecoilState(a.isUploaderOpen);
-  const ask = useSetRecoilState(a.ask);
+  const [isOpen, setOpen] = useRecoilState(isUploaderOpen);
+  const ask = useSetRecoilState(sendAsk);
 
   return (
-    <StyledCard variant="outlined">
-      <CardHeader
+    <Card variant="outlined">
+      <MuiCardHeader
         title={
-          <Grid container direction="row" justify="space-between">
+          <MuiGrid container direction="row" justify="space-between">
             <SplitButton value={type} handleChange={setType} />
-            <Tooltip
+            <MuiTooltip
               title={
                 image === ''
                   ? 'Attach an image'
                   : image.split('/').slice(image.split('/').length - 1)
               }
             >
-              <StyledButton onClick={() => setOpen(true)} variant="extended">
+              <Button onClick={() => setOpen(true)} variant="extended">
                 <PhotoIcon />
-              </StyledButton>
-            </Tooltip>
-            <Tooltip title="Send question">
-              <StyledButton color="primary" onClick={ask}>
+              </Button>
+            </MuiTooltip>
+            <MuiTooltip title="Send question">
+              <Button color="primary" onClick={ask}>
                 <SendIcon />
-              </StyledButton>
-            </Tooltip>
-          </Grid>
+              </Button>
+            </MuiTooltip>
+          </MuiGrid>
         }
       />
-      <CardContent>
-        <StyledTextField
+      <MuiCardContent>
+        <TextField
           multiline
           variant="outlined"
           placeholder="Type the question title (optional)"
@@ -109,17 +117,17 @@ const CreatePanel = () => {
           showPreviews={false}
           dialogProps={{ id: 'edupal-uploader' }}
         />
-      </CardContent>
+      </MuiCardContent>
 
-      <CardActions>
+      <MuiCardActions>
         <Option
           meta={meta}
           setMeta={setMeta}
           answer={answer}
           setAnswer={setAnswer}
         />
-      </CardActions>
-    </StyledCard>
+      </MuiCardActions>
+    </Card>
   );
 };
 

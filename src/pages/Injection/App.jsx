@@ -5,12 +5,22 @@ import { useRecoilValue, useSetRecoilState } from 'recoil';
 import useWebsocket from 'react-use-websocket';
 import styled from 'styled-components';
 
-import global from '../../global';
 import ShortAppBar from '../../containers/ShortAppBar';
 import Sidebar from '../../containers/Sidebar';
-import a from '../../atoms';
+
 import Util from '../../util';
-import useSocketActions from '../../util/useSocketActions';
+import g from '../../global';
+import { receiveAsk } from '../../logic/question';
+import { receiveAnswer } from '../../logic/response';
+import { receiveRespond } from '../../logic/stats';
+import {
+  isUploaderOpen,
+  isDrawerOpen,
+  fireMessage,
+  meetData,
+  role,
+  leaderboard,
+} from '../../logic/common';
 
 const Container = styled.div`
   position: absolute;
@@ -22,18 +32,56 @@ const Container = styled.div`
 `;
 
 const App = () => {
+  const uploaderOpen = useRecoilValue(isUploaderOpen);
+  const setDrawerOpen = useSetRecoilState(isDrawerOpen);
+  const socketMessage = useRecoilValue(fireMessage);
+  const meet = useRecoilValue(meetData);
+  const userRole = useRecoilValue(role);
+
   const [connect, setConnect] = useState(false);
-  const { sendJsonMessage } = useWebsocket(global.socketUrl, {}, connect);
-  const isUploaderOpen = useRecoilValue(a.isUploaderOpen);
-  const setDrawerOpen = useSetRecoilState(a.isDrawerOpen);
-  const fireMessage = useRecoilValue(a.fireMessage);
-  const meetData = useRecoilValue(a.meetData);
-  const role = useRecoilValue(a.role);
-  useSocketActions();
+  const { sendJsonMessage, readyState, lastJsonMessage } = useWebsocket(
+    g.socketUrl,
+    {},
+    connect
+  );
+
   const appbarRef = useRef(null);
   const sidebarRef = useRef(null);
 
-  Util.useOutsideClick([appbarRef, sidebarRef], isUploaderOpen, () =>
+  const addQuestion = useSetRecoilState(receiveAsk);
+  const addResponse = useSetRecoilState(receiveRespond);
+  const addAnswer = useSetRecoilState(receiveAnswer);
+  const setLeaderboard = useSetRecoilState(leaderboard);
+
+  useEffect(() => {
+    console.log(lastJsonMessage);
+    if (lastJsonMessage === null) return;
+    const { action, data } = lastJsonMessage;
+    switch (action) {
+      case 'receiveAsk':
+        addQuestion(data);
+        break;
+      case 'receiveRespond':
+        addResponse(data);
+        break;
+      case 'receiveLeaderboard':
+        setLeaderboard(data);
+        break;
+      case 'response':
+        // eslint-disable-next-line no-console
+        console.info(data);
+        break;
+      case 'receiveAnswer':
+        addAnswer(data);
+        break;
+      default:
+        // eslint-disable-next-line no-console
+        console.info(lastJsonMessage);
+        break;
+    }
+  }, [lastJsonMessage]);
+
+  Util.useOutsideClick([appbarRef, sidebarRef], uploaderOpen, () =>
     setDrawerOpen(false)
   );
 
@@ -42,6 +90,8 @@ const App = () => {
     setConnect(true);
     console.log('Edu-pal Google Meet Extension has started up.');
   }, []);
+
+  useEffect(() => console.info('Socket state:', readyState), [readyState]);
 
   // Send ping to keep socket connection open
   useEffect(() => {
@@ -52,34 +102,35 @@ const App = () => {
   }, []);
 
   useEffect(() => {
-    if (!meetData.meetingId) return;
-    const { meetingId, userId, name } = meetData;
+    if (!meet.meetingId) return;
+    const { meetingId, userId, name, avatar } = meet;
     sendJsonMessage({
       route: 'joinMeeting',
-      data: { meetingId, role, userId, name },
+      data: { meetingId, role: userRole, userId, name, avatar },
     });
-  }, [meetData]);
+  }, [meet]);
 
   useEffect(() => {
-    console.info(fireMessage);
-    sendJsonMessage(fireMessage);
-  }, [fireMessage]);
+    console.info(socketMessage);
+    sendJsonMessage(socketMessage);
+  }, [socketMessage]);
 
   useEffect(() => {
     (async () => {
-      const { meetingId, userId, name } = meetData;
+      const { meetingId, userId, name } = meet;
       const disconnectPayload = {
         route: 'disconnect',
         data: {
           meetingId,
-          role,
+          role: userRole,
           userId,
-          classId: null,
+          classId: 'null', // TODO: Backend requires strict typing of null
           name,
         },
       };
       document.addEventListener('beforeunload', () => {
         sendJsonMessage(disconnectPayload);
+        console.info('Safely disconnected from Edu-pal socket connections.');
       });
 
       // wait for meet to relay call ended message
@@ -88,6 +139,7 @@ const App = () => {
         await new Promise((r) => setTimeout(r, 200));
       }
       sendJsonMessage(disconnectPayload);
+      console.info('Safely disconnected from Edu-pal socket connections');
       setConnect(false);
     })();
   }, []);

@@ -3,30 +3,30 @@ import styled from 'styled-components';
 import Container from '@material-ui/core/Container';
 import { useRecoilValue } from 'recoil';
 
-import CardContent from '@material-ui/core/CardContent';
-import Typography from '@material-ui/core/Typography';
+import MuiCardContent from '@material-ui/core/CardContent';
+import MuiTypography from '@material-ui/core/Typography';
 
 import Person from '../../components/Person';
-import a from '../../atoms';
 import Util from '../../util';
 import g from '../../global';
+import { reportQuestion, responses } from '../../logic/stats';
 
-const FlexContainer = styled(Container)`
+const Wrapper = styled(Container)`
   overflow: hidden;
   padding: ${({ theme }) => theme.spacing(1)} ${({ theme }) => theme.spacing(2)};
 `;
 
-const Body = styled(Typography)`
+const Body = styled(MuiTypography)`
   margin-bottom: ${({ theme: $ }) => $.spacing(1)};
 `;
 
 const ReportPanel = () => {
-  const qid = useRecoilValue(a.reportQuestion);
-  const responses = useRecoilValue(a.responses(qid));
+  const qid = useRecoilValue(reportQuestion);
+  const studentResponses = useRecoilValue(responses(qid));
 
   return (
-    <FlexContainer>
-      {responses.map(
+    <Wrapper>
+      {studentResponses.map(
         ({
           student,
           coinsEarned,
@@ -43,15 +43,15 @@ const ReportPanel = () => {
             Icon={g.correctness[isCorrect].Icon}
             iconColor={g.correctness[isCorrect].colour}
           >
-            <CardContent>
+            <MuiCardContent>
               {responseText.map((el, i) => (
                 <Body key={`report-row-${i}`}>{el}</Body>
               ))}
-            </CardContent>
+            </MuiCardContent>
           </Person>
         )
       )}
-    </FlexContainer>
+    </Wrapper>
   );
 };
 

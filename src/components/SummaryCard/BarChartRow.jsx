@@ -6,7 +6,7 @@ import prop from 'prop-types';
 import Grid from '@material-ui/core/Grid';
 import Tooltip from '@material-ui/core/Tooltip';
 import LazyAvatar from '../LazyAvatar';
-import a from '../../atoms';
+import { optionBar } from '../../logic/stats';
 import g from '../../global';
 
 const StyledAvatar = styled(LazyAvatar)`
@@ -44,7 +44,7 @@ const StyledGrid = styled(Grid)`
 
 const BarChartRow = ({ i, qid, isTf }) => {
   const { percent, isCorrect, numSelected } = useRecoilValue(
-    a.optionBar({ questionId: qid, option: isTf ? !!i : i })
+    optionBar({ questionId: qid, option: isTf ? !!i : i })
   );
 
   const { colour } = g.correctness[isCorrect];

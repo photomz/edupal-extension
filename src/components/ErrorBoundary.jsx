@@ -35,7 +35,8 @@ ErrorBoundary.defaultProps = {
 };
 
 ErrorBoundary.propTypes = {
-  fallback: prop.oneOfType([prop.element, prop.string, prop.node]),
+  // eslint-disable-next-line react/forbid-prop-types
+  fallback: prop.any,
   children: prop.oneOfType([prop.element, prop.string, prop.node]),
 };
 

@@ -7,8 +7,9 @@ import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
 import Checkbox from '@material-ui/core/Checkbox';
 import Button from '@material-ui/core/Button';
-import a from '../../atoms';
 import g from '../../global';
+import { sendRespond, iHaveResponded } from '../../logic/response';
+import { questions } from '../../logic/question';
 
 const Wrapper = styled.div``;
 
@@ -106,8 +107,8 @@ const DoneButton = styled(Button)``;
 const MultiSelectOption = ({ qid }) => {
   const {
     meta: { optionNum, options },
-  } = useRecoilValue(a.questions(qid));
-  const hasResponded = useRecoilValue(a.iHaveResponded(qid));
+  } = useRecoilValue(questions(qid));
+  const hasResponded = useRecoilValue(iHaveResponded(qid));
 
   const [checkedArr, setCheckedArr] = useState(
     [...Array(optionNum)].fill(false)
@@ -122,7 +123,7 @@ const MultiSelectOption = ({ qid }) => {
     });
   };
 
-  const handleResponse = useSetRecoilState(a.sendRespond(qid));
+  const handleResponse = useSetRecoilState(sendRespond(qid));
 
   return (
     <Wrapper>

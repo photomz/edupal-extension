@@ -3,12 +3,12 @@ import styled from 'styled-components';
 import prop from 'prop-types';
 import { useRecoilValue, useSetRecoilState } from 'recoil';
 
-import CardHeader from '@material-ui/core/CardHeader';
-import CardMedia from '@material-ui/core/CardMedia';
-import CardActions from '@material-ui/core/CardActions';
-import IconButton from '@material-ui/core/IconButton';
-import Typography from '@material-ui/core/Typography';
-import Popover from '@material-ui/core/Popover';
+import MuiCardHeader from '@material-ui/core/CardHeader';
+import MuiCardMedia from '@material-ui/core/CardMedia';
+import MuiCardActions from '@material-ui/core/CardActions';
+import MuiIconButton from '@material-ui/core/IconButton';
+import MuiTypography from '@material-ui/core/Typography';
+import MuiPopover from '@material-ui/core/Popover';
 
 import InfoIcon from '@material-ui/icons/Info';
 import OpenIcon from '@material-ui/icons/OpenInNew';
@@ -19,108 +19,91 @@ import McqOption from './McqOption';
 import MultiSelectOption from './MultiSelectOption';
 import ShortAnswerOption from './ShortAnswerOption';
 import TrueFalseOption from './TrueFalseOption';
-import a from '../../atoms';
-import Util from '../../util';
 
-const PaddedTypography = styled(Typography)`
+import Util from '../../util';
+import { carouselOrder } from '../../logic/common';
+import { questions } from '../../logic/question';
+import { iHaveResponded } from '../../logic/response';
+
+const H5 = styled(MuiTypography)`
   ${({ theme: $ }) => `padding-left: ${$.spacing(2)}`}
 `;
-
-const StyledPopover = styled(Popover)`
+const Popover = styled(MuiPopover)`
   pointer-events: none;
 `;
-
-const PositionedCardMedia = styled(CardMedia)`
+const Image = styled(MuiCardMedia)`
   height: 0;
   padding-top: 56.25%; /* 16:9 */
   position: relative;
 `;
-
-const CornerIconButton = styled(IconButton)`
-  ${({ theme: $ }) => `  
+const CornerButton = styled(MuiIconButton)`
   position: absolute;
   bottom: 5px;
   right: 8px;
   color: #efefefbb;
-  background-color: rgba(0,0,0,0.35);
+  background-color: rgba(0, 0, 0, 0.35);
   &:hover {
-    box-shadow: ${$.shadows[8]};
-    background-color: rgba(0,0,0,0.65);
+    box-shadow: ${({ theme: $ }) => $.shadows[8]};
+    background-color: rgba(0, 0, 0, 0.65);
   }
-  `}
 `;
+
+const typeMap = {
+  MCQ: McqOption,
+  ShortAnswer: ShortAnswerOption,
+  MultiSelect: MultiSelectOption,
+  TrueFalse: TrueFalseOption,
+};
 
 const QuestionCard = ({ qid }) => {
   const { avatar, teacher, askTimestamp, question, num } = useRecoilValue(
-    a.questions(qid)
+    questions(qid)
   );
-  const switchCard = useSetRecoilState(a.carouselOrder(qid));
-  const hasResponded = useRecoilValue(a.iHaveResponded(qid));
+  const switchCard = useSetRecoilState(carouselOrder(qid));
+  const hasResponded = useRecoilValue(iHaveResponded(qid));
 
   const [popoverAnchor, setPopoverAnchor] = useState(null);
-
-  let OptionComponent;
-  switch (question.type) {
-    case 'MCQ':
-      OptionComponent = McqOption;
-      break;
-    case 'ShortAnswer':
-      OptionComponent = ShortAnswerOption;
-      break;
-    case 'MultiSelect':
-      OptionComponent = MultiSelectOption;
-      break;
-    case 'TrueFalse':
-      OptionComponent = TrueFalseOption;
-      break;
-    default:
-      throw new Error('Invalid question type');
-  }
+  const Option = typeMap[question.type];
 
   return (
     <>
-      <CardHeader
+      <MuiCardHeader
         avatar={<LazyAvatar src={avatar} />}
         action={
           <>
-            <IconButton
+            <MuiIconButton
               aria-label="More information"
               onMouseEnter={(e) => setPopoverAnchor(e.currentTarget)}
               onMouseLeave={() => setPopoverAnchor(null)}
             >
               <InfoIcon />
-            </IconButton>
-            <IconButton
+            </MuiIconButton>
+            <MuiIconButton
               aria-label="See other card"
               disabled={!hasResponded}
               onClick={() => hasResponded && switchCard(1)}
             >
               <RightIcon />
-            </IconButton>
+            </MuiIconButton>
           </>
         }
         title={teacher.name}
         subheader={Util.parseDateToDayTime(askTimestamp)}
       />
-      <PaddedTypography
-        component="h4"
-        variant="h5"
-        color="initial"
-        gutterBottom
-      >
+      <H5 component="h4" variant="h5" color="initial" gutterBottom>
         {question.text || `Question ${num + 1}`}
-      </PaddedTypography>
+      </H5>
       {question.image !== null && (
-        <PositionedCardMedia image={question.image} title="Question image">
-          <CornerIconButton
+        <Image image={question.image} title="Question image">
+          <CornerButton
             title="Open image in new tab"
             onClick={() => window.open(question.image)}
           >
             <OpenIcon />
-          </CornerIconButton>
-        </PositionedCardMedia>
+          </CornerButton>
+        </Image>
       )}
-      <StyledPopover
+      <Popover
         anchorEl={popoverAnchor}
         open={!!popoverAnchor}
         onClose={() => setPopoverAnchor(null)}
@@ -134,15 +117,15 @@ const QuestionCard = ({ qid }) => {
         }}
         disableRestoreFocus
       >
-        <Typography>
+        <MuiTypography>
           {process.env.NODE_ENV === 'development'
             ? `{questionId: ${qid}, askTimestamp: ${askTimestamp}, teacher.id: ${teacher.id} }`
             : 'Nothing to see here...'}
-        </Typography>
-      </StyledPopover>
-      <CardActions>
-        <OptionComponent qid={qid} />
-      </CardActions>
+        </MuiTypography>
+      </Popover>
+      <MuiCardActions>
+        <Option qid={qid} />
+      </MuiCardActions>
     </>
   );
 };

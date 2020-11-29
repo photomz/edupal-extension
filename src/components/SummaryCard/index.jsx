@@ -14,8 +14,9 @@ import RightIcon from '@material-ui/icons/ChevronRight';
 import LazyAvatar from '../LazyAvatar';
 
 import BarChart from './BarChart';
-import a from '../../atoms';
 import Util from '../../util';
+import { questions } from '../../logic/question';
+import { goToReport, responseSpeed } from '../../logic/stats';
 
 const StyledPopover = styled(Popover)`
   pointer-events: none;
@@ -33,10 +34,10 @@ const ActionsWrapper = styled.div`
 
 const SummaryCard = ({ qid }) => {
   const { avatar, teacher, askTimestamp, question, num } = useRecoilValue(
-    a.questions(qid)
+    questions(qid)
   );
-  const goToReport = useSetRecoilState(a.goToReport(qid));
-  const avgTime = useRecoilValue(a.responseSpeed(qid));
+  const switchToReport = useSetRecoilState(goToReport(qid));
+  const avgTime = useRecoilValue(responseSpeed(qid));
 
   const [popoverAnchor, setPopoverAnchor] = useState(null);
 
@@ -53,7 +54,7 @@ const SummaryCard = ({ qid }) => {
             >
               <InfoIcon />
             </IconButton>
-            <IconButton aria-label="See other card" onClick={goToReport}>
+            <IconButton aria-label="See other card" onClick={switchToReport}>
               <RightIcon />
             </IconButton>
           </>

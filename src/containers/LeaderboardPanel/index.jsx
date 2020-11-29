@@ -1,34 +1,36 @@
 import React, { useEffect } from 'react';
 import styled from 'styled-components';
-import Container from '@material-ui/core/Container';
+
+import MuiContainer from '@material-ui/core/Container';
+
 import { useRecoilValue, useSetRecoilState } from 'recoil';
 import Person from '../../components/Person';
-import a from '../../atoms';
 import CardSkeleton from '../../components/CardSkeleton';
+import { meetData, fireMessage, leaderboard } from '../../logic/common';
 
-const FlexContainer = styled(Container)`
+const Wrapper = styled(MuiContainer)`
   overflow: hidden;
   padding: ${({ theme }) => theme.spacing(1)} ${({ theme }) => theme.spacing(2)};
 `;
 
 const LeaderboardPanel = () => {
-  const { userId, meetingId } = useRecoilValue(a.meetData);
-  const board = useRecoilValue(a.leaderboard);
-  const fireMessage = useSetRecoilState(a.fireMessage);
+  const { userId, meetingId } = useRecoilValue(meetData);
+  const board = useRecoilValue(leaderboard);
+  const sendGetLeaderboard = useSetRecoilState(fireMessage);
 
   useEffect(() => {
-    fireMessage({ route: 'getLeaderboard', data: { meetingId } });
+    sendGetLeaderboard({ route: 'getLeaderboard', data: { meetingId } });
   }, []);
 
   if (!board.length)
     return (
-      <FlexContainer>
+      <Wrapper>
         <CardSkeleton />
-      </FlexContainer>
+      </Wrapper>
     );
 
   return (
-    <FlexContainer>
+    <Wrapper>
       {board.map(({ name, id, avatar, change, points }, i) => {
         let trophyColor;
         switch (i + 1) {
@@ -57,7 +59,7 @@ const LeaderboardPanel = () => {
           />
         );
       })}
-    </FlexContainer>
+    </Wrapper>
   );
 };
 

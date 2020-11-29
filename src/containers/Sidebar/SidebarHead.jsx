@@ -1,6 +1,8 @@
 import React from 'react';
 import styled from 'styled-components';
-import Container from '@material-ui/core/Container';
+
+import MuiContainer from '@material-ui/core/Container';
+
 import logo from '../../assets/images/logo_words.svg';
 
 const Image = styled.img`
@@ -9,19 +11,17 @@ const Image = styled.img`
   padding-left: ${({ theme }) => theme.spacing(4)};
 `;
 
-const FlexContainer = styled(Container)`
+const Flex = styled(MuiContainer)`
   display: flex;
   flex-direction: row;
   justify-content: left;
   margin: ${({ theme }) => theme.spacing(4)};
 `;
 
-const SidebarHead = () => {
-  return (
-    <FlexContainer>
-      <Image src={logo} />
-    </FlexContainer>
-  );
-};
+const SidebarHead = () => (
+  <Flex>
+    <Image src={logo} />
+  </Flex>
+);
 
 export default SidebarHead;

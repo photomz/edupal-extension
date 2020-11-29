@@ -1,23 +1,20 @@
 import React, { useState, useRef } from 'react';
 import prop from 'prop-types';
-import Button from '@material-ui/core/Button';
-import ButtonGroup from '@material-ui/core/ButtonGroup';
+
+import MuiButton from '@material-ui/core/Button';
+import MuiButtonGroup from '@material-ui/core/ButtonGroup';
+import MuiOutsideClick from '@material-ui/core/ClickAwayListener';
+import MuiGrow from '@material-ui/core/Grow';
+import MuiPaper from '@material-ui/core/Paper';
+import MuiPopper from '@material-ui/core/Popper';
+import MuiMenuItem from '@material-ui/core/MenuItem';
+import MuiMenuList from '@material-ui/core/MenuList';
+
 import ArrowDropDownIcon from '@material-ui/icons/ArrowDropDown';
-import ClickAwayListener from '@material-ui/core/ClickAwayListener';
-import Grow from '@material-ui/core/Grow';
-import Paper from '@material-ui/core/Paper';
-import Popper from '@material-ui/core/Popper';
-import MenuItem from '@material-ui/core/MenuItem';
-import MenuList from '@material-ui/core/MenuList';
 
 const SplitButton = ({ options, value, handleChange }) => {
   const [open, setOpen] = useState(false);
   const anchorRef = useRef(null);
-
-  const handleClick = () => {
-    // eslint-disable-next-line no-console
-    console.info(`You clicked ${value}`);
-  };
 
   const handleMenuItemClick = ([newVal]) => {
     handleChange(newVal);
@@ -32,14 +29,14 @@ const SplitButton = ({ options, value, handleChange }) => {
 
   return (
     <>
-      <ButtonGroup
+      <MuiButtonGroup
         variant="contained"
         color="primary"
         ref={anchorRef}
         aria-label="split button"
       >
-        <Button onClick={handleClick}>{options[value]}</Button>
-        <Button
+        <MuiButton>{options[value]}</MuiButton>
+        <MuiButton
           color="primary"
           size="small"
           aria-controls={open ? 'split-button-menu' : undefined}
@@ -49,9 +46,9 @@ const SplitButton = ({ options, value, handleChange }) => {
           onClick={() => setOpen((prev) => !prev)}
         >
           <ArrowDropDownIcon />
-        </Button>
-      </ButtonGroup>
-      <Popper
+        </MuiButton>
+      </MuiButtonGroup>
+      <MuiPopper
         open={open}
         anchorEl={anchorRef.current}
         transition
@@ -59,7 +56,7 @@ const SplitButton = ({ options, value, handleChange }) => {
         style={{ zIndex: 10 }}
       >
         {({ TransitionProps, placement }) => (
-          <Grow
+          <MuiGrow
             // eslint-disable-next-line react/jsx-props-no-spreading
             {...TransitionProps}
             style={{
@@ -68,24 +65,24 @@ const SplitButton = ({ options, value, handleChange }) => {
               zIndex: 10000,
             }}
           >
-            <Paper>
-              <ClickAwayListener onClickAway={handleClose}>
-                <MenuList id="split-button-menu">
+            <MuiPaper>
+              <MuiOutsideClick onClickAway={handleClose}>
+                <MuiMenuList id="split-button-menu">
                   {Object.entries(options).map((option) => (
-                    <MenuItem
+                    <MuiMenuItem
                       key={option[0]}
                       selected={option[0] === value}
                       onClick={() => handleMenuItemClick(option)}
                     >
                       {option[1]}
-                    </MenuItem>
+                    </MuiMenuItem>
                   ))}
-                </MenuList>
-              </ClickAwayListener>
-            </Paper>
-          </Grow>
+                </MuiMenuList>
+              </MuiOutsideClick>
+            </MuiPaper>
+          </MuiGrow>
         )}
-      </Popper>
+      </MuiPopper>
     </>
   );
 };

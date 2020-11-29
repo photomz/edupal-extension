@@ -2,87 +2,32 @@ import React, { useState } from 'react';
 import { useRecoilState } from 'recoil';
 import styled from 'styled-components';
 
-import Grid from '@material-ui/core/Grid';
-import Radio from '@material-ui/core/Radio';
-import TextField from '@material-ui/core/TextField';
-import Slider from '@material-ui/core/Slider';
-import Typography from '@material-ui/core/Typography';
-import a from '../../atoms';
+import MuiGrid from '@material-ui/core/Grid';
+import MuiTextField from '@material-ui/core/TextField';
+import MuiText from '@material-ui/core/Typography';
+
+import ColourfulRadio from '../../components/ColourfulRadio';
+import Slider from '../../components/Slider';
 import g from '../../global';
+import { creatorMeta, creatorAnswer } from '../../logic/create';
 
 const Wrapper = styled.div`
   flex-grow: 1;
 `;
 
-const StyledTextField = styled(TextField)`
+const TextField = styled(MuiTextField)`
   margin-bottom: ${({ theme }) => theme.spacing(2)};
-`;
-
-const StyledRadio = styled(Radio)`
-  ${({ theme: $, colour }) => `
-  
-  margin: ${$.spacing(1)};
-  background-color: ${$.palette[colour].main};
-  transition: all 0.3s ease-in-out;
-  &:hover, &&&.Mui-checked {
-    color: ${$.palette.common.white};
-    box-shadow: ${$.shadows[4]};
-    background-color: ${$.palette[colour].dark};
-  }
-  &&&.Mui-checked:hover {
-    box-shadow: ${$.shadows[8]};
-  }
-  color: ${$.palette.common.white};
-  font-weight: ${$.typography.fontWeightMedium};
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: center;
-  width: 45px;
-  height: 45px;
-  margin-right: ${$.spacing(1)};
-`}
-`;
-
-const StyledSlider = styled(Slider)`
-  color: ${({ theme }) => theme.palette.secondary.main};
-  height: 8;
-  margin-bottom: ${({ theme }) => theme.spacing(2)};
-  &&& .MuiSlider-thumb {
-    height: 24;
-    width: 24;
-    background-color: ${({ theme }) => theme.palette.common.white};
-    border: 2px solid currentColor;
-    margin-top: -8;
-    margin-left: -12;
-  }
-  &&& .MuiSlider-thumb:hover,
-  &&& .MuiSlider-thumb:active,
-  &&& .MuiSlider-thumb:focus {
-    box-shadow: inherit;
-  }
-  &&& .MuiSlider-valueLabel {
-    left: calc(50% - 16px);
-  }
-  &&& .MuiSlider-track {
-    height: 8;
-    border-radius: 4;
-  }
-  &&& .MuiSlider-rail {
-    height: 8;
-    border-radius: 4;
-  }
 `;
 
 const McqOption = () => {
-  const [meta, setMeta] = useRecoilState(a.creatorMeta('MCQ'));
-  const [answer, setAnswer] = useRecoilState(a.creatorAnswer('MCQ'));
+  const [meta, setMeta] = useRecoilState(creatorMeta('MCQ'));
+  const [answer, setAnswer] = useRecoilState(creatorAnswer('MCQ'));
   const [textInputs, setTextInputs] = useState(meta.options);
 
   return (
     <Wrapper>
-      <Typography>Number of Options</Typography>
-      <StyledSlider
+      <MuiText>Number of Options</MuiText>
+      <Slider
         defaultValue={4}
         marks
         step={1}
@@ -92,9 +37,9 @@ const McqOption = () => {
         valueLabelDisplay="auto"
         onChange={(_, optionNum) => setMeta((prev) => ({ ...prev, optionNum }))}
       />
-      <Grid container spacing={1} justify="center">
+      <MuiGrid container spacing={1} justify="center">
         {[...Array(meta.optionNum)].map((_, i) => (
-          <Grid
+          <MuiGrid
             key={i}
             container
             direction="row"
@@ -102,7 +47,7 @@ const McqOption = () => {
             alignItems="stretch"
             wrap="nowrap"
           >
-            <StyledRadio
+            <ColourfulRadio
               colour={g.alphabet[i][1]}
               checked={answer === i}
               value={i}
@@ -115,7 +60,7 @@ const McqOption = () => {
                 })
               }
             />
-            <StyledTextField
+            <TextField
               multiline
               fullWidth
               variant="outlined"
@@ -133,9 +78,9 @@ const McqOption = () => {
                 })
               }
             />
-          </Grid>
+          </MuiGrid>
         ))}
-      </Grid>
+      </MuiGrid>
     </Wrapper>
   );
 };
