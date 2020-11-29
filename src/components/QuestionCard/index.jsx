@@ -77,8 +77,6 @@ const QuestionCard = ({ qid }) => {
       throw new Error('Invalid question type');
   }
 
-  // TODO: useEffect to construct response object, send to websocket
-
   return (
     <>
       <CardHeader

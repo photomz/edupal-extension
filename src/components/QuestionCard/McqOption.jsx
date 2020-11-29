@@ -92,7 +92,7 @@ const McqOption = ({ qid }) => {
   const {
     meta: { optionNum, options },
   } = useRecoilValue(a.questions(qid));
-  const handleResponse = useSetRecoilState(a.saveMyResponse(qid));
+  const handleResponse = useSetRecoilState(a.sendRespond(qid));
 
   const hasOptionsText = options !== null;
 

@@ -25,7 +25,7 @@ const StyledButton = styled(Button)`
 const TrueFalseOption = ({ qid }) => {
   const hasResponded = useRecoilValue(a.iHaveResponded(qid));
 
-  const handleResponse = useSetRecoilState(a.saveMyResponse(qid));
+  const handleResponse = useSetRecoilState(a.sendRespond(qid));
 
   return (
     <Grid

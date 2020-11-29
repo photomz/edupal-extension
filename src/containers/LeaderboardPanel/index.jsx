@@ -4,7 +4,7 @@ import Container from '@material-ui/core/Container';
 import { useRecoilValue, useSetRecoilState } from 'recoil';
 import Person from '../../components/Person';
 import a from '../../atoms';
-// import mockHttpData from './data.json';
+import CardSkeleton from '../../components/CardSkeleton';
 
 const FlexContainer = styled(Container)`
   overflow: hidden;
@@ -20,12 +20,12 @@ const LeaderboardPanel = () => {
     fireMessage({ route: 'getLeaderboard', data: { meetingId } });
   }, []);
 
-  // useEffect(() => {
-  //   fireMessage({ route: 'getLeaderboard', data: { meetingId } });
-  //   // TODO: HTTP backend call
-  //   const sortedLeaderboard = mockHttpData.sort((c, d) => d.points - c.points);
-  //   setBoard(sortedLeaderboard);
-  // }, []);
+  if (!board.length)
+    return (
+      <FlexContainer>
+        <CardSkeleton />
+      </FlexContainer>
+    );
 
   return (
     <FlexContainer>

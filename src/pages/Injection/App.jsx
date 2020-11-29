@@ -27,6 +27,8 @@ const App = () => {
   const isUploaderOpen = useRecoilValue(a.isUploaderOpen);
   const setDrawerOpen = useSetRecoilState(a.isDrawerOpen);
   const fireMessage = useRecoilValue(a.fireMessage);
+  const meetData = useRecoilValue(a.meetData);
+  const role = useRecoilValue(a.role);
   useSocketActions();
   const appbarRef = useRef(null);
   const sidebarRef = useRef(null);
@@ -38,28 +40,46 @@ const App = () => {
   // Websocket init
   useEffect(() => {
     setConnect(true);
-    // TODO: JoinMeeting
-    // Send console message
-    console.log('%c Edu-pal Google Meet Extension has started up.');
+    console.log('Edu-pal Google Meet Extension has started up.');
   }, []);
 
   // Send ping to keep socket connection open
   useEffect(() => {
     const keepAlive = setInterval(() => {
-      console.log('Keeping Edu-pal alive...');
       sendJsonMessage({ route: 'ping' });
     }, 60000 * 9);
     return clearInterval(keepAlive);
   }, []);
 
   useEffect(() => {
-    console.log(fireMessage);
+    if (!meetData.meetingId) return;
+    const { meetingId, userId, name } = meetData;
+    sendJsonMessage({
+      route: 'joinMeeting',
+      data: { meetingId, role, userId, name },
+    });
+  }, [meetData]);
+
+  useEffect(() => {
+    console.info(fireMessage);
+    sendJsonMessage(fireMessage);
   }, [fireMessage]);
 
   useEffect(() => {
     (async () => {
+      const { meetingId, userId, name } = meetData;
+      const disconnectPayload = {
+        route: 'disconnect',
+        data: {
+          meetingId,
+          role,
+          userId,
+          classId: null,
+          name,
+        },
+      };
       document.addEventListener('beforeunload', () => {
-        // TODO:  Wbs disconnect
+        sendJsonMessage(disconnectPayload);
       });
 
       // wait for meet to relay call ended message
@@ -67,12 +87,8 @@ const App = () => {
         // eslint-disable-next-line no-await-in-loop
         await new Promise((r) => setTimeout(r, 200));
       }
-      // sendJsonMessage({
-      //   route: 'disconnect',
-      //   data: { id: meetData.meetingId },
-      // });
+      sendJsonMessage(disconnectPayload);
       setConnect(false);
-      // TODO: Wbs disconnect
     })();
   }, []);
 

@@ -1,7 +1,7 @@
 import { useEffect, useState, useMemo } from 'react';
 // import { useDispatch } from 'react-redux';
 // import { bindActionCreators } from 'redux';
-import shortid from 'shortid';
+import { nanoid } from 'nanoid';
 
 import $ from '../styles/global';
 
@@ -107,7 +107,7 @@ const useOutsideClick = (refArray, override, callback) => {
  */
 const addKeys = (items) =>
   // eslint-disable-next-line implicit-arrow-linebreak
-  items.map((item) => ({ ...item, key: shortid.generate() }));
+  items.map((item) => ({ ...item, key: nanoid() }));
 
 const parseTimeToDayMonth = (item) => {
   const date = new Date(item);

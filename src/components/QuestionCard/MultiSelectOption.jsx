@@ -122,7 +122,7 @@ const MultiSelectOption = ({ qid }) => {
     });
   };
 
-  const handleResponse = useSetRecoilState(a.saveMyResponse(qid));
+  const handleResponse = useSetRecoilState(a.sendRespond(qid));
 
   return (
     <Wrapper>

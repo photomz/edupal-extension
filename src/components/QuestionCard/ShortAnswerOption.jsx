@@ -20,7 +20,7 @@ const ShortAnswerOption = ({ qid }) => {
   const hasResponded = useRecoilValue(a.iHaveResponded(qid));
   const [text, setText] = useState('');
 
-  const handleResponse = useSetRecoilState(a.saveMyResponse(qid));
+  const handleResponse = useSetRecoilState(a.sendRespond(qid));
 
   return (
     <StyledTextField

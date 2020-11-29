@@ -11,6 +11,8 @@ import TrophyIcon from '@material-ui/icons/EmojiEvents';
 import UpIcon from '@material-ui/icons/KeyboardArrowUp';
 import DownIcon from '@material-ui/icons/KeyboardArrowDown';
 import LazyAvatar from './LazyAvatar';
+import CardSkeleton from './CardSkeleton';
+import ErrorBoundary from './ErrorBoundary';
 
 const PersonCard = styled(Card)`
   margin: ${({ theme }) => theme.spacing(1)} 0;
@@ -93,31 +95,34 @@ const Person = ({
   children,
   Icon,
   iconColor,
+  fallback,
 }) => {
   return (
-    <PersonCard variant="outlined" $highlighted={highlighted}>
-      <CardHeader
-        avatar={<LazyAvatar src={avatar} />}
-        action={
-          <IconWrapper colour={iconColor}>
-            <Icon />
-          </IconWrapper>
-        }
-        title={
-          <StyledGrid
-            container
-            direction="row"
-            justify="flex-start"
-            wrap="nowrap"
-          >
-            <Typography>{name}</Typography>
-            <ChangeIndicator change={change} />
-          </StyledGrid>
-        }
-        subheader={subheader}
-      />
-      {children}
-    </PersonCard>
+    <ErrorBoundary fallback={fallback}>
+      <PersonCard variant="outlined" $highlighted={highlighted}>
+        <CardHeader
+          avatar={<LazyAvatar src={avatar} />}
+          action={
+            <IconWrapper colour={iconColor}>
+              <Icon />
+            </IconWrapper>
+          }
+          title={
+            <StyledGrid
+              container
+              direction="row"
+              justify="flex-start"
+              wrap="nowrap"
+            >
+              <Typography>{name}</Typography>
+              <ChangeIndicator change={change} />
+            </StyledGrid>
+          }
+          subheader={subheader}
+        />
+        {children}
+      </PersonCard>
+    </ErrorBoundary>
   );
 };
 
@@ -130,6 +135,7 @@ Person.defaultProps = {
   children: <></>,
   Icon: TrophyIcon,
   iconColor: 'gold',
+  fallback: CardSkeleton,
 };
 
 Person.propTypes = {
@@ -139,6 +145,7 @@ Person.propTypes = {
   subheader: prop.string,
   highlighted: prop.bool,
   children: prop.oneOfType([prop.string, prop.element, prop.node]),
+  fallback: prop.oneOfType([prop.string, prop.element, prop.node]),
   // eslint-disable-next-line react/forbid-prop-types
   Icon: prop.object,
   iconColor: prop.string,

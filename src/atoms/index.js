@@ -1,4 +1,5 @@
 import { atom, selector, selectorFamily, atomFamily } from 'recoil';
+import { nanoid } from 'nanoid';
 import mockMeetData from './data.json';
 import g from '../global';
 import Util from '../util';
@@ -27,6 +28,35 @@ const scrapeMeetData = () => {
     email: userData[4],
     userId: userData[15],
   };
+};
+
+const normaliseResponse = (texts, res) => {
+  let responseText;
+  switch (typeof res) {
+    case 'boolean':
+      responseText = Util.capitalise([res.toString()]);
+      break;
+    case 'number':
+      responseText =
+        texts && texts.options ? [texts.options[res]] : [g.alphabet[res][0]];
+      break;
+    case 'object':
+      responseText =
+        texts && texts.options
+          ? texts.options.filter((_, i) => res[i])
+          : [
+              res
+                .map((num) => g.alphabet[num][0])
+                .reduce((p, c) => `${p}, ${c}`, ''),
+            ];
+      break;
+    case 'string':
+      responseText = [res];
+      break;
+    default:
+      throw new Error('Unexpected response type');
+  }
+  return responseText;
 };
 
 const meetData = atom({
@@ -64,35 +94,11 @@ const addResponse = selector({
   key: 'addResponse',
   set: ({ set, get }, { questionId, ...rest }) => {
     const texts = get(questions(questionId)).meta;
-    let responseText;
-    switch (typeof rest.response) {
-      case 'boolean':
-        responseText = Util.capitalise([rest.response.toString()]);
-        break;
-      case 'number':
-        responseText =
-          texts && texts.options
-            ? [texts.options[rest.response]]
-            : [g.alphabet[rest.response][0]];
-        break;
-      case 'object':
-        responseText =
-          texts && texts.options
-            ? texts.options.filter((_, i) => rest.response[i])
-            : [
-                rest.response
-                  .map((num) => g.alphabet[num][0])
-                  .reduce((p, c) => `${p}, ${c}`, ''),
-              ];
-        break;
-      case 'string':
-        responseText = [rest.response];
-        break;
-      default:
-        throw new Error('Unexpected response type');
-    }
     set(responses(questionId), (prev) =>
-      prev.concat({ responseText, ...rest })
+      prev.concat({
+        responseText: normaliseResponse(texts, rest.response),
+        ...rest,
+      })
     );
     set(responseStudentIds(questionId), (prev) => prev.concat(rest.student.id));
   },
@@ -118,7 +124,6 @@ const numStudents = atom({
   default: 5,
 });
 
-// TODO: Set this when creator clicks send
 const answers = atomFamily({ key: 'answers', default: null });
 
 const optionBar = selectorFamily({
@@ -155,8 +160,27 @@ const myResponse = atomFamily({
   default: {},
 });
 
-const saveMyResponse = selectorFamily({
-  key: 'saveMyResponse',
+const studentAnswer = atomFamily({
+  key: 'studentAnswers',
+  default: {},
+});
+
+const addAnswer = selector({
+  key: 'addAnswer',
+  set: ({ set, get }, { questionId, ...obj }) => {
+    const answerText = normaliseResponse(
+      get(questions(questionId)).meta,
+      obj.answer
+    );
+    set(studentAnswer(questionId), {
+      answerText,
+      ...obj,
+    });
+  },
+});
+
+const sendRespond = selectorFamily({
+  key: 'sendRespond',
   set: (questionId) => ({ set, get }, obj) => {
     if (get(iHaveResponded(questionId))) return;
     set(iHaveResponded(questionId), true);
@@ -228,6 +252,13 @@ const creatorMeta = atomFamily({
     type: 'buildMeta',
   },
 });
+const creatorText = atom({
+  key: 'creatorText',
+  default: '',
+  persistence_UNSTABLE: {
+    type: 'creatorText',
+  },
+});
 
 const tabOrder = atom({ key: 'tabOrder', default: 0 });
 const reportQuestion = atom({ key: 'reportQuestion', default: '' });
@@ -243,6 +274,44 @@ const loadingAnswer = atomFamily({ key: 'loadingAnswer', default: false });
 
 const leaderboard = atom({ key: 'leaderboard', default: [] });
 
+const sendAsk = selector({
+  key: 'sendAsk',
+  set: ({ set, get }) => {
+    const { name, userId, avatar, meetingId } = get(meetData);
+    const type = get(creatorType);
+    const questionId = nanoid();
+    const answer = get(creatorAnswer(type));
+    set(answers(questionId), answer);
+    const question = {
+      teacher: {
+        name,
+        id: userId,
+      },
+      avatar,
+      question: {
+        type,
+        image: get(creatorImage),
+        text: get(creatorText),
+      },
+      meta: get(creatorMeta(type)),
+      askTimestamp: new Date().toISOString(),
+      questionId,
+    };
+
+    set(addQuestion, question);
+
+    set(fireMessage, {
+      route: 'ask',
+      data: {
+        classId: null,
+        meetingId,
+        answer,
+        ...question,
+      },
+    });
+  },
+});
+
 export default {
   meetData,
   isDrawerOpen,
@@ -251,7 +320,7 @@ export default {
   addQuestion,
   carouselOrder,
   myResponse,
-  saveMyResponse,
+  sendRespond,
   role,
   isUploaderOpen,
   creatorType,
@@ -272,4 +341,8 @@ export default {
   loadingAnswer,
   fireMessage,
   leaderboard,
+  studentAnswer,
+  addAnswer,
+  sendAsk,
+  creatorText,
 };

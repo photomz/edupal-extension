@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { useRecoilState } from 'recoil';
+import React from 'react';
+import { useRecoilState, useSetRecoilState } from 'recoil';
 import styled from 'styled-components';
 import Card from '@material-ui/core/Card';
 import CardHeader from '@material-ui/core/CardHeader';
@@ -54,10 +54,9 @@ const CreatePanel = () => {
   const [answer, setAnswer] = useRecoilState(a.creatorAnswer(type));
   const [image, setImage] = useRecoilState(a.creatorImage);
 
-  const [title, setTitle] = useState('');
+  const [title, setTitle] = useRecoilState(a.creatorText);
   const [isOpen, setOpen] = useRecoilState(a.isUploaderOpen);
-
-  // TODO: useEffect to construct response object, send to websocket
+  const ask = useSetRecoilState(a.ask);
 
   return (
     <StyledCard variant="outlined">
@@ -77,7 +76,7 @@ const CreatePanel = () => {
               </StyledButton>
             </Tooltip>
             <Tooltip title="Send question">
-              <StyledButton color="primary">
+              <StyledButton color="primary" onClick={ask}>
                 <SendIcon />
               </StyledButton>
             </Tooltip>

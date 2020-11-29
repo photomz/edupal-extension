@@ -38,69 +38,35 @@ const StyledGrid = styled(Grid)`
 `}
 `;
 
+const Body = styled(Typography)`
+  margin-bottom: ${({ theme: $ }) => $.spacing(1)};
+  color: ${({ theme: $ }) => $.palette.green.main};
+`;
+
 const AnswerCard = ({ qid }) => {
-  const { avatar, userId } = useRecoilValue(a.meetData);
+  const { avatar } = useRecoilValue(a.meetData);
   const { question, num } = useRecoilValue(a.questions(qid));
-  const { respondTimestamp, ...response } = useRecoilValue(a.myResponse(qid));
+  const { respondTimestamp } = useRecoilValue(a.myResponse(qid));
+  const { isCorrect, coinsEarned, answerText } = useRecoilValue(
+    a.studentAnswer(qid)
+  );
   const switchCard = useSetRecoilState(a.carouselOrder(qid));
   const isLoading = useRecoilValue(a.loadingAnswer(qid));
 
-  const [popoverAnchor, setPopoverAnchor] = useState(null);
-
-  const answer = {
-    isCorrect: true,
-    pointsEarned: 3,
-  };
-
-  const { Icon, colour } = g.correctness[answer.isCorrect];
+  const { Icon, colour } = g.correctness[isCorrect];
 
   return (
     <>
       <CardHeader
         avatar={<LazyAvatar src={avatar} />}
         action={
-          <>
-            <IconButton
-              aria-label="More information"
-              onMouseEnter={(e) => setPopoverAnchor(e.currentTarget)}
-              onMouseLeave={() => setPopoverAnchor(null)}
-            >
-              <InfoIcon />
-            </IconButton>
-            <IconButton
-              aria-label="See other card"
-              onClick={() => switchCard(0)}
-            >
-              <LeftIcon />
-            </IconButton>
-          </>
+          <IconButton aria-label="See other card" onClick={() => switchCard(0)}>
+            <LeftIcon />
+          </IconButton>
         }
         title={question.text || `Question ${num + 1}`}
         subheader={Util.parseDateToDayTime(respondTimestamp)}
       />
-      <StyledPopover
-        anchorEl={popoverAnchor}
-        open={!!popoverAnchor}
-        onClose={() => setPopoverAnchor(null)}
-        anchorOrigin={{
-          vertical: 'top',
-          horizontal: 'left',
-        }}
-        transformOrigin={{
-          vertical: 'bottom',
-          horizontal: 'center',
-        }}
-        disableRestoreFocus
-      >
-        <Typography>
-          {process.env.NODE_ENV === 'development'
-            ? `{qid: ${qid},
-            respondTimestamp: ${respondTimestamp},
-            student.id: ${userId},
-            response: ${JSON.stringify(response).slice(0, 100)} }`
-            : 'Nothing to see here...'}
-        </Typography>
-      </StyledPopover>
       <CardContent>
         <Grid
           container
@@ -120,9 +86,14 @@ const AnswerCard = ({ qid }) => {
           {isLoading ? (
             <Skeleton variant="rect" width={80} height={20} />
           ) : (
-            <Typography variant="h5" component="h3">
-              {`+${answer.pointsEarned} Points!`}
-            </Typography>
+            <>
+              <Typography variant="h5" component="h3">
+                {`+${coinsEarned} Points!`}
+              </Typography>
+              {answerText.map((el, i) => (
+                <Body key={`report-row-${i}`}>{el}</Body>
+              ))}
+            </>
           )}
         </Grid>
       </CardContent>
