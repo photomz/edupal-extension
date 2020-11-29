@@ -1,7 +1,7 @@
 import Util from '../util';
 import g from '../global';
 
-const normaliseResponse = (texts, res) => {
+const sanitiseResponse = (texts, res) => {
   switch (typeof res) {
     case 'boolean':
       return Util.capitalise([res.toString()]);
@@ -10,7 +10,7 @@ const normaliseResponse = (texts, res) => {
         ? [texts.options[res]]
         : [g.alphabet[res][0]];
     case 'object':
-      if (res === null) return 'Ungraded';
+      if (res === null) return ['Ungraded'];
       return texts && texts.options
         ? texts.options.filter((_, i) => res[i])
         : [
@@ -25,4 +25,4 @@ const normaliseResponse = (texts, res) => {
   }
 };
 
-export default normaliseResponse;
+export default sanitiseResponse;

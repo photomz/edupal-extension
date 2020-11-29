@@ -80,7 +80,7 @@ const McqOption = () => {
           >
             <Check
               i={i}
-              checked={answer && answer[i]}
+              checked={answer && !!answer[i]}
               handleCheck={handleCheck}
             />
             <TextField

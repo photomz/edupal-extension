@@ -5,6 +5,8 @@ import { nanoid } from 'nanoid';
 
 import $ from '../styles/global';
 
+const deepClone = (obj) => JSON.parse(JSON.stringify(obj));
+
 /**
  * Retrieves 1 absolute path to the Webpack processed image from the assets/image folder.
  * @param {string} pathToImage
@@ -198,5 +200,6 @@ export default {
   useComponentWillMount,
   formatTimeDiff,
   capitalise,
+  deepClone,
   // useActions,
 };

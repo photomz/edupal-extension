@@ -54,7 +54,7 @@ const App = () => {
   const setLeaderboard = useSetRecoilState(leaderboard);
 
   useEffect(() => {
-    console.log(lastJsonMessage);
+    console.info(lastJsonMessage);
     if (lastJsonMessage === null) return;
     const { action, data } = lastJsonMessage;
     switch (action) {
@@ -69,7 +69,7 @@ const App = () => {
         break;
       case 'response':
         // eslint-disable-next-line no-console
-        console.info(data);
+        console.info(lastJsonMessage);
         break;
       case 'receiveAnswer':
         addAnswer(data);

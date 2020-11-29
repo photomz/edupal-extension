@@ -38,6 +38,7 @@ export default {
     silver: {
       light: '#eee9e9',
       main: '#c5bbba',
+      dark: '#948b8a',
     },
     bronze: {
       light: '#c09278',

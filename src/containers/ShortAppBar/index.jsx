@@ -12,7 +12,7 @@ import TrueFalseIcon from '@material-ui/icons/Beenhere';
 import ParagraphICon from '@material-ui/icons/ViewHeadline';
 import EdupalSvg from '../../assets/images/edupal_icon.svg';
 
-import { role, isDrawerOpen } from '../../logic/common';
+import { role, isDrawerOpen, tabOrder } from '../../logic/common';
 import { creatorType } from '../../logic/create';
 
 const drawerWidth = 400;
@@ -55,12 +55,14 @@ const ShortAppBar = React.forwardRef((_, ref) => {
   const [open, setOpen] = useRecoilState(isDrawerOpen);
   const userRole = useRecoilValue(role);
   const setQuestionType = useSetRecoilState(creatorType);
+  const setTabs = useSetRecoilState(tabOrder);
   const [speedDialOpen, setSpeedDialOpen] = useState(false);
 
   const handleDialClick = (value) => {
     setSpeedDialOpen(false);
     setOpen(true);
     setQuestionType(value);
+    setTabs(0);
   };
 
   return (

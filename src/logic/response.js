@@ -1,5 +1,5 @@
 import { atomFamily, selector, selectorFamily } from 'recoil';
-import normaliseResponse from './normaliseResponse';
+import sanitiseResponse from './sanitiseResponse';
 import { meetData, carouselOrder, fireMessage } from './common';
 import { questions } from './question';
 
@@ -23,7 +23,7 @@ const loadingAnswer = atomFamily({ key: 'loadingAnswer', default: false });
 const receiveAnswer = selector({
   key: 'receiveAnswer',
   set: ({ set, get }, { questionId, ...obj }) => {
-    const answerText = normaliseResponse(
+    const answerText = sanitiseResponse(
       get(questions(questionId)).meta,
       obj.answer
     );
@@ -64,7 +64,7 @@ const sendRespond = selectorFamily({
         questionId,
         meetingId: user.meetingId,
         classId: 'null', // TODO: Class join show get UI UX in V2
-        response: JSON.stringify(response),
+        response,
         askTimestamp: question.askTimestamp,
         respondTimestamp,
       },

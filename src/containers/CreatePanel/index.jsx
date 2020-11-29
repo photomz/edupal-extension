@@ -22,8 +22,6 @@ import TrueFalseOption from './TrueFalseOption';
 import SplitButton from './SplitButton';
 import {
   creatorType,
-  creatorMeta,
-  creatorAnswer,
   creatorImage,
   creatorText,
   sendAsk,
@@ -58,8 +56,6 @@ const CreatePanel = () => {
   const [type, setType] = useRecoilState(creatorType);
   // Question type dictates interface of meta and answer;
   const Option = optionComponentMap[type];
-  const [meta, setMeta] = useRecoilState(creatorMeta(type));
-  const [answer, setAnswer] = useRecoilState(creatorAnswer(type));
   const [image, setImage] = useRecoilState(creatorImage);
   const [title, setTitle] = useRecoilState(creatorText);
 
@@ -120,12 +116,7 @@ const CreatePanel = () => {
       </MuiCardContent>
 
       <MuiCardActions>
-        <Option
-          meta={meta}
-          setMeta={setMeta}
-          answer={answer}
-          setAnswer={setAnswer}
-        />
+        <Option />
       </MuiCardActions>
     </Card>
   );

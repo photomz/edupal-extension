@@ -1,5 +1,5 @@
 import { atom, atomFamily, selector, selectorFamily } from 'recoil';
-import normaliseResponse from './normaliseResponse';
+import sanitiseResponse from './sanitiseResponse';
 import { questions } from './question';
 import { tabOrder } from './common';
 
@@ -15,7 +15,7 @@ const receiveRespond = selector({
     const texts = get(questions(questionId)).meta;
     set(responses(questionId), (prev) =>
       prev.concat({
-        responseText: normaliseResponse(texts, rest.response),
+        responseText: sanitiseResponse(texts, rest.response),
         ...rest,
       })
     );

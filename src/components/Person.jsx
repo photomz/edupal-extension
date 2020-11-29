@@ -2,10 +2,10 @@ import React from 'react';
 import styled from 'styled-components';
 import prop from 'prop-types';
 
-import Card from '@material-ui/core/Card';
-import CardHeader from '@material-ui/core/CardHeader';
-import Grid from '@material-ui/core/Grid';
-import Typography from '@material-ui/core/Typography';
+import MuiCard from '@material-ui/core/Card';
+import MuiCardHeader from '@material-ui/core/CardHeader';
+import MuiGrid from '@material-ui/core/Grid';
+import MuiTypography from '@material-ui/core/Typography';
 
 import TrophyIcon from '@material-ui/icons/EmojiEvents';
 import UpIcon from '@material-ui/icons/KeyboardArrowUp';
@@ -13,16 +13,17 @@ import DownIcon from '@material-ui/icons/KeyboardArrowDown';
 import LazyAvatar from './LazyAvatar';
 import CardSkeleton from './CardSkeleton';
 import ErrorBoundary from './ErrorBoundary';
+import RaisedIcon from './RaisedIcon';
 
-const PersonCard = styled(Card)`
-  margin: ${({ theme }) => theme.spacing(1)} 0;
+const PersonCard = styled(MuiCard)`
+  border: none;
+  padding: 0;
   &&& .MuiCardHeader-action {
     align-self: center;
-    margin-right: ${({ theme }) => theme.spacing(1)};
   }
-  ${({ $highlighted, theme }) =>
+  ${({ $highlighted, theme, $colour }) =>
     $highlighted &&
-    `background-color: ${theme.palette.secondary.dark}; 
+    `background-color: ${theme.palette[$colour].dark}; 
     box-shadow: ${theme.shadows[8]};
     &&& * {
       color: ${theme.palette.common.white};
@@ -31,20 +32,9 @@ const PersonCard = styled(Card)`
      `}
 `;
 
-const StyledGrid = styled(Grid)``;
+const Grid = styled(MuiGrid)``;
 
-const IconWrapper = styled(LazyAvatar)`
-  ${({ theme, colour }) => `
-	color: #fff;
-	align-self: center;
-	box-shadow: ${theme.shadows[2]};
-	background-color: ${theme.palette[colour].main};
-	border: 3px solid ${theme.palette[colour].light};
-
-  `}
-`;
-
-const InnerGrid = styled(Grid)`
+const InnerGrid = styled(MuiGrid)`
   color: ${({ theme, colour }) => theme.palette[colour].main};
   margin-left: ${({ theme }) => theme.spacing(1)};
   &&& svg {
@@ -65,7 +55,7 @@ const changeMap = [
 ];
 
 const ChangeIndicator = ({ change }) => {
-  const [Icon, colour] = changeMap[change >= 0 ? 0 : 1];
+  const [Icon, colour] = changeMap[change > 0 ? 0 : 1];
   return (
     <InnerGrid
       colour={colour}
@@ -76,7 +66,7 @@ const ChangeIndicator = ({ change }) => {
       wrap="nowrap"
     >
       <Icon />
-      <Typography>{change}</Typography>
+      <MuiTypography>{change}</MuiTypography>
     </InnerGrid>
   );
 };
@@ -92,33 +82,32 @@ const Person = ({
   change,
   subheader,
   highlighted,
+  highlightColour,
   children,
   Icon,
   iconColor,
   fallback,
+  HeaderProps,
 }) => {
   return (
     <ErrorBoundary fallback={fallback}>
-      <PersonCard variant="outlined" $highlighted={highlighted}>
-        <CardHeader
+      <PersonCard
+        variant="outlined"
+        $highlighted={highlighted}
+        $colour={highlightColour}
+      >
+        <MuiCardHeader
           avatar={<LazyAvatar src={avatar} />}
-          action={
-            <IconWrapper colour={iconColor}>
-              <Icon />
-            </IconWrapper>
-          }
+          action={<RaisedIcon Icon={Icon} colour={iconColor} />}
           title={
-            <StyledGrid
-              container
-              direction="row"
-              justify="flex-start"
-              wrap="nowrap"
-            >
-              <Typography>{name}</Typography>
+            <Grid container direction="row" justify="flex-start" wrap="nowrap">
+              <MuiTypography>{name}</MuiTypography>
               <ChangeIndicator change={change} />
-            </StyledGrid>
+            </Grid>
           }
           subheader={subheader}
+          // eslint-disable-next-line react/jsx-props-no-spreading
+          {...HeaderProps}
         />
         {children}
       </PersonCard>
@@ -127,15 +116,17 @@ const Person = ({
 };
 
 Person.defaultProps = {
-  name: 'John',
+  name: '',
   avatar: '',
   change: 2,
-  subheader: '45 Points',
+  subheader: '',
   highlighted: false,
   children: <></>,
   Icon: TrophyIcon,
   iconColor: 'gold',
   fallback: CardSkeleton,
+  highlightColour: 'secondary',
+  HeaderProps: {},
 };
 
 Person.propTypes = {
@@ -150,6 +141,9 @@ Person.propTypes = {
   // eslint-disable-next-line react/forbid-prop-types
   Icon: prop.object,
   iconColor: prop.string,
+  highlightColour: prop.string,
+  // eslint-disable-next-line react/forbid-prop-types
+  HeaderProps: prop.object,
 };
 
 export default Person;

@@ -3,15 +3,16 @@ import { nanoid } from 'nanoid';
 import { meetData, fireMessage } from './common';
 import { answers } from './stats';
 import { receiveAsk } from './question';
+import Util from '../util';
 
 const typeMap = {
-  MCQ: [{ optionNum: 4, options: ['', '', '', '', ''] }, 0],
-  ShortAnswer: [{}, ''],
+  MCQ: [{ optionNum: 4, options: ['', '', '', '', ''] }, null],
+  ShortAnswer: [{}, null],
   MultiSelect: [
     { optionNum: 4, options: ['', '', '', '', ''] },
     [false, false, false, false, false],
   ],
-  TrueFalse: [{}, false],
+  TrueFalse: [{}, null],
 };
 
 const creatorImage = atom({
@@ -27,9 +28,6 @@ const creatorType = atom({
 const creatorAnswer = atomFamily({
   key: 'creatorAnswer',
   default: (type) => typeMap[type][1],
-  persistence_UNSTABLE: {
-    type: 'creatorAnswer',
-  },
 });
 const creatorMeta = atomFamily({
   key: 'creatorMeta',
@@ -52,9 +50,25 @@ const sendAsk = selector({
     const { name, userId, avatar, meetingId } = get(meetData);
     const type = get(creatorType);
     const questionId = nanoid();
-    const answer = get(creatorAnswer(type));
-    set(answers(questionId), answer);
-    const question = {
+    const meta = Util.deepClone(get(creatorMeta(type)));
+    if (
+      ['MultiSelect', 'MCQ'].includes(type) &&
+      meta.options.every((el) => el === '')
+    ) {
+      meta.options = null;
+    }
+
+    let answer = Util.deepClone(get(creatorAnswer(type)));
+    if (type === 'MultiSelect') {
+      answer = answer.slice(0, meta.optionNum);
+      if (answer.every((tf) => tf === false)) answer = null;
+    } else if (type === 'ShortAnswer' && answer === '') answer = null;
+
+    console.log(Object.keys(typeMap).map((el) => get(creatorAnswer(el))));
+    console.log(Object.keys(typeMap).map((el) => get(creatorMeta(el))));
+    console.log(type, answer);
+
+    const payload = {
       teacher: {
         name,
         id: userId,
@@ -65,20 +79,20 @@ const sendAsk = selector({
         image: get(creatorImage) || null,
         text: get(creatorText) || null,
       },
-      meta: get(creatorMeta(type)),
+      meta,
       askTimestamp: new Date().toISOString(),
       questionId,
     };
 
-    set(receiveAsk, question);
-
+    set(receiveAsk, payload);
+    set(answers(questionId), answer);
     set(fireMessage, {
       route: 'ask',
       data: {
         classId: 'null',
         meetingId,
         answer,
-        ...question,
+        ...payload,
       },
     });
   },
