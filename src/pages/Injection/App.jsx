@@ -4,9 +4,13 @@ import { hot } from 'react-hot-loader';
 import { useRecoilValue, useSetRecoilState } from 'recoil';
 import useWebsocket from 'react-use-websocket';
 import styled from 'styled-components';
+import { useSnackbar } from 'notistack';
+
+import MuiButton from '@material-ui/core/Button';
 
 import ShortAppBar from '../../containers/ShortAppBar';
 import Sidebar from '../../containers/Sidebar';
+import QuestionSnack from '../../containers/Snackbar/QuestionSnack';
 
 import Util from '../../util';
 import g from '../../global';
@@ -20,7 +24,9 @@ import {
   meetData,
   role,
   leaderboard,
+  receiveUpdateRole,
 } from '../../logic/common';
+import { receiveRespondAction } from '../../logic/snackbar';
 
 const Container = styled.div`
   position: absolute;
@@ -38,20 +44,20 @@ const App = () => {
   const meet = useRecoilValue(meetData);
   const userRole = useRecoilValue(role);
 
-  const [connect, setConnect] = useState(false);
+  const [connect, setConnect] = useState(true);
   const { sendJsonMessage, readyState, lastJsonMessage } = useWebsocket(
     g.socketUrl,
     {},
     connect
   );
 
-  const appbarRef = useRef(null);
-  const sidebarRef = useRef(null);
-
+  const { enqueueSnackbar } = useSnackbar();
   const addQuestion = useSetRecoilState(receiveAsk);
   const addResponse = useSetRecoilState(receiveRespond);
   const addAnswer = useSetRecoilState(receiveAnswer);
   const setLeaderboard = useSetRecoilState(leaderboard);
+  const updateRole = useSetRecoilState(receiveUpdateRole);
+  const handleRespond = useSetRecoilState(receiveRespondAction);
 
   useEffect(() => {
     console.info(lastJsonMessage);
@@ -59,20 +65,51 @@ const App = () => {
     const { action, data } = lastJsonMessage;
     switch (action) {
       case 'receiveAsk':
+        enqueueSnackbar('New Question', {
+          content: (key, message) => (
+            <QuestionSnack key={key} message={message} qid={data.questionId} />
+          ),
+        });
         addQuestion(data);
         break;
       case 'receiveResponse':
+        enqueueSnackbar(`${data.student.name} answered a question!`, {
+          variant: 'info',
+          action: (
+            <MuiButton onClick={() => handleRespond(data.questionId)}>
+              More
+            </MuiButton>
+          ),
+        });
         addResponse(data);
         break;
       case 'receiveLeaderboard':
         setLeaderboard(data);
         break;
-      case 'response':
-        // eslint-disable-next-line no-console
-        console.info(lastJsonMessage);
-        break;
       case 'receiveAnswer':
         addAnswer(data);
+        break;
+      case 'joinMeetingSuccess':
+        console.info('You are connected to Edu-pal!');
+        break;
+      case 'joinMeetingFailed':
+        enqueueSnackbar(
+          `Joining as teacher failed. Please join as student or ask ${data.culprit} to become a student and reconnect.`,
+          { variant: 'warning' }
+        );
+        break;
+      case 'updateRoleFailed':
+        console.log(data);
+        enqueueSnackbar(
+          `Your cannot be teacher because ${data.culprit} is currently the teacher.`,
+          { variant: 'error' }
+        );
+        break;
+      case 'updateRoleSuccess':
+        enqueueSnackbar(`You are now a ${data.newRole.toLowerCase()}!`, {
+          variant: 'success',
+        });
+        updateRole(data);
         break;
       default:
         // eslint-disable-next-line no-console
@@ -81,15 +118,12 @@ const App = () => {
     }
   }, [lastJsonMessage]);
 
+  const appbarRef = useRef(null);
+  const sidebarRef = useRef(null);
+
   Util.useOutsideClick([appbarRef, sidebarRef], uploaderOpen, () =>
     setDrawerOpen(false)
   );
-
-  // Websocket init
-  useEffect(() => {
-    setConnect(true);
-    console.log('Edu-pal Google Meet Extension has started up.');
-  }, []);
 
   useEffect(() => console.info('Socket state:', readyState), [readyState]);
 

@@ -50,14 +50,39 @@ const typeMap = {
   TrueFalse: TrueFalseOption,
 };
 
-const QuestionCard = ({ qid }) => {
-  const { avatar, teacher, askTimestamp, question } = useRecoilValue(
-    questions(qid)
+const QuestionCardContent = ({ qid }) => {
+  const { question } = useRecoilValue(questions(qid));
+  const Option = typeMap[question.type];
+  return (
+    <>
+      <H5 component="h4" variant="h5" color="initial" gutterBottom>
+        {question.text}
+      </H5>
+      {question.image !== null && (
+        <Image image={question.image} title="Question image">
+          <CornerButton
+            title="Open image in new tab"
+            onClick={() => window.open(question.image)}
+          >
+            <OpenIcon />
+          </CornerButton>
+        </Image>
+      )}
+      <MuiCardActions>
+        <Option qid={qid} />
+      </MuiCardActions>
+    </>
   );
+};
+
+QuestionCardContent.propTypes = {
+  qid: prop.string.isRequired,
+};
+
+const QuestionCard = ({ qid }) => {
+  const { avatar, teacher, askTimestamp } = useRecoilValue(questions(qid));
   const switchCard = useSetRecoilState(carouselOrder(qid));
   const hasResponded = useRecoilValue(iHaveResponded(qid));
-
-  const Option = typeMap[question.type];
 
   return (
     <>
@@ -75,23 +100,7 @@ const QuestionCard = ({ qid }) => {
         title={teacher.name}
         subheader={Util.parseDateToDayTime(askTimestamp)}
       />
-      <H5 component="h4" variant="h5" color="initial" gutterBottom>
-        {question.text}
-      </H5>
-      {question.image !== null && (
-        <Image image={question.image} title="Question image">
-          <CornerButton
-            title="Open image in new tab"
-            onClick={() => window.open(question.image)}
-          >
-            <OpenIcon />
-          </CornerButton>
-        </Image>
-      )}
-
-      <MuiCardActions>
-        <Option qid={qid} />
-      </MuiCardActions>
+      <QuestionCardContent qid={qid} />
     </>
   );
 };
@@ -101,3 +110,4 @@ QuestionCard.propTypes = {
 };
 
 export default QuestionCard;
+export { QuestionCardContent };

@@ -56,22 +56,22 @@ const sendRespond = selectorFamily({
       respondTimestamp,
     });
 
-    const user = get(meetData);
-    const question = get(questions(questionId));
+    const { avatar, name, userId, meetingId } = get(meetData);
+    const { answerCrypt, askTimestamp } = get(questions(questionId));
     const payload = {
       route: 'respond',
       data: {
         student: {
-          name: user.name,
-          id: user.userId,
+          name,
+          id: userId,
         },
-        answerCrypt: question.answerCrypt,
-        avatar: user.avatar,
+        answerCrypt,
+        avatar,
         questionId,
-        meetingId: user.meetingId,
+        meetingId,
         classId: 'null', // TODO: Class join show get UI UX in V2
         response,
-        askTimestamp: question.askTimestamp,
+        askTimestamp,
         respondTimestamp,
       },
     };

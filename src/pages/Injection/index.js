@@ -24,7 +24,11 @@ import renderRoot from './Root';
   const id = 'edupal';
   const app = document.createElement('div');
   app.setAttribute('id', id);
-  document.body.prepend(app);
+
+  const root = document.querySelector(
+    process.env.NODE_ENV === 'development' ? 'body' : '.koV58.Zi94Db.S7urwe'
+  );
+  root.prepend(app);
   renderRoot(id);
 })();
 

@@ -1,5 +1,5 @@
 import React from 'react';
-import { useRecoilState, useSetRecoilState } from 'recoil';
+import { useRecoilValue, useSetRecoilState } from 'recoil';
 
 import MuiRadio from '@material-ui/core/Radio';
 import MuiRadioGroup from '@material-ui/core/RadioGroup';
@@ -9,11 +9,11 @@ import MuiFormLabel from '@material-ui/core/FormLabel';
 import MuiBox from '@material-ui/core/Box';
 import MuiTypography from '@material-ui/core/Typography';
 
-import { role, tabOrder } from '../../logic/common';
+import { role, sendUpdateRole } from '../../logic/common';
 
 const SettingsPanel = () => {
-  const [userRole, setUserRole] = useRecoilState(role);
-  const setTabs = useSetRecoilState(tabOrder);
+  const userRole = useRecoilValue(role);
+  const handleChange = useSetRecoilState(sendUpdateRole);
 
   return (
     <MuiBox m={4}>
@@ -23,11 +23,7 @@ const SettingsPanel = () => {
           aria-label="role"
           name="role"
           value={userRole}
-          onChange={(e) => {
-            const newRole = e.target.value;
-            setUserRole(newRole);
-            setTabs(newRole === 'TEACHER' ? 3 : newRole === 'STUDENT' && 2);
-          }}
+          onChange={(e) => handleChange(e.target.value)}
         >
           <MuiFormControlLabel
             value="STUDENT"

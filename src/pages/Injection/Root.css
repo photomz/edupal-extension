@@ -3,3 +3,7 @@
 	padding-left: 270px !important;
 	box-sizing: border-box;
 }
+
+.snackbarOverride {
+	margin-bottom: 96px !important;
+}

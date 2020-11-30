@@ -1,3 +1,4 @@
+/* eslint-disable react/jsx-props-no-spreading */
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { RecoilRoot } from 'recoil';
@@ -7,8 +8,9 @@ import {
   ThemeProvider as MuiThemeProvider,
 } from '@material-ui/core/styles';
 import CssBaseline from '@material-ui/core/CssBaseline';
-
 import recoilPersist from 'recoil-persist';
+
+import SnackbarProvider from '../../containers/Snackbar';
 import App from './App';
 import themeTemplate from '../../styles/theme';
 import './Root.css';
@@ -28,7 +30,9 @@ const Root = () => (
     <MuiThemeProvider theme={theme}>
       <StyledThemeProvider theme={theme}>
         <CssBaseline />
-        <App />
+        <SnackbarProvider>
+          <App />
+        </SnackbarProvider>
       </StyledThemeProvider>
     </MuiThemeProvider>
   </RecoilRoot>

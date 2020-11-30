@@ -1,4 +1,4 @@
-import { atom, atomFamily } from 'recoil';
+import { atom, atomFamily, selector } from 'recoil';
 import mockMeetData from './data.json';
 import scrapeMeetData from './scrapeMeetData';
 
@@ -29,6 +29,33 @@ const tabOrder = atom({ key: 'tabOrder', default: 0 });
 
 const leaderboard = atom({ key: 'leaderboard', default: [] });
 
+const sendUpdateRole = selector({
+  key: 'sendUpdateRole',
+  set: ({ set, get }, newRole) => {
+    const { meetingId, userId, name, avatar } = get(meetData);
+    const payload = {
+      route: 'updateRole',
+      data: {
+        prevRole: get(role),
+        newRole,
+        meetingId,
+        userId,
+        name,
+        avatar,
+      },
+    };
+    set(fireMessage, payload);
+  },
+});
+
+const receiveUpdateRole = selector({
+  key: 'receiveUpdateRole',
+  set: ({ set }, { newRole }) => {
+    set(role, newRole);
+    set(tabOrder, newRole === 'TEACHER' ? 3 : newRole === 'STUDENT' && 2);
+  },
+});
+
 export default {};
 export {
   meetData,
@@ -39,4 +66,6 @@ export {
   tabOrder,
   fireMessage,
   leaderboard,
+  sendUpdateRole,
+  receiveUpdateRole,
 };
