@@ -42,8 +42,19 @@ const Body = styled(MuiTypography)`
   margin-bottom: ${({ theme: $ }) => $.spacing(1)};
 `;
 
+const Header = styled(MuiTypography)`
+  font-weight: bold;
+  margin-left: ${({ theme: $ }) => $.spacing(1)};
+`;
+
+const CardActions = styled(MuiCardActions)`
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+`;
+
 const AnswerCard = ({ qid }) => {
-  const { question, num } = useRecoilValue(questions(qid));
+  const { question } = useRecoilValue(questions(qid));
   const { isCorrect, answerText, answer } = useRecoilValue(studentAnswer(qid));
   const switchCard = useSetRecoilState(carouselOrder(qid));
   // eslint-disable-next-line no-unused-vars
@@ -59,7 +70,7 @@ const AnswerCard = ({ qid }) => {
       <PersonCardHeader
         $highlighted
         $colour={colour}
-        title={question.text || `Question ${num + 1}`}
+        title={question.text}
         avatar={<RaisedIcon Icon={Icon} colour={colour} />}
         action={
           <MuiIconButton
@@ -70,13 +81,16 @@ const AnswerCard = ({ qid }) => {
           </MuiIconButton>
         }
       />
-      <MuiCardActions>
+      <CardActions>
+        <Header variant="h6" component="h3">
+          Answer
+        </Header>
         <MuiGrid container direction="column" alignItems="flex-start">
           {answerText.map((el, i) => (
             <Body key={`report-row-${i}`}>{el}</Body>
           ))}
         </MuiGrid>
-      </MuiCardActions>
+      </CardActions>
     </>
   );
 };

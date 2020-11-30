@@ -1,6 +1,6 @@
 import React from 'react';
 import prop from 'prop-types';
-import { useRecoilValue } from 'recoil';
+import { useRecoilValue, useRecoilState } from 'recoil';
 import styled from 'styled-components';
 
 import MuiCard from '@material-ui/core/Card';
@@ -32,16 +32,18 @@ const Card = styled(MuiCard)`
 const Carousel = ({ qid }) => {
   const hasResponded = useRecoilValue(iHaveResponded(qid));
   const userRole = useRecoilValue(role);
-  const order = useRecoilValue(carouselOrder(qid));
+  const [order, setOrder] = useRecoilState(carouselOrder(qid));
 
   const renderFirst = Util.useDelayUnmount(order === 0, 250);
   const renderSecond = Util.useDelayUnmount(order === 1, 250);
+
+  if (userRole === 'TEACHER') setOrder(0);
 
   const CardOne =
     userRole === 'STUDENT'
       ? QuestionCard
       : userRole === 'TEACHER' && SummaryCard;
-  const CardTwo = userRole === 'STUDENT' ? AnswerCard : null;
+  const CardTwo = userRole === 'STUDENT' ? AnswerCard : () => <></>;
 
   return (
     <Wrapper>

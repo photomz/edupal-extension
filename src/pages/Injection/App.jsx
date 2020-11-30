@@ -61,7 +61,7 @@ const App = () => {
       case 'receiveAsk':
         addQuestion(data);
         break;
-      case 'receiveRespond':
+      case 'receiveResponse':
         addResponse(data);
         break;
       case 'receiveLeaderboard':

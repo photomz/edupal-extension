@@ -6,11 +6,17 @@ import { questions } from './question';
 const iHaveResponded = atomFamily({
   key: 'iHaveResponded',
   default: false,
+  persistence_UNSTABLE: {
+    type: 'iHaveResponded',
+  },
 });
 
 const myResponse = atomFamily({
   key: 'myResponse',
   default: {},
+  persistence_UNSTABLE: {
+    type: 'myResponse',
+  },
 });
 
 const studentAnswer = atomFamily({

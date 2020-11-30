@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import styled from 'styled-components';
 import prop from 'prop-types';
 import { useRecoilValue, useSetRecoilState } from 'recoil';
@@ -8,9 +8,7 @@ import MuiCardMedia from '@material-ui/core/CardMedia';
 import MuiCardActions from '@material-ui/core/CardActions';
 import MuiIconButton from '@material-ui/core/IconButton';
 import MuiTypography from '@material-ui/core/Typography';
-import MuiPopover from '@material-ui/core/Popover';
 
-import InfoIcon from '@material-ui/icons/Info';
 import OpenIcon from '@material-ui/icons/OpenInNew';
 import RightIcon from '@material-ui/icons/ChevronRight';
 import LazyAvatar from '../LazyAvatar';
@@ -27,9 +25,6 @@ import { iHaveResponded } from '../../logic/response';
 
 const H5 = styled(MuiTypography)`
   ${({ theme: $ }) => `padding-left: ${$.spacing(2)}`}
-`;
-const Popover = styled(MuiPopover)`
-  pointer-events: none;
 `;
 const Image = styled(MuiCardMedia)`
   height: 0;
@@ -56,13 +51,12 @@ const typeMap = {
 };
 
 const QuestionCard = ({ qid }) => {
-  const { avatar, teacher, askTimestamp, question, num } = useRecoilValue(
+  const { avatar, teacher, askTimestamp, question } = useRecoilValue(
     questions(qid)
   );
   const switchCard = useSetRecoilState(carouselOrder(qid));
   const hasResponded = useRecoilValue(iHaveResponded(qid));
 
-  const [popoverAnchor, setPopoverAnchor] = useState(null);
   const Option = typeMap[question.type];
 
   return (
@@ -70,28 +64,19 @@ const QuestionCard = ({ qid }) => {
       <MuiCardHeader
         avatar={<LazyAvatar src={avatar} />}
         action={
-          <>
-            <MuiIconButton
-              aria-label="More information"
-              onMouseEnter={(e) => setPopoverAnchor(e.currentTarget)}
-              onMouseLeave={() => setPopoverAnchor(null)}
-            >
-              <InfoIcon />
-            </MuiIconButton>
-            <MuiIconButton
-              aria-label="See other card"
-              disabled={!hasResponded}
-              onClick={() => hasResponded && switchCard(1)}
-            >
-              <RightIcon />
-            </MuiIconButton>
-          </>
+          <MuiIconButton
+            aria-label="See other card"
+            disabled={!hasResponded}
+            onClick={() => hasResponded && switchCard(1)}
+          >
+            <RightIcon />
+          </MuiIconButton>
         }
         title={teacher.name}
         subheader={Util.parseDateToDayTime(askTimestamp)}
       />
       <H5 component="h4" variant="h5" color="initial" gutterBottom>
-        {question.text || `Question ${num + 1}`}
+        {question.text}
       </H5>
       {question.image !== null && (
         <Image image={question.image} title="Question image">
@@ -103,26 +88,7 @@ const QuestionCard = ({ qid }) => {
           </CornerButton>
         </Image>
       )}
-      <Popover
-        anchorEl={popoverAnchor}
-        open={!!popoverAnchor}
-        onClose={() => setPopoverAnchor(null)}
-        anchorOrigin={{
-          vertical: 'top',
-          horizontal: 'left',
-        }}
-        transformOrigin={{
-          vertical: 'bottom',
-          horizontal: 'center',
-        }}
-        disableRestoreFocus
-      >
-        <MuiTypography>
-          {process.env.NODE_ENV === 'development'
-            ? `{questionId: ${qid}, askTimestamp: ${askTimestamp}, teacher.id: ${teacher.id} }`
-            : 'Nothing to see here...'}
-        </MuiTypography>
-      </Popover>
+
       <MuiCardActions>
         <Option qid={qid} />
       </MuiCardActions>

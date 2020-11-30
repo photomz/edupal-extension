@@ -33,7 +33,7 @@ const ActionsWrapper = styled.div`
 `;
 
 const SummaryCard = ({ qid }) => {
-  const { avatar, teacher, askTimestamp, question, num } = useRecoilValue(
+  const { avatar, teacher, askTimestamp, question } = useRecoilValue(
     questions(qid)
   );
   const switchToReport = useSetRecoilState(goToReport(qid));
@@ -59,7 +59,7 @@ const SummaryCard = ({ qid }) => {
             </IconButton>
           </>
         }
-        title={question.text || `Question ${num + 1}`}
+        title={question.text}
         subheader={Util.parseDateToDayTime(askTimestamp)}
       />
       <StyledPopover

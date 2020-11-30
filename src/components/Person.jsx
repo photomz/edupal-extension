@@ -11,15 +11,13 @@ import TrophyIcon from '@material-ui/icons/EmojiEvents';
 import UpIcon from '@material-ui/icons/KeyboardArrowUp';
 import DownIcon from '@material-ui/icons/KeyboardArrowDown';
 import LazyAvatar from './LazyAvatar';
-import CardSkeleton from './CardSkeleton';
-import ErrorBoundary from './ErrorBoundary';
 import RaisedIcon from './RaisedIcon';
 
 const PersonCard = styled(MuiCard)`
-  border: none;
-  padding: 0;
+  margin: ${({ theme }) => theme.spacing(1)} 0;
   &&& .MuiCardHeader-action {
     align-self: center;
+    margin-right: ${({ theme }) => theme.spacing(1)};
   }
   ${({ $highlighted, theme, $colour }) =>
     $highlighted &&
@@ -86,11 +84,10 @@ const Person = ({
   children,
   Icon,
   iconColor,
-  fallback,
   HeaderProps,
 }) => {
   return (
-    <ErrorBoundary fallback={fallback}>
+    <>
       <PersonCard
         variant="outlined"
         $highlighted={highlighted}
@@ -111,7 +108,7 @@ const Person = ({
         />
         {children}
       </PersonCard>
-    </ErrorBoundary>
+    </>
   );
 };
 
@@ -124,7 +121,6 @@ Person.defaultProps = {
   children: <></>,
   Icon: TrophyIcon,
   iconColor: 'gold',
-  fallback: CardSkeleton,
   highlightColour: 'secondary',
   HeaderProps: {},
 };
@@ -136,8 +132,6 @@ Person.propTypes = {
   subheader: prop.string,
   highlighted: prop.bool,
   children: prop.oneOfType([prop.string, prop.element, prop.node]),
-  // eslint-disable-next-line react/forbid-prop-types
-  fallback: prop.any,
   // eslint-disable-next-line react/forbid-prop-types
   Icon: prop.object,
   iconColor: prop.string,
