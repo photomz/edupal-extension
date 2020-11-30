@@ -1,5 +1,6 @@
 import { atom, atomFamily, selector } from 'recoil';
 import { nanoid } from 'nanoid';
+import mixpanel from 'mixpanel-browser';
 import { meetData, fireMessage } from './common';
 import { answers } from './stats';
 import { receiveAsk } from './question';
@@ -64,9 +65,8 @@ const sendAsk = selector({
       if (answer.every((tf) => tf === false)) answer = null;
     } else if (type === 'ShortAnswer' && answer === '') answer = null;
 
-    console.log(Object.keys(typeMap).map((el) => get(creatorAnswer(el))));
-    console.log(Object.keys(typeMap).map((el) => get(creatorMeta(el))));
-    console.log(type, answer);
+    const image = get(creatorImage) || null;
+    const text = get(creatorText) || null;
 
     const payload = {
       teacher: {
@@ -76,8 +76,8 @@ const sendAsk = selector({
       avatar,
       question: {
         type,
-        image: get(creatorImage) || null,
-        text: get(creatorText) || null,
+        image,
+        text,
       },
       meta,
       askTimestamp: new Date().toISOString(),
@@ -94,6 +94,15 @@ const sendAsk = selector({
         answer,
         ...payload,
       },
+    });
+    mixpanel.track('Ask Question', {
+      name,
+      questionId,
+      meetingId,
+      type,
+      text,
+      meta: JSON.stringify(meta),
+      answer,
     });
   },
 });

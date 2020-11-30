@@ -10,8 +10,10 @@ import {
 import CssBaseline from '@material-ui/core/CssBaseline';
 import recoilPersist from 'recoil-persist';
 
+import mixpanel from 'mixpanel-browser';
 import SnackbarProvider from '../../containers/Snackbar';
 import App from './App';
+import g from '../../global';
 import themeTemplate from '../../styles/theme';
 import './Root.css';
 
@@ -19,6 +21,8 @@ import 'fontsource-roboto/300.css';
 import 'fontsource-roboto/400.css';
 import 'fontsource-roboto/500.css';
 import 'fontsource-roboto/700.css';
+
+mixpanel.init(g.mixpanelToken, { api_host: 'https://api.mixpanel.com' });
 
 const { RecoilPersist, updateState } = recoilPersist();
 

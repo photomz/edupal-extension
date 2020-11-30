@@ -5,6 +5,7 @@ import { useRecoilValue, useSetRecoilState } from 'recoil';
 import useWebsocket from 'react-use-websocket';
 import styled from 'styled-components';
 import { useSnackbar } from 'notistack';
+import mixpanel from 'mixpanel-browser';
 
 import MuiButton from '@material-ui/core/Button';
 
@@ -25,6 +26,7 @@ import {
   role,
   leaderboard,
   receiveUpdateRole,
+  signUpDate as userSignUpDate,
 } from '../../logic/common';
 import { receiveRespondAction } from '../../logic/snackbar';
 
@@ -43,6 +45,7 @@ const App = () => {
   const socketMessage = useRecoilValue(fireMessage);
   const meet = useRecoilValue(meetData);
   const userRole = useRecoilValue(role);
+  const signUpDate = useRecoilValue(userSignUpDate);
 
   const [connect, setConnect] = useState(true);
   const { sendJsonMessage, readyState, lastJsonMessage } = useWebsocket(
@@ -50,6 +53,24 @@ const App = () => {
     {},
     connect
   );
+
+  useEffect(() => {
+    console.log(`Tracking opt out: ${mixpanel.has_opted_out_tracking()}`);
+    mixpanel.identify(meet.userId);
+    if (new Date() - new Date(signUpDate) < 1000 * 60 * 2)
+      mixpanel.track('New User', {
+        signUpDate,
+        name: meet.name,
+      });
+    mixpanel.people.set({
+      $email: meet.email,
+      signUpDate,
+      userId: meet.userId,
+      name: meet.name,
+      fullName: meet.fullName,
+      team: meet.team,
+    });
+  }, []);
 
   const { enqueueSnackbar } = useSnackbar();
   const addQuestion = useSetRecoilState(receiveAsk);
@@ -91,6 +112,10 @@ const App = () => {
         break;
       case 'joinMeetingSuccess':
         console.info('You are connected to Edu-pal!');
+        mixpanel.track('Join Meeting', {
+          meetingId: meet.meetingId,
+          role: userRole,
+        });
         break;
       case 'joinMeetingFailed':
         enqueueSnackbar(

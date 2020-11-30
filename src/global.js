@@ -3,6 +3,7 @@ import CorrectIcon from '@material-ui/icons/CheckCircle';
 import UngradedIcon from '@material-ui/icons/RemoveCircle';
 
 export default {
+  mixpanelToken: '163ddda22a51cddd2fcce948b3d8406d',
   socketUrl: 'wss://0cyod0odw5.execute-api.ap-southeast-1.amazonaws.com/dev/',
   alphabet: [
     ['A', 'primary'],

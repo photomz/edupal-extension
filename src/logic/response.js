@@ -1,4 +1,5 @@
 import { atomFamily, selector, selectorFamily } from 'recoil';
+import mixpanel from 'mixpanel-browser';
 import sanitiseResponse from './sanitiseResponse';
 import { meetData, carouselOrder, fireMessage } from './common';
 import { questions } from './question';
@@ -76,6 +77,12 @@ const sendRespond = selectorFamily({
       },
     };
     set(fireMessage, payload);
+    mixpanel.track('Respond to Question', {
+      meetingId,
+      name,
+      questionId,
+      response: JSON.stringify(response),
+    });
   },
 });
 

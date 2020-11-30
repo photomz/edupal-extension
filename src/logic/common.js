@@ -2,6 +2,13 @@ import { atom, atomFamily, selector } from 'recoil';
 import mockMeetData from './data.json';
 import scrapeMeetData from './scrapeMeetData';
 
+const signUpDate = atom({
+  key: 'signUpDate',
+  default: new Date().toISOString(),
+  persistence_UNSTABLE: {
+    type: 'signUpDate',
+  },
+});
 const role = atom({
   key: 'role',
   default: 'STUDENT',
@@ -68,4 +75,5 @@ export {
   leaderboard,
   sendUpdateRole,
   receiveUpdateRole,
+  signUpDate,
 };
