@@ -9,7 +9,7 @@ const scrapeMeetData = () => {
       .querySelector('[data-unresolved-meeting-id]')
       .getAttribute('data-unresolved-meeting-id'),
     name: userData[6].split(' ')[0],
-    fullName: userData[6],
+    lastName: userData[6].split(' ')[1],
     team: userData[28],
     avatar: userData[5],
     email: userData[4],

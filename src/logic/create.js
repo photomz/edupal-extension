@@ -1,6 +1,6 @@
 import { atom, atomFamily, selector } from 'recoil';
 import { nanoid } from 'nanoid';
-import mixpanel from 'mixpanel-browser';
+import Mixpanel from './mixpanelParams';
 import { meetData, fireMessage } from './common';
 import { answers } from './stats';
 import { receiveAsk } from './question';
@@ -95,7 +95,7 @@ const sendAsk = selector({
         ...payload,
       },
     });
-    mixpanel.track('Ask Question', {
+    Mixpanel.track('Ask Question', {
       name,
       questionId,
       meetingId,

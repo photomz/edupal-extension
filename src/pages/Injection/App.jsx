@@ -5,9 +5,8 @@ import { useRecoilValue, useSetRecoilState } from 'recoil';
 import useWebsocket from 'react-use-websocket';
 import styled from 'styled-components';
 import { useSnackbar } from 'notistack';
-import mixpanel from 'mixpanel-browser';
-
 import MuiButton from '@material-ui/core/Button';
+import Mixpanel from '../../logic/mixpanelParams';
 
 import ShortAppBar from '../../containers/ShortAppBar';
 import Sidebar from '../../containers/Sidebar';
@@ -29,6 +28,7 @@ import {
   signUpDate as userSignUpDate,
 } from '../../logic/common';
 import { receiveRespondAction } from '../../logic/snackbar';
+import { peopleSet, track } from '../../logic/mixpanel';
 
 const Container = styled.div`
   position: absolute;
@@ -47,6 +47,8 @@ const App = () => {
   const userRole = useRecoilValue(role);
   const signUpDate = useRecoilValue(userSignUpDate);
 
+  const mixpanelPeopleSet = useSetRecoilState(peopleSet);
+  const mixpanelTrack = useSetRecoilState(track);
   const [connect, setConnect] = useState(true);
   const { sendJsonMessage, readyState, lastJsonMessage } = useWebsocket(
     g.socketUrl,
@@ -55,21 +57,12 @@ const App = () => {
   );
 
   useEffect(() => {
-    console.log(`Tracking opt out: ${mixpanel.has_opted_out_tracking()}`);
-    mixpanel.identify(meet.userId);
+    mixpanelPeopleSet();
     if (new Date() - new Date(signUpDate) < 1000 * 60 * 2)
-      mixpanel.track('New User', {
+      mixpanelTrack('New User', {
         signUpDate,
         name: meet.name,
       });
-    mixpanel.people.set({
-      $email: meet.email,
-      signUpDate,
-      userId: meet.userId,
-      name: meet.name,
-      fullName: meet.fullName,
-      team: meet.team,
-    });
   }, []);
 
   const { enqueueSnackbar } = useSnackbar();
@@ -112,7 +105,7 @@ const App = () => {
         break;
       case 'joinMeetingSuccess':
         console.info('You are connected to Edu-pal!');
-        mixpanel.track('Join Meeting', {
+        Mixpanel.track('Join Meeting', {
           meetingId: meet.meetingId,
           role: userRole,
         });
