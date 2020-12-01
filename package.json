@@ -14,11 +14,8 @@
   "private": true,
   "scripts": {
     "lint": "eslint --fix \"src/**/*.{js,jsx}\"",
-    "build": "node extensionConfig/build.js",
-    "build:web": "node scripts/build.js",
-    "start": "node extensionConfig/webserver.js",
-    "dev": "node scripts/start.js",
-    "debug": "node --lazy --inspect-brk=9229 --preserve-symlinks --preserve-symlinks-main config/webserver.js"
+    "build": "node scripts/build.js",
+    "start": "node scripts/start.js"
   },
   "devDependencies": {
     "@babel/core": "^7.12.3",
@@ -26,9 +23,6 @@
     "@hot-loader/react-dom": "^17.0.0",
     "babel-eslint": "^10.1.0",
     "babel-loader": "8.0.6",
-    "clean-webpack-plugin": "3.0.0",
-    "copy-webpack-plugin": "5.0.5",
-    "css-loader-3.2": "npm:css-loader@3.2.0",
     "eslint": "^7.12.1",
     "eslint-config-airbnb": "^18.2.1",
     "eslint-config-prettier": "^6.15.0",
@@ -37,16 +31,7 @@
     "eslint-plugin-prettier": "^3.1.4",
     "eslint-plugin-react": "^7.21.5",
     "eslint-plugin-react-hooks": "^4.2.0",
-    "file-loader-4.3": "npm:file-loader@4.3.0",
-    "html-loader": "0.5.5",
-    "html-webpack-plugin-3.2": "npm:html-webpack-plugin@3.2.0",
-    "parcel-plugin-web-extension": "^1.6.1",
-    "prettier": "^2.1.2",
-    "style-loader-1.0": "npm:style-loader@1.0.0",
-    "webpack-4.41": "npm:webpack@4.41.2",
-    "webpack-cli": "3.3.10",
-    "webpack-dev-server-3.9": "npm:webpack-dev-server@3.9.0",
-    "write-file-webpack-plugin": "4.5.1"
+    "prettier": "^2.2.1"
   },
   "dependencies": {
     "@material-ui/core": "^4.11.0",
@@ -103,7 +88,6 @@
     "react-refresh": "^0.8.3",
     "react-swipeable-views": "^0.13.9",
     "react-use-websocket": "^2.2.0",
-    "recharts": "^1.8.5",
     "recoil": "^0.1.2",
     "recoil-persist": "^0.7.0",
     "resolve": "1.18.1",

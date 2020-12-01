@@ -1,8 +1,9 @@
 import Util from '../util';
+import mockMeetData from './data.json';
 
 const scrapeMeetData = () => {
   const dataScript = Util.contains('script', 'accounts.google.com');
-  if (!dataScript[1]) return null;
+  if (!dataScript[1]) return mockMeetData;
   const userData = JSON.parse(dataScript[1].text.match(/\[(.*?)\]/)[0]);
   return {
     meetingId: document

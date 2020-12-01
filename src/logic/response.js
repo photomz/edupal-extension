@@ -77,15 +77,19 @@ const sendRespond = selectorFamily({
       },
     };
     set(queueMessage, payload);
-    set(track, {
-      event: 'Respond to Question',
-      props: {
-        meetingId,
-        name,
-        questionId,
-        response: JSON.stringify(response),
-      },
-    });
+    setTimeout(
+      () =>
+        set(track, {
+          event: 'Respond to Question',
+          props: {
+            meetingId,
+            name,
+            questionId,
+            response: JSON.stringify(response),
+          },
+        }),
+      50
+    );
   },
 });
 

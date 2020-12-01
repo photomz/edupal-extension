@@ -1,6 +1,4 @@
 import { atom, atomFamily, selector } from 'recoil';
-import mockMeetData from './data.json';
-// eslint-disable-next-line no-unused-vars
 import scrapeMeetData from './scrapeMeetData';
 
 const role = atom({
@@ -30,10 +28,7 @@ const dequeueMessage = selector({
 
 const meetData = atom({
   key: 'meetData',
-  default:
-    // process.env.NODE_ENV === 'development'
-    mockMeetData,
-  // : process.env.NODE_ENV === 'production' && scrapeMeetData(),
+  default: scrapeMeetData(),
 });
 
 const isDrawerOpen = atom({ key: 'isDrawerOpen', default: false });

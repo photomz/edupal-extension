@@ -95,18 +95,23 @@ const sendAsk = selector({
         ...payload,
       },
     });
-    set(track, {
-      event: 'Ask Question',
-      props: {
-        name,
-        questionId,
-        meetingId,
-        type,
-        text,
-        meta: JSON.stringify(meta),
-        answer,
-      },
-    });
+    // Hacky fix for recoil bug where only second fireMessage actually is queued
+    setTimeout(
+      () =>
+        set(track, {
+          event: 'Ask Question',
+          props: {
+            name,
+            questionId,
+            meetingId,
+            type,
+            text,
+            meta: JSON.stringify(meta),
+            answer,
+          },
+        }),
+      50
+    );
   },
 });
 
