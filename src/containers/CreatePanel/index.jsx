@@ -12,6 +12,7 @@ import MuiGrid from '@material-ui/core/Grid';
 import MuiTooltip from '@material-ui/core/Tooltip';
 import { DropzoneDialog } from 'material-ui-dropzone';
 
+// eslint-disable-next-line no-unused-vars
 import PhotoIcon from '@material-ui/icons/AddPhotoAlternate';
 import SendIcon from '@material-ui/icons/Send';
 
@@ -56,6 +57,7 @@ const CreatePanel = () => {
   const [type, setType] = useRecoilState(creatorType);
   // Question type dictates interface of meta and answer;
   const Option = optionComponentMap[type];
+  // eslint-disable-next-line no-unused-vars
   const [image, setImage] = useRecoilState(creatorImage);
   const [title, setTitle] = useRecoilState(creatorText);
 
@@ -68,7 +70,8 @@ const CreatePanel = () => {
         title={
           <MuiGrid container direction="row" justify="space-between">
             <SplitButton value={type} handleChange={setType} />
-            <MuiTooltip
+            {/* S3 image upload has not been implemented yet */}
+            {/* <MuiTooltip
               title={
                 image === ''
                   ? 'Attach an image'
@@ -78,7 +81,7 @@ const CreatePanel = () => {
               <Button onClick={() => setOpen(true)} variant="extended">
                 <PhotoIcon />
               </Button>
-            </MuiTooltip>
+            </MuiTooltip> */}
             <MuiTooltip title="Send question">
               <Button color="primary" onClick={ask}>
                 <SendIcon />

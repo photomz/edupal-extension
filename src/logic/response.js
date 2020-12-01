@@ -1,6 +1,12 @@
 import { atomFamily, selector, selectorFamily } from 'recoil';
 import sanitiseResponse from './sanitiseResponse';
-import { meetData, carouselOrder, queueMessage } from './common';
+import {
+  meetData,
+  carouselOrder,
+  queueMessage,
+  isDrawerOpen,
+  tabOrder,
+} from './common';
 import { questions } from './question';
 import { track } from './mixpanel';
 
@@ -47,6 +53,8 @@ const sendRespond = selectorFamily({
   set: (questionId) => ({ set, get }, obj) => {
     if (get(iHaveResponded(questionId))) return;
     set(iHaveResponded(questionId), true);
+    set(isDrawerOpen, true);
+    set(tabOrder, 0);
     set(carouselOrder(questionId), 1);
     set(loadingAnswer(questionId), true);
 

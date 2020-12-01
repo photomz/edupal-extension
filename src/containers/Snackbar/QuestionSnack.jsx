@@ -64,7 +64,7 @@ const SnackMessage = React.forwardRef(({ id, message, qid }, ref) => {
           </ButtonsWrapper>
         </CardActions>
         <MuiCollapse in={expanded} timeout="auto" unmountOnExit>
-          <QuestionCardContent qid={qid} onClick={followThrough} />
+          <QuestionCardContent qid={qid} onClick={() => followThrough()} />
         </MuiCollapse>
       </Card>
     </Wrapper>

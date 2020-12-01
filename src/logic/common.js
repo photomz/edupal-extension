@@ -29,6 +29,9 @@ const dequeueMessage = selector({
 const meetData = atom({
   key: 'meetData',
   default: scrapeMeetData(),
+  persistence_UNSTABLE: {
+    type: 'meetData',
+  },
 });
 
 const isDrawerOpen = atom({ key: 'isDrawerOpen', default: false });

@@ -35,6 +35,7 @@ const Grid = styled(MuiGrid)``;
 const InnerGrid = styled(MuiGrid)`
   color: ${({ theme, colour }) => theme.palette[colour].main};
   margin-left: ${({ theme }) => theme.spacing(1)}px;
+  flex-shrink: 10;
   &&& svg {
     width: 16px;
     height: 16px;
@@ -98,7 +99,7 @@ const Person = ({
           action={<RaisedIcon Icon={Icon} colour={iconColor} />}
           title={
             <Grid container direction="row" justify="flex-start" wrap="nowrap">
-              <MuiTypography>{name}</MuiTypography>
+              <MuiTypography style={{ flexGrow: 1 }}>{name}</MuiTypography>
               <ChangeIndicator change={change} />
             </Grid>
           }

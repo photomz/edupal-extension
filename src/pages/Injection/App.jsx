@@ -31,6 +31,7 @@ import {
   track,
   signUpDate as userSignUpDate,
 } from '../../logic/mixpanel';
+import { resetAsNeeded } from '../../logic/helper';
 
 const App = () => {
   const uploaderOpen = useRecoilValue(isUploaderOpen);
@@ -38,20 +39,39 @@ const App = () => {
   const socketMessage = useRecoilValue(messages);
   const dequeue = useSetRecoilState(dequeueMessage);
   const meet = useRecoilValue(meetData);
-  const userRole = useRecoilValue(role);
+  const [userRole, setUserRole] = useRecoilState(role);
   const [signUpDate, setSignUpDate] = useRecoilState(userSignUpDate);
+  const resetPrevious = useSetRecoilState(resetAsNeeded);
+
+  const { enqueueSnackbar } = useSnackbar();
+  const addQuestion = useSetRecoilState(receiveAsk);
+  const addResponse = useSetRecoilState(receiveRespond);
+  const addAnswer = useSetRecoilState(receiveAnswer);
+  const setLeaderboard = useSetRecoilState(leaderboard);
+  const updateRole = useSetRecoilState(receiveUpdateRole);
+  const handleRespond = useSetRecoilState(receiveRespondAction);
 
   const mixpanelPeopleSet = useSetRecoilState(peopleSet);
   const mixpanelTrack = useSetRecoilState(track);
   const [connect, setConnect] = useState(true);
   const { sendJsonMessage, readyState, lastJsonMessage } = useWebsocket(
     g.socketUrl,
-    { shouldReconnect: () => connect },
+    {
+      shouldReconnect: () => connect,
+      onClose: () => {
+        if (connect)
+          enqueueSnackbar(
+            'Whoops! Edu-pal lost connection. We are trying again...',
+            { variant: 'warning' }
+          );
+      },
+    },
     connect
   );
 
   useEffect(() => {
     if (!meet.meetingId) return () => {};
+    resetPrevious();
     const { meetingId, userId, name, avatar } = meet;
     sendJsonMessage({
       route: 'joinMeeting',
@@ -64,14 +84,6 @@ const App = () => {
     }, 60000 * 9);
     return clearInterval(keepAlive);
   }, []);
-
-  const { enqueueSnackbar } = useSnackbar();
-  const addQuestion = useSetRecoilState(receiveAsk);
-  const addResponse = useSetRecoilState(receiveRespond);
-  const addAnswer = useSetRecoilState(receiveAnswer);
-  const setLeaderboard = useSetRecoilState(leaderboard);
-  const updateRole = useSetRecoilState(receiveUpdateRole);
-  const handleRespond = useSetRecoilState(receiveRespondAction);
 
   useEffect(() => {
     if (lastJsonMessage === null) return;
@@ -117,6 +129,7 @@ const App = () => {
         enqueueSnackbar(`You joined as student.`, {
           variant: 'info',
         });
+        setUserRole('STUDENT');
         break;
       case 'updateRoleFailed':
         console.log(data);

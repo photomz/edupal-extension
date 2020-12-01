@@ -29,6 +29,9 @@ const creatorType = atom({
 const creatorAnswer = atomFamily({
   key: 'creatorAnswer',
   default: (type) => typeMap[type][1],
+  persistence_UNSTABLE: {
+    type: 'creatorAnswer',
+  },
 });
 const creatorMeta = atomFamily({
   key: 'creatorMeta',
@@ -54,7 +57,7 @@ const sendAsk = selector({
     const meta = Util.deepClone(get(creatorMeta(type)));
     if (
       ['MultiSelect', 'MCQ'].includes(type) &&
-      meta.options.every((el) => el === '')
+      meta.options.every((el) => el.trim() === '')
     ) {
       meta.options = null;
     }
@@ -63,7 +66,7 @@ const sendAsk = selector({
     if (type === 'MultiSelect') {
       answer = answer.slice(0, meta.optionNum);
       if (answer.every((tf) => tf === false)) answer = null;
-    } else if (type === 'ShortAnswer' && answer === '') answer = null;
+    } else if (type === 'ShortAnswer' && answer.trim() === '') answer = null;
 
     const image = get(creatorImage) || null;
     const text = get(creatorText) || null;
