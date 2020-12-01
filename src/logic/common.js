@@ -9,7 +9,23 @@ const role = atom({
     type: 'role',
   },
 });
-const fireMessage = atom({ key: 'fireMessage', default: '' });
+const messages = atom({ key: 'messages', default: [] });
+const queueMessage = selector({
+  key: 'queueMessage',
+  set: ({ set }, obj) => {
+    set(messages, (prev) => prev.concat(obj));
+  },
+});
+const dequeueMessage = selector({
+  key: 'dequeueMessage',
+  set: ({ set }) => {
+    set(messages, (prev) => {
+      const newQueue = [...prev];
+      newQueue.shift();
+      return newQueue;
+    });
+  },
+});
 
 const meetData = atom({
   key: 'meetData',
@@ -44,7 +60,7 @@ const sendUpdateRole = selector({
         avatar,
       },
     };
-    set(fireMessage, payload);
+    set(queueMessage, payload);
   },
 });
 
@@ -64,7 +80,9 @@ export {
   role,
   isUploaderOpen,
   tabOrder,
-  fireMessage,
+  messages,
+  queueMessage,
+  dequeueMessage,
   leaderboard,
   sendUpdateRole,
   receiveUpdateRole,

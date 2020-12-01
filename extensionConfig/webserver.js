@@ -1,4 +1,4 @@
-const WebpackDevServer = require('webpack-dev-server-3.10');
+const WebpackDevServer = require('webpack-dev-server-3.9');
 const webpack = require('webpack-4.41');
 const path = require('path');
 const CopyWebpackPlugin = require('copy-webpack-plugin');

@@ -4,7 +4,7 @@ const fileSystem = require('fs');
 
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
-const HtmlWebpackPlugin = require('html-webpack-plugin-5');
+const HtmlWebpackPlugin = require('html-webpack-plugin-3.2');
 const WriteFilePlugin = require('write-file-webpack-plugin');
 const ReloadPlugin = require('./extensionConfig/ReloadPlugin');
 const env = require('./extensionConfig/env');
@@ -50,7 +50,7 @@ const options = {
     rules: [
       {
         test: /\.css$/,
-        loader: 'style-loader!css-loader',
+        use: ['style-loader', 'css-loader'],
         exclude: /node_modules/,
       },
       {

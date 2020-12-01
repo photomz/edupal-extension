@@ -35,8 +35,6 @@ const ReportPanel = () => {
   const setTabOrder = useSetRecoilState(tabOrder);
   const studentResponses = useRecoilValue(responses(qid));
 
-  console.log(studentResponses);
-
   return (
     <Wrapper>
       <Head

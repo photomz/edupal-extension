@@ -1,9 +1,9 @@
 import { atom, atomFamily, selector } from 'recoil';
 import { nanoid } from 'nanoid';
-import Mixpanel from './mixpanelParams';
-import { meetData, fireMessage } from './common';
+import { meetData, queueMessage } from './common';
 import { answers } from './stats';
 import { receiveAsk } from './question';
+import { track } from './mixpanel';
 import Util from '../util';
 
 const typeMap = {
@@ -86,7 +86,7 @@ const sendAsk = selector({
 
     set(receiveAsk, payload);
     set(answers(questionId), answer);
-    set(fireMessage, {
+    set(queueMessage, {
       route: 'ask',
       data: {
         classId: 'null',
@@ -95,14 +95,17 @@ const sendAsk = selector({
         ...payload,
       },
     });
-    Mixpanel.track('Ask Question', {
-      name,
-      questionId,
-      meetingId,
-      type,
-      text,
-      meta: JSON.stringify(meta),
-      answer,
+    set(track, {
+      event: 'Ask Question',
+      props: {
+        name,
+        questionId,
+        meetingId,
+        type,
+        text,
+        meta: JSON.stringify(meta),
+        answer,
+      },
     });
   },
 });

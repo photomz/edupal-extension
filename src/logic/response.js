@@ -1,8 +1,8 @@
 import { atomFamily, selector, selectorFamily } from 'recoil';
-import Mixpanel from './mixpanelParams';
 import sanitiseResponse from './sanitiseResponse';
-import { meetData, carouselOrder, fireMessage } from './common';
+import { meetData, carouselOrder, queueMessage } from './common';
 import { questions } from './question';
+import { track } from './mixpanel';
 
 const iHaveResponded = atomFamily({
   key: 'iHaveResponded',
@@ -76,12 +76,15 @@ const sendRespond = selectorFamily({
         respondTimestamp,
       },
     };
-    set(fireMessage, payload);
-    Mixpanel.track('Respond to Question', {
-      meetingId,
-      name,
-      questionId,
-      response: JSON.stringify(response),
+    set(queueMessage, payload);
+    set(track, {
+      event: 'Respond to Question',
+      props: {
+        meetingId,
+        name,
+        questionId,
+        response: JSON.stringify(response),
+      },
     });
   },
 });

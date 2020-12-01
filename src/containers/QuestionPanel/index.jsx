@@ -11,8 +11,6 @@ const Wrapper = styled.div``;
 const QuestionPanel = () => {
   const qids = useRecoilValue(questionIds);
 
-  console.log(qids);
-
   return (
     <Wrapper id="edupal-questionPanel">
       {qids.map((qid) => (

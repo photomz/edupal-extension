@@ -6,7 +6,7 @@ import MuiContainer from '@material-ui/core/Container';
 import { useRecoilValue, useSetRecoilState } from 'recoil';
 import Person from '../../components/Person';
 import CardSkeleton from '../../components/CardSkeleton';
-import { meetData, fireMessage, leaderboard } from '../../logic/common';
+import { meetData, queueMessage, leaderboard } from '../../logic/common';
 
 const Wrapper = styled(MuiContainer)`
   overflow: hidden;
@@ -16,7 +16,7 @@ const Wrapper = styled(MuiContainer)`
 const LeaderboardPanel = () => {
   const { userId, meetingId } = useRecoilValue(meetData);
   const board = useRecoilValue(leaderboard);
-  const sendGetLeaderboard = useSetRecoilState(fireMessage);
+  const sendGetLeaderboard = useSetRecoilState(queueMessage);
 
   useEffect(() => {
     sendGetLeaderboard({ route: 'getLeaderboard', data: { meetingId } });

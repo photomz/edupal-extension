@@ -1,10 +1,10 @@
 import { selector, atom } from 'recoil';
-import { fireMessage, meetData } from './common';
+import { queueMessage, meetData } from './common';
 import defaultParams from './mixpanelParams';
 
 const signUpDate = atom({
   key: 'signUpDate',
-  default: new Date().toISOString(),
+  default: '',
   persistence_UNSTABLE: {
     type: 'signUpDate',
   },
@@ -18,42 +18,47 @@ const peopleSet = selector({
   set: ({ set, get }, props) => {
     const { userId: distinctId, name, lastName, email, team } = get(meetData);
     const payload = {
-      route: 'trace',
+      route: 'mixpanel',
       data: {
         action: 'people',
-        props: [
-          distinctId,
-          {
-            ...defaultParams.properties(),
-            ...defaultParams.people_properties(),
-            $first_name: name,
-            $last_name: lastName,
-            $created: signUpDate,
-            $email: email,
-            team,
-            ...props,
-          },
-        ],
+        id: distinctId,
+        properties: {
+          ...defaultParams.properties(),
+          ...defaultParams.people_properties(),
+          $first_name: name,
+          $last_name: lastName,
+          $created: signUpDate,
+          $email: email,
+          team,
+          ...props,
+        },
       },
     };
-    set(fireMessage, payload);
+    set(queueMessage, payload);
   },
 });
 
 const track = selector({
   key: 'mixpanelTrack',
-  set: ({ set, get }, props) => {
-    const { userId: distinctId } = get(meetData);
+  set: ({ set, get }, { event, props }) => {
+    const { userId: distinctId, meetingId, name } = get(meetData);
     const payload = {
-      route: 'trace',
+      route: 'mixpanel',
       data: {
         action: 'track',
-        props: [distinctId, { ...defaultParams.properties(), ...props }],
+        id: event,
+        properties: {
+          ...defaultParams.properties(),
+          distinct_id: distinctId,
+          meetingId,
+          name,
+          ...props,
+        },
       },
     };
-    set(fireMessage, payload);
+    set(queueMessage, payload);
   },
 });
 
 export default {};
-export { peopleSet, track };
+export { signUpDate, peopleSet, track };

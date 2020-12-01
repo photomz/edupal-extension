@@ -55,7 +55,7 @@ const CardActions = styled(MuiCardActions)`
 
 const AnswerCard = ({ qid }) => {
   const { question } = useRecoilValue(questions(qid));
-  const { isCorrect, answerText, answer } = useRecoilValue(studentAnswer(qid));
+  const { isCorrect, answerText } = useRecoilValue(studentAnswer(qid));
   const switchCard = useSetRecoilState(carouselOrder(qid));
   // eslint-disable-next-line no-unused-vars
   const isLoading = useRecoilValue(loadingAnswer(qid));
@@ -63,7 +63,6 @@ const AnswerCard = ({ qid }) => {
   if (isLoading) return <CardSkeleton />;
 
   const { Icon, colour } = g.correctness[isCorrect];
-  console.log(answerText, answer);
 
   return (
     <>

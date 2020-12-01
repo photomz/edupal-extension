@@ -1,11 +1,12 @@
 {
   "name": "edupal-extension",
-  "version": "0.0.1",
-  "description": "Google Meet client modifications with an emphasis on learning",
+  "version": "0.1.0",
+  "description": "Quick learning feedback during online lessons",
   "repository": {
     "type": "git",
     "url": "https://github.com/edu-pal/edupal-extension"
   },
+  "author": "Edu-pal Group <edupal.group@gmail.com>",
   "contributors": [
     "Markus Zhang <markuszhang8@gmail.com>",
     "Arjun Barrett <arjunbarrett@gmail.com>"
@@ -36,14 +37,15 @@
     "eslint-plugin-prettier": "^3.1.4",
     "eslint-plugin-react": "^7.21.5",
     "eslint-plugin-react-hooks": "^4.2.0",
+    "file-loader-4.3": "npm:file-loader@4.3.0",
     "html-loader": "0.5.5",
-    "html-webpack-plugin-5": "npm:html-webpack-plugin@5.0.0-alpha.14",
+    "html-webpack-plugin-3.2": "npm:html-webpack-plugin@3.2.0",
     "parcel-plugin-web-extension": "^1.6.1",
     "prettier": "^2.1.2",
     "style-loader-1.0": "npm:style-loader@1.0.0",
     "webpack-4.41": "npm:webpack@4.41.2",
     "webpack-cli": "3.3.10",
-    "webpack-dev-server-3.10": "npm:webpack-dev-server@3.10.3",
+    "webpack-dev-server-3.9": "npm:webpack-dev-server@3.9.0",
     "write-file-webpack-plugin": "4.5.1"
   },
   "dependencies": {
@@ -64,7 +66,7 @@
     "camelcase": "^6.1.0",
     "case-sensitive-paths-webpack-plugin": "2.3.0",
     "clsx": "^1.1.1",
-    "css-loader": "4.3.0",
+    "css-loader": "^5.0.1",
     "dotenv": "8.2.0",
     "dotenv-expand": "5.1.0",
     "eslint-config-react-app": "^6.0.0",
@@ -82,7 +84,6 @@
     "jest-watch-typeahead": "0.6.1",
     "material-ui-dropzone": "^3.5.0",
     "mini-css-extract-plugin": "0.11.3",
-    "mixpanel-browser": "^2.39.0",
     "nanoid": "^3.1.18",
     "notistack": "^1.0.2",
     "optimize-css-assets-webpack-plugin": "5.0.4",

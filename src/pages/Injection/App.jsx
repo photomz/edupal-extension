@@ -1,12 +1,11 @@
 /* eslint-disable no-console */
 import React, { useState, useEffect, useRef } from 'react';
 import { hot } from 'react-hot-loader';
-import { useRecoilValue, useSetRecoilState } from 'recoil';
+import { useRecoilValue, useSetRecoilState, useRecoilState } from 'recoil';
 import useWebsocket from 'react-use-websocket';
 import styled from 'styled-components';
 import { useSnackbar } from 'notistack';
 import MuiButton from '@material-ui/core/Button';
-import Mixpanel from '../../logic/mixpanelParams';
 
 import ShortAppBar from '../../containers/ShortAppBar';
 import Sidebar from '../../containers/Sidebar';
@@ -20,15 +19,19 @@ import { receiveRespond } from '../../logic/stats';
 import {
   isUploaderOpen,
   isDrawerOpen,
-  fireMessage,
+  messages,
+  dequeueMessage,
   meetData,
   role,
   leaderboard,
   receiveUpdateRole,
-  signUpDate as userSignUpDate,
 } from '../../logic/common';
 import { receiveRespondAction } from '../../logic/snackbar';
-import { peopleSet, track } from '../../logic/mixpanel';
+import {
+  peopleSet,
+  track,
+  signUpDate as userSignUpDate,
+} from '../../logic/mixpanel';
 
 const Container = styled.div`
   position: absolute;
@@ -42,10 +45,11 @@ const Container = styled.div`
 const App = () => {
   const uploaderOpen = useRecoilValue(isUploaderOpen);
   const setDrawerOpen = useSetRecoilState(isDrawerOpen);
-  const socketMessage = useRecoilValue(fireMessage);
+  const socketMessage = useRecoilValue(messages);
+  const dequeue = useSetRecoilState(dequeueMessage);
   const meet = useRecoilValue(meetData);
   const userRole = useRecoilValue(role);
-  const signUpDate = useRecoilValue(userSignUpDate);
+  const [signUpDate, setSignUpDate] = useRecoilState(userSignUpDate);
 
   const mixpanelPeopleSet = useSetRecoilState(peopleSet);
   const mixpanelTrack = useSetRecoilState(track);
@@ -57,12 +61,17 @@ const App = () => {
   );
 
   useEffect(() => {
-    mixpanelPeopleSet();
-    if (new Date() - new Date(signUpDate) < 1000 * 60 * 2)
-      mixpanelTrack('New User', {
-        signUpDate,
-        name: meet.name,
-      });
+    if (!meet.meetingId) return () => {};
+    const { meetingId, userId, name, avatar } = meet;
+    sendJsonMessage({
+      route: 'joinMeeting',
+      data: { meetingId, role: userRole, userId, name, avatar },
+    });
+
+    const keepAlive = setInterval(() => {
+      sendJsonMessage({ route: 'ping' });
+    }, 60000 * 9);
+    return clearInterval(keepAlive);
   }, []);
 
   const { enqueueSnackbar } = useSnackbar();
@@ -74,8 +83,8 @@ const App = () => {
   const handleRespond = useSetRecoilState(receiveRespondAction);
 
   useEffect(() => {
-    console.info(lastJsonMessage);
     if (lastJsonMessage === null) return;
+    console.info(lastJsonMessage);
     const { action, data } = lastJsonMessage;
     switch (action) {
       case 'receiveAsk':
@@ -105,9 +114,12 @@ const App = () => {
         break;
       case 'joinMeetingSuccess':
         console.info('You are connected to Edu-pal!');
-        Mixpanel.track('Join Meeting', {
-          meetingId: meet.meetingId,
-          role: userRole,
+        mixpanelTrack({
+          event: 'Join Meeting',
+          props: {
+            meetingId: meet.meetingId,
+            role: userRole,
+          },
         });
         break;
       case 'joinMeetingFailed':
@@ -143,28 +155,27 @@ const App = () => {
     setDrawerOpen(false)
   );
 
-  useEffect(() => console.info('Socket state:', readyState), [readyState]);
-
-  // Send ping to keep socket connection open
   useEffect(() => {
-    const keepAlive = setInterval(() => {
-      sendJsonMessage({ route: 'ping' });
-    }, 60000 * 9);
-    return clearInterval(keepAlive);
-  }, []);
-
-  useEffect(() => {
-    if (!meet.meetingId) return;
-    const { meetingId, userId, name, avatar } = meet;
-    sendJsonMessage({
-      route: 'joinMeeting',
-      data: { meetingId, role: userRole, userId, name, avatar },
-    });
-  }, [meet]);
+    if (readyState !== 1) return;
+    mixpanelPeopleSet({});
+    if (signUpDate === '') {
+      mixpanelTrack({
+        event: 'New User',
+        props: {
+          signUpDate,
+          name: meet.name,
+        },
+      });
+      setSignUpDate(new Date().toISOString());
+    }
+  }, [readyState]);
 
   useEffect(() => {
-    console.info(socketMessage);
-    sendJsonMessage(socketMessage);
+    if (!socketMessage.length) return;
+    const front = socketMessage[socketMessage.length - 1];
+    console.info(front);
+    sendJsonMessage(front);
+    dequeue();
   }, [socketMessage]);
 
   useEffect(() => {
@@ -181,7 +192,11 @@ const App = () => {
         },
       };
       document.addEventListener('beforeunload', () => {
-        sendJsonMessage(disconnectPayload);
+        mixpanelTrack({ event: 'Leave Meeting' });
+        setTimeout(() => {
+          sendJsonMessage(disconnectPayload);
+        }, 100);
+
         console.info('Safely disconnected from Edu-pal socket connections.');
       });
 
@@ -190,9 +205,12 @@ const App = () => {
         // eslint-disable-next-line no-await-in-loop
         await new Promise((r) => setTimeout(r, 200));
       }
-      sendJsonMessage(disconnectPayload);
+      mixpanelTrack({ event: 'Leave Meeting' });
+      setTimeout(() => {
+        sendJsonMessage(disconnectPayload);
+        setConnect(false);
+      }, 100);
       console.info('Safely disconnected from Edu-pal socket connections');
-      setConnect(false);
     })();
   }, []);
 

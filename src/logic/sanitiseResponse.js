@@ -2,7 +2,6 @@ import Util from '../util';
 import g from '../global';
 
 const sanitiseResponse = (texts, res) => {
-  console.log(res);
   switch (typeof res) {
     case 'boolean':
       return [Util.capitalise(res.toString())];
