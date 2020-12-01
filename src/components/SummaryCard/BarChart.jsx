@@ -9,8 +9,8 @@ import { questions } from '../../logic/question';
 import BarChartRow from './BarChartRow';
 
 const TextBlock = styled(Typography)`
-  margin: ${({ theme: $ }) => $.spacing(2)};
-  padding: ${({ theme: $ }) => `0 ${$.spacing(1)} 0 ${$.spacing(2)}`};
+  margin: ${({ theme: $ }) => $.spacing(2)}px;
+  padding: ${({ theme: $ }) => `0px ${$.spacing(1)}px 0px ${$.spacing(2)}px`};
   flex-grow: 10;
   border-width: 1px;
   text-align: left;

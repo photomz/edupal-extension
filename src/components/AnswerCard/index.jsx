@@ -21,11 +21,11 @@ import { studentAnswer, loadingAnswer } from '../../logic/response';
 
 const PersonCardHeader = styled(MuiCardHeader)`
   border: none;
-  margin-bottom: ${({ theme }) => theme.spacing(2)};
+  margin-bottom: ${({ theme }) => theme.spacing(2)}px;
   border-radius: 4px;
   &&& .MuiCardHeader-action {
     align-self: center;
-    margin-right: ${({ theme }) => theme.spacing(1)};
+    margin-right: ${({ theme }) => theme.spacing(1)}px;
   }
   ${({ $highlighted, theme, $colour }) =>
     $highlighted &&
@@ -39,12 +39,12 @@ const PersonCardHeader = styled(MuiCardHeader)`
 `;
 
 const Body = styled(MuiTypography)`
-  margin-bottom: ${({ theme: $ }) => $.spacing(1)};
+  margin-bottom: ${({ theme: $ }) => $.spacing(1)}px;
 `;
 
 const Header = styled(MuiTypography)`
   font-weight: bold;
-  margin-left: ${({ theme: $ }) => $.spacing(1)};
+  margin-left: ${({ theme: $ }) => $.spacing(1)}px;
 `;
 
 const CardActions = styled(MuiCardActions)`

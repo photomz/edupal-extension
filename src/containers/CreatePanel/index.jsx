@@ -29,19 +29,19 @@ import {
 import { isUploaderOpen } from '../../logic/common';
 
 const Card = styled(MuiCard)`
-  margin-top: ${({ theme }) => theme.spacing(2)};
-  padding-bottom: ${({ theme }) => theme.spacing(2)};
-  padding: ${({ theme }) => theme.spacing(1)};
+  margin-top: ${({ theme }) => theme.spacing(2)}px;
+  padding-bottom: ${({ theme }) => theme.spacing(2)}px;
+  padding: ${({ theme }) => theme.spacing(1)}px;
 `;
 
 const TextField = styled(MuiTextField)`
-  margin-bottom: ${({ theme }) => theme.spacing(2)};
+  margin-bottom: ${({ theme }) => theme.spacing(2)}px;
 `;
 
 const Button = styled(MuiIconButton)`
   &&& {
-    margin-left: ${({ theme }) => theme.spacing(2)};
-    padding: ${({ theme }) => theme.spacing(1)};
+    margin-left: ${({ theme }) => theme.spacing(2)}px;
+    padding: ${({ theme }) => theme.spacing(1)}px;
   }
 `;
 

@@ -3,7 +3,7 @@ import styled from 'styled-components';
 
 const ColourfulCheckbox = styled(MuiCheckbox)`
   ${({ theme: $, colour }) => `
-  margin: ${$.spacing(1)};
+  margin: ${$.spacing(1)}px;
   background-color: ${$.palette[colour].main};
   transition: all 0.3s ease-in-out;
   &:hover {

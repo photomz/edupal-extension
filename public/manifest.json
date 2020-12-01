@@ -1,0 +1,38 @@
+{
+  "manifest_version": 2,
+  "name": "Edu-pal",
+  "version": "0.1.0",
+  "author": "Edu-pal Group",
+  "description": "Quick learning feedback for online lessons",
+  "icons": {
+    "16": "icons/16.png",
+    "24": "icons/24.png",
+    "32": "icons/32.png",
+    "48": "icons/48.png",
+    "64": "icons/64.png",
+    "96": "icons/96.png",
+    "128": "icons/128.png",
+    "256": "icons/256.png"
+  },
+  "browser_action": {
+    "default_icon": "icons/256.png"
+  },
+  "content_scripts": [
+    {
+      "matches": ["*://meet.google.com/**-**-**"],
+      "js": ["inject.js"]
+    }
+  ],
+  "externally_connectable": {
+    "matches": [
+      "*://meet.google.com/**-**-**"
+    ]
+  },
+  "permissions": [
+    "notifications",
+    "*://meet.google.com/**-**-**"
+  ],
+  "web_accessible_resources": [
+    "static/**/*"
+  ]
+}

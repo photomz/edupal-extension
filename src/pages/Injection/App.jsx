@@ -3,7 +3,6 @@ import React, { useState, useEffect, useRef } from 'react';
 import { hot } from 'react-hot-loader';
 import { useRecoilValue, useSetRecoilState, useRecoilState } from 'recoil';
 import useWebsocket from 'react-use-websocket';
-import styled from 'styled-components';
 import { useSnackbar } from 'notistack';
 import MuiButton from '@material-ui/core/Button';
 
@@ -32,15 +31,6 @@ import {
   track,
   signUpDate as userSignUpDate,
 } from '../../logic/mixpanel';
-
-const Container = styled.div`
-  position: absolute;
-  top: 0;
-  left: 0;
-  bottom: 0;
-  right: 0;
-  z-index: 999;
-`;
 
 const App = () => {
   const uploaderOpen = useRecoilValue(isUploaderOpen);
@@ -217,10 +207,10 @@ const App = () => {
   if (!connect) return <></>;
 
   return (
-    <Container>
+    <>
       <ShortAppBar ref={appbarRef} />
       <Sidebar ref={sidebarRef} />
-    </Container>
+    </>
   );
 };
 

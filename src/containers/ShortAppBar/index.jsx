@@ -25,8 +25,9 @@ const EdupalIcon = () => (
 
 const Wrapper = styled.div`
   position: absolute;
-  top: ${({ theme }) => theme.spacing(12)};
-  right: ${({ theme, $isOpen }) => theme.spacing(4) + ($isOpen && drawerWidth)};
+  top: ${({ theme }) => theme.spacing(12)}px;
+  right: ${({ theme, $isOpen }) =>
+    theme.spacing(4) + ($isOpen && drawerWidth)}px;
   transform: translateZ(0);
   flex-grow: 1;
   transition: right

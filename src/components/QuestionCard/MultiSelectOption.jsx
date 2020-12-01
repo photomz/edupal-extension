@@ -15,7 +15,7 @@ const Wrapper = styled.div``;
 
 const StyledCheckbox = styled(Checkbox)`
   ${({ theme: $, colour }) => `
-  margin: ${$.spacing(1)};
+  margin: ${$.spacing(1)}px;
   background-color: ${$.palette[colour].main};
   transition: all 0.3s ease-in-out;
   &:hover {
@@ -35,9 +35,9 @@ const StyledCheckbox = styled(Checkbox)`
 
 const StyledButton = styled(Button)`
   ${({ theme: $ }) => ` 
-  padding: ${$.spacing(1)} ${$.spacing(2)};
-  margin: 0 ${$.spacing(1)};
-  margin-top: ${$.spacing(1)};
+  padding: ${$.spacing(1)}px ${$.spacing(2)}px;
+  margin: 0px ${$.spacing(1)}px;
+  margin-top: ${$.spacing(1)}px;
   flex-grow: 10;
   border-width: 1px;
   text-transform: none;

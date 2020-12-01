@@ -10,7 +10,8 @@ import { meetData, queueMessage, leaderboard } from '../../logic/common';
 
 const Wrapper = styled(MuiContainer)`
   overflow: hidden;
-  padding: ${({ theme }) => theme.spacing(1)} ${({ theme }) => theme.spacing(2)};
+  padding: ${({ theme }) => theme.spacing(1)}px
+    ${({ theme }) => theme.spacing(2)}px;
 `;
 
 const LeaderboardPanel = () => {

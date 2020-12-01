@@ -11,8 +11,8 @@ import { sendRespond, iHaveResponded } from '../../logic/response';
 
 const StyledTextField = styled(TextField)`
   ${({ theme: $ }) => `
-  margin: ${$.spacing(1)};
-  margin-top: ${$.spacing(2)};
+  margin: ${$.spacing(1)}px;
+  margin-top: ${$.spacing(2)}px;
   `}
 `;
 

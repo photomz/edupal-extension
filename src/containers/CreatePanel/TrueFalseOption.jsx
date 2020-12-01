@@ -28,8 +28,8 @@ const InnerRadio = styled(MuiRadio)`
 
 const Button = styled(MuiButton)`
   ${({ theme: $, colour }) => ` 
-  padding: 0 ${$.spacing(2)};
-  margin: 0 ${$.spacing(1)};
+  padding: 0px ${$.spacing(2)}px;
+  margin: 0px ${$.spacing(1)}px;
   flex-grow: 10;
   border-width: 1px;
   background-color: ${$.palette[colour].main};
@@ -42,8 +42,8 @@ const Button = styled(MuiButton)`
 `;
 
 const Label = styled(MuiTypography)`
-  margin-left: ${({ theme }) => theme.spacing(1)};
-  margin-right: ${({ theme }) => theme.spacing(2)};
+  margin-left: ${({ theme }) => theme.spacing(1)}px;
+  margin-right: ${({ theme }) => theme.spacing(2)}px;
   font-weight: ${({ theme }) => theme.typography.fontWeightMedium};
 `;
 

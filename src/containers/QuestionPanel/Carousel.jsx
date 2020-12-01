@@ -20,13 +20,13 @@ const Wrapper = styled.div`
   text-align: center;
   overflow: hidden;
   & > * {
-    margin: ${({ theme: $ }) => $.spacing(2)};
+    margin: ${({ theme: $ }) => $.spacing(2)}px;
   }
 `;
 
 const Card = styled(MuiCard)`
   animation: ${({ $animationStyle }) => slide[$animationStyle]};
-  padding-bottom: ${({ theme }) => theme.spacing(1)};
+  padding-bottom: ${({ theme }) => theme.spacing(1)}px;
 `;
 
 const Carousel = ({ qid }) => {

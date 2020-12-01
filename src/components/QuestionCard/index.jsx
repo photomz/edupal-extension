@@ -24,7 +24,7 @@ import { questions } from '../../logic/question';
 import { iHaveResponded } from '../../logic/response';
 
 const H5 = styled(MuiTypography)`
-  ${({ theme: $ }) => `padding-left: ${$.spacing(2)}`}
+  ${({ theme: $ }) => `padding-left: ${$.spacing(2)}px`}
 `;
 const Image = styled(MuiCardMedia)`
   height: 0;

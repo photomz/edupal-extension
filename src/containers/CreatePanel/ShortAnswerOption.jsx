@@ -5,8 +5,8 @@ import MuiTextField from '@material-ui/core/TextField';
 import { creatorAnswer } from '../../logic/create';
 
 const TextField = styled(MuiTextField)`
-  margin: 0 ${({ theme }) => theme.spacing(1)};
-  margin-bottom: ${({ theme }) => theme.spacing(2)};
+  margin: 0 ${({ theme }) => theme.spacing(1)}px;
+  margin-bottom: ${({ theme }) => theme.spacing(2)}px;
 `;
 
 const ShortAnswerOption = () => {

@@ -9,8 +9,8 @@ import { sendRespond, iHaveResponded } from '../../logic/response';
 
 const StyledButton = styled(Button)`
   ${({ theme: $, colour }) => ` 
-  padding: ${$.spacing(1)} ${$.spacing(2)};
-  margin: 0 ${$.spacing(1)};
+  padding: ${$.spacing(1)}px ${$.spacing(2)}px;
+  margin: 0px ${$.spacing(1)}px;
   flex-grow: 10;
   border-width: 1px;
   background-color: ${$.palette[colour].main};

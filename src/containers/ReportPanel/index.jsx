@@ -19,11 +19,12 @@ import { questions } from '../../logic/question';
 
 const Wrapper = styled(Container)`
   overflow: hidden;
-  padding: ${({ theme }) => theme.spacing(1)} ${({ theme }) => theme.spacing(2)};
+  padding: ${({ theme }) => theme.spacing(1)}px
+    ${({ theme }) => theme.spacing(2)}px;
 `;
 
 const Body = styled(MuiTypography)`
-  margin-bottom: ${({ theme: $ }) => $.spacing(1)};
+  margin-bottom: ${({ theme: $ }) => $.spacing(1)}px;
 `;
 const Head = styled(MuiGrid)`
   padding: ${({ theme: $ }) => $.spacing(2)}px;

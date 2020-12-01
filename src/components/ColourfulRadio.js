@@ -4,7 +4,7 @@ import styled from 'styled-components';
 const ColourfulRadio = styled(MuiRadio)`
   ${({ theme: $, colour }) => `
   
-  margin: ${$.spacing(1)};
+  margin: ${$.spacing(1)}px;
   background-color: ${$.palette[colour].main};
   transition: all 0.3s ease-in-out;
   &:hover, &&&.Mui-checked {
@@ -23,7 +23,7 @@ const ColourfulRadio = styled(MuiRadio)`
   justify-content: center;
   width: 45px;
   height: 45px;
-  margin-right: ${$.spacing(1)};
+  margin-right: ${$.spacing(1)}px;
 `}
 `;
 

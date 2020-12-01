@@ -16,7 +16,7 @@ const Wrapper = styled.div`
 `;
 
 const TextField = styled(MuiTextField)`
-  margin-bottom: ${({ theme }) => theme.spacing(2)};
+  margin-bottom: ${({ theme }) => theme.spacing(2)}px;
 `;
 
 const McqOption = () => {

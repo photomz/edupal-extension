@@ -3,15 +3,15 @@ import styled from 'styled-components';
 
 const Slider = styled(MuiSlider)`
   color: ${({ theme }) => theme.palette.secondary.main};
-  height: 8;
-  margin-bottom: ${({ theme }) => theme.spacing(2)};
+  height: 8px;
+  margin-bottom: ${({ theme }) => theme.spacing(2)}px;
   &&& .MuiSlider-thumb {
-    height: 24;
-    width: 24;
+    height: 24px;
+    width: 24px;
     background-color: ${({ theme }) => theme.palette.common.white};
     border: 2px solid currentColor;
-    margin-top: -8;
-    margin-left: -12;
+    margin-top: -8px;
+    margin-left: -12px;
   }
   &&& .MuiSlider-thumb:hover,
   &&& .MuiSlider-thumb:active,
@@ -22,12 +22,12 @@ const Slider = styled(MuiSlider)`
     left: calc(50% - 16px);
   }
   &&& .MuiSlider-track {
-    height: 8;
-    border-radius: 4;
+    height: 8px;
+    border-radius: 4px;
   }
   &&& .MuiSlider-rail {
-    height: 8;
-    border-radius: 4;
+    height: 8px;
+    border-radius: 4px;
   }
 `;
 

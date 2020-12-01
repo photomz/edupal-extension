@@ -14,10 +14,10 @@ import LazyAvatar from './LazyAvatar';
 import RaisedIcon from './RaisedIcon';
 
 const PersonCard = styled(MuiCard)`
-  margin: ${({ theme }) => theme.spacing(1)} 0;
+  margin: ${({ theme }) => theme.spacing(1)}px 0px;
   &&& .MuiCardHeader-action {
     align-self: center;
-    margin-right: ${({ theme }) => theme.spacing(1)};
+    margin-right: ${({ theme }) => theme.spacing(1)}px;
   }
   ${({ $highlighted, theme, $colour }) =>
     $highlighted &&
@@ -34,7 +34,7 @@ const Grid = styled(MuiGrid)``;
 
 const InnerGrid = styled(MuiGrid)`
   color: ${({ theme, colour }) => theme.palette[colour].main};
-  margin-left: ${({ theme }) => theme.spacing(1)};
+  margin-left: ${({ theme }) => theme.spacing(1)}px;
   &&& svg {
     width: 16px;
     height: 16px;

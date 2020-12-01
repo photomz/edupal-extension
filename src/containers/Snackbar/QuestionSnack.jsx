@@ -16,7 +16,7 @@ import { QuestionCardContent } from '../../components/QuestionCard';
 import { receiveAskAction } from '../../logic/snackbar';
 
 const IconButton = styled(MuiIconButton)`
-  padding: ${({ theme: $ }) => $.spacing(1)};
+  padding: ${({ theme: $ }) => $.spacing(1)}px;
 `;
 const Chevron = styled(IconButton)`
   transform: rotate(${({ open }) => (open ? 0 : 180)}deg);
@@ -31,8 +31,8 @@ const Card = styled(MuiCard)`
   width: 100%;
 `;
 const CardActions = styled(MuiCardActions)`
-  padding: ${({ theme: $ }) => $.spacing(1)};
-  padding-left: ${({ theme: $ }) => $.spacing(2)};
+  padding: ${({ theme: $ }) => $.spacing(1)}px;
+  padding-left: ${({ theme: $ }) => $.spacing(2)}px;
 `;
 const ButtonsWrapper = styled.div`
   margin-left: auto;

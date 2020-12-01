@@ -13,7 +13,7 @@ const drawerWidth = 400;
 const Drawer = styled(MuiDrawer)`
   ${({ theme: $ }) => `
     position: absolute;
-    right: ${$.spacing(0)};
+    right: ${$.spacing(0)}px;
     width: ${drawerWidth}px;
     margin: 0 auto;
     transition: ${$.transitions.create('width')};
@@ -25,7 +25,7 @@ const Drawer = styled(MuiDrawer)`
     width: ${$.spacing(7)}px;
     `}
   & > .MuiPaper-root {
-    width: ${drawerWidth};
+    width: ${drawerWidth}px;
     border: 0;
     overflow-x: hidden;
   }
