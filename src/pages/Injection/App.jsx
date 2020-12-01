@@ -161,6 +161,7 @@ const App = () => {
   }, [readyState]);
 
   useEffect(() => {
+    console.log(socketMessage);
     if (!socketMessage.length) return;
     const front = socketMessage[socketMessage.length - 1];
     console.info(front);
