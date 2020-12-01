@@ -113,11 +113,10 @@ const App = () => {
           },
         });
         break;
-      case 'joinMeetingFailed':
-        enqueueSnackbar(
-          `Joining as teacher failed. Please join as student or ask ${data.culprit} to become a student and reconnect.`,
-          { variant: 'warning' }
-        );
+      case 'joinMeetingAsStudent':
+        enqueueSnackbar(`You joined as student.`, {
+          variant: 'info',
+        });
         break;
       case 'updateRoleFailed':
         console.log(data);
