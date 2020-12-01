@@ -30,6 +30,20 @@ const Head = styled(MuiGrid)`
   padding: ${({ theme: $ }) => $.spacing(2)}px;
 `;
 
+const H5 = styled(MuiTypography)`
+  line-height: 1;
+  overflow-x: auto;
+  overflow-wrap: break-word;
+  overflow-y: hidden;
+  font-weight: ${({ theme }) => theme.typography.fontWeightBold};
+  margin-right: ${({ theme: $ }) => $.spacing(1)};
+`;
+
+const ChevronLeft = styled(MuiIconButton)`
+  margin: ${({ theme: $ }) => $.spacing(1)}px;
+  margin-left: ${({ theme: $ }) => $.spacing(-1)}px;
+`;
+
 const ReportPanel = () => {
   const qid = useRecoilValue(reportQuestion);
   const { question } = useRecoilValue(questions(qid));
@@ -40,19 +54,14 @@ const ReportPanel = () => {
     <Wrapper>
       <Head
         container
-        direction="row"
+        direction="reverse-row"
         justify="space-between"
         alignItems="center"
       >
-        <MuiTypography variant="h5" style={{ lineHeight: 1 }}>
-          <b>{question.text}</b>
-        </MuiTypography>
-        <MuiIconButton
-          aria-label="See other card"
-          onClick={() => setTabOrder(1)}
-        >
+        <ChevronLeft aria-label="See other card" onClick={() => setTabOrder(1)}>
           <LeftIcon />
-        </MuiIconButton>
+        </ChevronLeft>
+        <H5 variant="h5">{question.text}</H5>
       </Head>
 
       {studentResponses.map(

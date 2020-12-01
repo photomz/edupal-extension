@@ -24,7 +24,10 @@ import { questions } from '../../logic/question';
 import { iHaveResponded } from '../../logic/response';
 
 const H5 = styled(MuiTypography)`
-  ${({ theme: $ }) => `padding-left: ${$.spacing(2)}px`}
+  padding-left: ${({ theme: $ }) => $.spacing(2)}px;
+  overflow-x: auto;
+  overflow-wrap: break-word;
+  white-space: break-spaces;
 `;
 const Image = styled(MuiCardMedia)`
   height: 0;

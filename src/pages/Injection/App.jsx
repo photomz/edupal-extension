@@ -46,7 +46,7 @@ const App = () => {
   const [connect, setConnect] = useState(true);
   const { sendJsonMessage, readyState, lastJsonMessage } = useWebsocket(
     g.socketUrl,
-    {},
+    { shouldReconnect: () => connect },
     connect
   );
 
@@ -59,6 +59,7 @@ const App = () => {
     });
 
     const keepAlive = setInterval(() => {
+      console.log('Keeping Edu-pal alive...');
       sendJsonMessage({ route: 'ping' });
     }, 60000 * 9);
     return clearInterval(keepAlive);

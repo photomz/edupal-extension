@@ -15,3 +15,8 @@ div#edupal {
   bottom: 0;
   z-index: 10000000;
 }
+
+.MuiTypography-root {
+	overflow-x: auto;
+	overflow-wrap: break-word;
+}

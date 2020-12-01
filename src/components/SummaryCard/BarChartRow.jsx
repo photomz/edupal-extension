@@ -28,7 +28,7 @@ const OuterBar = styled.div`
   height: 20px;
   background-color: ${({ colour, theme: $ }) => $.palette[colour].light}33;
   border-radius: 999px;
-  margin: 0 ${({ theme: $ }) => $.spacing(2)};
+  margin: 0px ${({ theme: $ }) => $.spacing(2)}px;
 `;
 
 const InnerBar = styled.div`
@@ -39,7 +39,7 @@ const InnerBar = styled.div`
 `;
 
 const StyledGrid = styled(Grid)`
-  margin: ${({ theme: $ }) => $.spacing(1)};
+  margin: ${({ theme: $ }) => $.spacing(1)}px;
 `;
 
 const BarChartRow = ({ i, qid, isTf }) => {

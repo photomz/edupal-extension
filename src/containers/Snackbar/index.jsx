@@ -20,7 +20,7 @@ const SnackbarProvider = ({ children }) => {
         horizontal: 'right',
       }}
       disableWindowBlurListener
-      autoHideDuration={4000}
+      autoHideDuration={8000}
       classes={{ containerRoot: 'snackbarOverride' }}
       action={(key) => (
         <MuiIconButton onClick={() => dismiss(key)}>
