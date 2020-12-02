@@ -1,3 +1,5 @@
+import Util from '../util';
+
 const localStorageEffect = ({ name, id }) => ({ setSelf, onSet }) => {
   const key = id ? `edupal__${name}__${id}` : `edupal__${name}`;
 
@@ -7,8 +9,7 @@ const localStorageEffect = ({ name, id }) => ({ setSelf, onSet }) => {
       setSelf(JSON.parse(savedValue));
     }
   } catch (e) {
-    console.log(e);
-    // Parsing failed
+    Util.log(e);
   }
 
   onSet((newValue) => {
@@ -19,8 +20,7 @@ const localStorageEffect = ({ name, id }) => ({ setSelf, onSet }) => {
         localStorage.removeItem(key);
       }
     } catch (e) {
-      console.log(e);
-      // Parsing failed
+      Util.log(e);
     }
   });
 };

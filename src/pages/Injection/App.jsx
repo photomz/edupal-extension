@@ -74,7 +74,6 @@ const App = () => {
     },
     connect
   );
-  console.log(meet);
 
   useEffect(() => {
     if (!meet.meetingId) return () => {};

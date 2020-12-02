@@ -45,7 +45,7 @@ const creatorText = atom({
 
 const sendAsk = selector({
   key: 'sendAsk',
-  set: ({ set, get }) => {
+  set: ({ set, get, reset }) => {
     const { name, userId, avatar, meetingId } = get(meetData);
     const type = get(creatorType);
     const questionId = nanoid();
@@ -98,22 +98,24 @@ const sendAsk = selector({
       },
     });
     // Hacky fix for recoil bug where only second fireMessage actually is queued
-    setTimeout(
-      () =>
-        set(track, {
-          event: 'Ask Question',
-          props: {
-            name,
-            questionId,
-            meetingId,
-            type,
-            text,
-            meta: JSON.stringify(meta),
-            answer,
-          },
-        }),
-      50
-    );
+    setTimeout(() => {
+      set(track, {
+        event: 'Ask Question',
+        props: {
+          name,
+          questionId,
+          meetingId,
+          type,
+          text,
+          meta: JSON.stringify(meta),
+          answer,
+        },
+      });
+      reset(creatorImage);
+      reset(creatorAnswer(type));
+      reset(creatorMeta(type));
+      reset(creatorText(type));
+    }, 50);
   },
 });
 
