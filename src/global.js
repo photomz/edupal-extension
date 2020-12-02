@@ -31,4 +31,7 @@ export default {
     TrueFalse: { Icon: TrueFalseIcon, name: 'True or False' },
     ShortAnswer: { Icon: ParagraphIcon, name: 'Short Answer' },
   },
+  drawerWidth: 400,
+  meetChatWidth: 360,
+  meetChatClass: '.kjZr4',
 };

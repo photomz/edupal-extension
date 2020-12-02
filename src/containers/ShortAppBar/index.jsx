@@ -12,8 +12,6 @@ import g from '../../global';
 import { role, isDrawerOpen, tabOrder } from '../../logic/common';
 import { creatorType } from '../../logic/create';
 
-const drawerWidth = 400;
-
 const EdupalIcon = () => (
   <MuiIcon>
     <img src={EdupalSvg} height={52} width={50} alt="Edu-pal Icon" />
@@ -24,7 +22,7 @@ const Wrapper = styled.div`
   position: absolute;
   top: ${({ theme }) => theme.spacing(12)}px;
   right: ${({ theme, $isOpen }) =>
-    theme.spacing(4) + ($isOpen && drawerWidth)}px;
+    theme.spacing(4) + ($isOpen && g.drawerWidth)}px;
   transform: translateZ(0);
   flex-grow: 1;
   transition: right
@@ -33,6 +31,7 @@ const Wrapper = styled.div`
 `;
 
 const SpeedDial = styled(MuiSpeedDial)`
+  z-index: 99;
   & .MuiIcon-root {
     width: 1.5em;
     height: 1.5em;

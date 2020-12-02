@@ -28,10 +28,10 @@ const dequeueMessage = selector({
 const meetData = atom({
   key: 'meetData',
   default: scrapeMeetData(),
-  effects_UNSTABLE: [localStorageEffect({ name: 'meetData' })],
 });
 
 const isDrawerOpen = atom({ key: 'isDrawerOpen', default: false });
+const isMeetChatOpen = atom({ key: 'isMeetChatOpen', default: false });
 
 const carouselOrder = atomFamily({ key: 'carouselOrder', default: 0 });
 
@@ -82,4 +82,5 @@ export {
   leaderboard,
   sendUpdateRole,
   receiveUpdateRole,
+  isMeetChatOpen,
 };

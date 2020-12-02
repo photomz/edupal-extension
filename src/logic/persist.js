@@ -1,5 +1,6 @@
 const localStorageEffect = ({ name, id }) => ({ setSelf, onSet }) => {
   const key = id ? `edupal__${name}__${id}` : `edupal__${name}`;
+
   try {
     const savedValue = localStorage.getItem(key);
     if (savedValue !== null) {

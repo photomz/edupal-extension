@@ -20,9 +20,12 @@ const Flex = styled(MuiContainer)`
 
 const SidebarHead = () => (
   <Flex>
-    <a href="www.edu-pal.org">
-      <Image src={logo} />
-    </a>
+    <Image
+      src={logo}
+      onClick={() => {
+        window.open('https://www.edu-pal.org');
+      }}
+    />
   </Flex>
 );
 

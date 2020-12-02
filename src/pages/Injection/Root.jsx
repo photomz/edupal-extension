@@ -15,6 +15,7 @@ import MuiButton from '@material-ui/core/Button';
 import SnackbarProvider from '../../containers/Snackbar';
 import App from './App';
 import themeTemplate from '../../styles/theme';
+import resetState from '../../logic/reset';
 import './Root.css';
 
 import 'fontsource-roboto/latin-300.css';
@@ -25,7 +26,7 @@ import 'fontsource-roboto/latin-700.css';
 const theme = createMuiTheme(themeTemplate);
 
 const Root = () => (
-  <RecoilRoot>
+  <RecoilRoot initializeState={resetState}>
     <StyledThemeProvider theme={theme}>
       <MuiThemeProvider theme={theme}>
         <CssBaseline />

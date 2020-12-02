@@ -24,6 +24,7 @@ import {
   role,
   leaderboard,
   receiveUpdateRole,
+  // isMeetChatOpen,
 } from '../../logic/common';
 import { receiveRespondAction } from '../../logic/snackbar';
 import {
@@ -31,9 +32,9 @@ import {
   track,
   signUpDate as userSignUpDate,
 } from '../../logic/mixpanel';
-import { resetAsNeeded } from '../../logic/helper';
 
 const App = () => {
+  // const setMeetChat = useSetRecoilState(isMeetChatOpen);
   const uploaderOpen = useRecoilValue(isUploaderOpen);
   const setDrawerOpen = useSetRecoilState(isDrawerOpen);
   const socketMessage = useRecoilValue(messages);
@@ -41,7 +42,6 @@ const App = () => {
   const meet = useRecoilValue(meetData);
   const [userRole, setUserRole] = useRecoilState(role);
   const [signUpDate, setSignUpDate] = useRecoilState(userSignUpDate);
-  const resetPrevious = useSetRecoilState(resetAsNeeded);
 
   const { enqueueSnackbar } = useSnackbar();
   const addQuestion = useSetRecoilState(receiveAsk);
@@ -74,10 +74,10 @@ const App = () => {
     },
     connect
   );
+  console.log(meet);
 
   useEffect(() => {
     if (!meet.meetingId) return () => {};
-    resetPrevious();
     const { meetingId, userId, name, avatar } = meet;
     sendJsonMessage({
       route: 'joinMeeting',
@@ -183,6 +183,15 @@ const App = () => {
     sendJsonMessage(front);
     dequeue();
   }, [socketMessage]);
+
+  // useEffect(() => {
+  //   const timeout = setInterval(() => {
+  //     setMeetChat(document.querySelector(g.meetChatClass) !== null);
+  //   }, 1000);
+  //   return () => {
+  //     clearInterval(timeout);
+  //   };
+  // }, []);
 
   useEffect(() => {
     (async () => {

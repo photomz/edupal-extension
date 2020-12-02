@@ -65,7 +65,9 @@ const QuestionCardContent = ({ qid }) => {
         <Image image={question.image} title="Question image">
           <CornerButton
             title="Open image in new tab"
-            onClick={() => window.open(question.image)}
+            onClick={() => {
+              window.open(question.image);
+            }}
           >
             <OpenIcon />
           </CornerButton>
