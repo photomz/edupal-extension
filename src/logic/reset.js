@@ -4,7 +4,7 @@ const get = (key) => {
   const value = localStorage.getItem(`edupal__${key}`);
   return value === null ? undefined : JSON.parse(value);
 };
-const reset = window.localStorage.removeItem.bind(localStorage);
+const reset = (key) => localStorage.removeItem(`edupal__${key}`);
 
 const resetState = ({ set }) => {
   // Only reset if user changes meetings
@@ -14,9 +14,19 @@ const resetState = ({ set }) => {
     localStorage.setItem('edupal__meetData', JSON.stringify(scrapeMeetData()));
     return;
   }
+  reset(`creatorImage`);
+  reset('creatorType');
+  reset('creatorText');
+  ['MCQ', 'ShortAnswer', 'MultiSelect', 'TrueFalse'].forEach((type) => {
+    reset(`creatorMeta__${type}`);
+    reset(`creatorAnswer__${type}`);
+  });
 
   const qids = get('questionIds');
-  if (!Array.isArray(qids)) return;
+  if (!Array.isArray(qids)) {
+    reset(`questionIds`);
+    return;
+  }
 
   qids.forEach((qid) => {
     reset(`questions__${qid}`);
@@ -28,14 +38,10 @@ const resetState = ({ set }) => {
     reset(`studentAnswer__${qid}`);
   });
 
-  reset(`questionIds`);
-  reset(`creatorImage`);
-  reset('creatorType');
-  reset('creatorText');
-  ['MCQ', 'ShortAnswer', 'MultiSelect', 'TrueFalse'].forEach((type) => {
-    reset(`creatorMeta__${type}`);
-    reset(`creatorAnswer__${type}`);
-  });
+  reset('questionIds');
+
+  set({ key: 'meetData' }, scrapeMeetData());
+  localStorage.setItem('edupal__meetData', JSON.stringify(scrapeMeetData()));
 };
 
 export default resetState;
