@@ -22,6 +22,10 @@ const resetState = ({ set }) => {
     reset(`questions__${qid}`);
     reset(`iHaveResponded__${qid}`);
     reset(`myResponse__${qid}`);
+    reset(`responses__${qid}`);
+    reset(`responseStudentIds__${qid}`);
+    reset(`answers__${qid}`);
+    reset(`studentAnswer__${qid}`);
   });
 
   reset(`questionIds`);

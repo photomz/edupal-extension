@@ -60,7 +60,8 @@ const AnswerCard = ({ qid }) => {
   // eslint-disable-next-line no-unused-vars
   const isLoading = useRecoilValue(loadingAnswer(qid));
 
-  if (isLoading) return <CardSkeleton />;
+  // https://github.com/facebookexperimental/Recoil/issues/774
+  if (isLoading || question === undefined) return <CardSkeleton />;
 
   const { Icon, colour } = g.correctness[isCorrect];
 

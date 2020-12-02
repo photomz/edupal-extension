@@ -2,11 +2,19 @@ import { atom, atomFamily, selector, selectorFamily } from 'recoil';
 import sanitiseResponse from './sanitiseResponse';
 import { questions } from './question';
 import { tabOrder } from './common';
+import { localStorageEffect } from './persist';
 
-const responses = atomFamily({ key: 'responses', default: [] });
+const responses = atomFamily({
+  key: 'responses',
+  default: [],
+  effects_UNSTABLE: (id) => [localStorageEffect({ name: 'responses', id })],
+});
 const responseStudentIds = atomFamily({
   key: 'responseStudentIds',
   default: [],
+  effects_UNSTABLE: (id) => [
+    localStorageEffect({ name: 'responseStudentIds', id }),
+  ],
 });
 
 const receiveRespond = selector({
@@ -41,6 +49,7 @@ const responseSpeed = selectorFamily({
 const numStudents = atomFamily({
   key: 'numStudents',
   default: 1, // 0 might give ZeroDivision error
+  effects_UNSTABLE: (id) => [localStorageEffect({ name: 'numStudents', id })],
 });
 
 const receiveNumStudents = selector({
@@ -50,7 +59,11 @@ const receiveNumStudents = selector({
   },
 });
 
-const answers = atomFamily({ key: 'answers', default: null });
+const answers = atomFamily({
+  key: 'answers',
+  default: null,
+  effects_UNSTABLE: (id) => [localStorageEffect({ name: 'answers', id })],
+});
 
 const optionBar = selectorFamily({
   key: 'selectedOptionRate',

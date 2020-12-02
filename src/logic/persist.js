@@ -6,7 +6,10 @@ const localStorageEffect = ({ name, id }) => ({ setSelf, onSet }) => {
   try {
     const savedValue = localStorage.getItem(key);
     if (savedValue !== null) {
-      setSelf(JSON.parse(savedValue));
+      if (id === 'M1DyjknmZL18qbup37Svk')
+        console.log('HEY LISTEN', JSON.parse(savedValue));
+      // https://github.com/facebookexperimental/Recoil/issues/774
+      window.requestAnimationFrame(() => setSelf(JSON.parse(savedValue)));
     }
   } catch (e) {
     Util.log(e);

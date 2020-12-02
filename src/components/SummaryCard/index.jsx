@@ -11,6 +11,7 @@ import MuiTooltip from '@material-ui/core/Toolbar';
 
 import RightIcon from '@material-ui/icons/ChevronRight';
 
+import CardSkeleton from '../CardSkeleton';
 import RaisedIcon from '../RaisedIcon';
 import BarChart from './BarChart';
 import Util from '../../util';
@@ -55,6 +56,10 @@ const SummaryCard = ({ qid }) => {
   const { question } = useRecoilValue(questions(qid));
   const switchToReport = useSetRecoilState(goToReport(qid));
   const avgTime = useRecoilValue(responseSpeed(qid));
+
+  // https://github.com/facebookexperimental/Recoil/issues/774
+  if (question === undefined) return <CardSkeleton />;
+
   const { Icon, name } = g.questionTypes[question.type];
 
   return (

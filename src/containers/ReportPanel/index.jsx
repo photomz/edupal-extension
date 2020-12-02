@@ -10,6 +10,7 @@ import MuiTypography from '@material-ui/core/Typography';
 
 import LeftIcon from '@material-ui/icons/ChevronLeft';
 
+import CardSkeleton from '../../components/CardSkeleton';
 import Person from '../../components/Person';
 import Util from '../../util';
 import g from '../../global';
@@ -49,6 +50,9 @@ const ReportPanel = () => {
   const { question } = useRecoilValue(questions(qid));
   const setTabOrder = useSetRecoilState(tabOrder);
   const studentResponses = useRecoilValue(responses(qid));
+
+  // https://github.com/facebookexperimental/Recoil/issues/774
+  if (question === undefined) return <CardSkeleton />;
 
   return (
     <Wrapper>

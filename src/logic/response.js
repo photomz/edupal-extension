@@ -26,8 +26,9 @@ const myResponse = atomFamily({
 });
 
 const studentAnswer = atomFamily({
-  key: 'studentAnswers',
+  key: 'studentAnswer',
   default: {},
+  effects_UNSTABLE: (id) => [localStorageEffect({ name: 'studentAnswer', id })],
 });
 
 const loadingAnswer = atomFamily({ key: 'loadingAnswer', default: false });
