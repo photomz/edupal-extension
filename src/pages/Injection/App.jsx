@@ -205,7 +205,7 @@ const App = () => {
           meetingId,
           role: userRole,
           userId,
-          classId: 'null', // TODO: Backend requires strict typing of null
+          classId: 'null', // Backend requires strict typing of null
           name,
         },
       };

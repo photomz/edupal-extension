@@ -4,7 +4,7 @@ const get = (key) => {
   const value = localStorage.getItem(`edupal__${key}`);
   return value === null ? undefined : JSON.parse(value);
 };
-const reset = window.localStorage.clear.bind(localStorage);
+const reset = window.localStorage.removeItem.bind(localStorage);
 
 const resetState = ({ set }) => {
   // Only reset if user changes meetings
