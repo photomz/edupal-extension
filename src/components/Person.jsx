@@ -35,7 +35,7 @@ const Grid = styled(MuiGrid)``;
 const InnerGrid = styled(MuiGrid)`
   color: ${({ theme, colour }) => theme.palette[colour].main};
   margin-left: ${({ theme }) => theme.spacing(1)}px;
-  flex-shrink: 10;
+  width: auto;
   &&& svg {
     width: 16px;
     height: 16px;
@@ -49,8 +49,8 @@ const InnerGrid = styled(MuiGrid)`
 `;
 
 const changeMap = [
-  [UpIcon, 'green'],
-  [DownIcon, 'red'],
+  [UpIcon, 'success'],
+  [DownIcon, 'error'],
 ];
 
 const ChangeIndicator = ({ change }) => {
@@ -99,7 +99,7 @@ const Person = ({
           action={<RaisedIcon Icon={Icon} colour={iconColor} />}
           title={
             <Grid container direction="row" justify="flex-start" wrap="nowrap">
-              <MuiTypography style={{ flexGrow: 1 }}>{name}</MuiTypography>
+              <MuiTypography>{name}</MuiTypography>
               <ChangeIndicator change={change} />
             </Grid>
           }

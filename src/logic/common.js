@@ -1,12 +1,11 @@
 import { atom, atomFamily, selector } from 'recoil';
 import scrapeMeetData from './scrapeMeetData';
+import { localStorageEffect } from './persist';
 
 const role = atom({
   key: 'role',
   default: 'STUDENT',
-  persistence_UNSTABLE: {
-    type: 'role',
-  },
+  effects_UNSTABLE: [localStorageEffect({ name: 'role' })],
 });
 const messages = atom({ key: 'messages', default: [] });
 const queueMessage = selector({
@@ -29,9 +28,7 @@ const dequeueMessage = selector({
 const meetData = atom({
   key: 'meetData',
   default: scrapeMeetData(),
-  persistence_UNSTABLE: {
-    type: 'meetData',
-  },
+  effects_UNSTABLE: [localStorageEffect({ name: 'meetData' })],
 });
 
 const isDrawerOpen = atom({ key: 'isDrawerOpen', default: false });

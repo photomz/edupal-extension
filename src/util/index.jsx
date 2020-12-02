@@ -60,7 +60,7 @@ const useOutsideClick = (refArray, override, callback) => {
 
     if (!(Array.isArray(refArray) && refArray.length > 0)) {
       // eslint-disable-next-line no-console
-      console.log('Please pass in an array of refs.');
+      throw new Error('Please pass in an array of refs.');
     }
 
     refArray.forEach((ref) => {
@@ -166,6 +166,13 @@ const useComponentWillMount = (func) => {
 
 const capitalise = (str) => str[0].toUpperCase() + str.slice(1);
 
+const isDev = process.env.NODE_ENV === 'development';
+const isProd = process.env.NODE_ENV === 'production';
+
+const log = (el) =>
+  // eslint-disable-next-line no-undef, no-console
+  (isDev || process.env.REACT_APP_DEBUG) && console.log(el);
+
 // /**
 //  * Binds an array of actions or 1 action, and dispatches it using useDispatch.
 //  * @param {[Function]|Function} actions - Array or 1 action.
@@ -201,5 +208,8 @@ export default {
   formatTimeDiff,
   capitalise,
   deepClone,
+  log,
+  isDev,
+  isProd,
   // useActions,
 };

@@ -39,7 +39,7 @@ const TrueFalseOption = ({ qid }) => {
     >
       {[
         [true, 'True', 'primary'],
-        [false, 'False', 'red'],
+        [false, 'False', 'error'],
       ].map((el) => (
         <StyledButton
           key={el[1]}

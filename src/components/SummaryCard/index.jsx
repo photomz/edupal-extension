@@ -7,11 +7,14 @@ import MuiCardHeader from '@material-ui/core/CardHeader';
 import MuiCardActions from '@material-ui/core/CardActions';
 import MuiIconButton from '@material-ui/core/IconButton';
 import MuiTypography from '@material-ui/core/Typography';
+import MuiTooltip from '@material-ui/core/Toolbar';
 
 import RightIcon from '@material-ui/icons/ChevronRight';
 
+import RaisedIcon from '../RaisedIcon';
 import BarChart from './BarChart';
 import Util from '../../util';
+import g from '../../global';
 import { questions } from '../../logic/question';
 import { goToReport, responseSpeed } from '../../logic/stats';
 
@@ -33,23 +36,35 @@ const PersonCardHeader = styled(MuiCardHeader)`
     align-self: center;
     margin-right: ${({ theme }) => theme.spacing(1)}px;
   }
+  background-color: ${({ theme }) => theme.palette.secondary.dark};
   box-shadow: ${({ theme: $ }) => $.shadows[4]};
   & * {
+    color: ${({ theme }) => theme.palette.common.white};
     font-weight: ${({ theme: $ }) => $.typography.fontWeightMedium};
     overflow-x: auto;
     overflow-wrap: break-word;
     white-space: break-spaces;
   }
 `;
+const Tooltip = styled(MuiTooltip)`
+  padding: 0px;
+  min-height: 40px;
+`;
 
 const SummaryCard = ({ qid }) => {
   const { question } = useRecoilValue(questions(qid));
   const switchToReport = useSetRecoilState(goToReport(qid));
   const avgTime = useRecoilValue(responseSpeed(qid));
+  const { Icon, name } = g.questionTypes[question.type];
 
   return (
     <>
       <PersonCardHeader
+        avatar={
+          <Tooltip title={name}>
+            <RaisedIcon colour="info" Icon={Icon} />
+          </Tooltip>
+        }
         action={
           <MuiIconButton aria-label="See other card" onClick={switchToReport}>
             <RightIcon />

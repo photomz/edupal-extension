@@ -9,21 +9,20 @@ import {
 } from './common';
 import { questions } from './question';
 import { track } from './mixpanel';
+import { localStorageEffect } from './persist';
 
 const iHaveResponded = atomFamily({
   key: 'iHaveResponded',
   default: false,
-  persistence_UNSTABLE: {
-    type: 'iHaveResponded',
-  },
+  effects_UNSTABLE: (id) => [
+    localStorageEffect({ name: 'iHaveResponded', id }),
+  ],
 });
 
 const myResponse = atomFamily({
   key: 'myResponse',
   default: {},
-  persistence_UNSTABLE: {
-    type: 'myResponse',
-  },
+  effects_UNSTABLE: (id) => [localStorageEffect({ name: 'myResponse', id })],
 });
 
 const studentAnswer = atomFamily({

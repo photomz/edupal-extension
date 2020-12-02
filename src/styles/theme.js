@@ -16,26 +16,30 @@ export default {
       main: '#5566ff',
       dark: '#4436ff',
     },
-    green: {
+    // Green
+    success: {
       light: '#49b063',
       main: '#008037',
       dark: '#00520c',
     },
-    yellow: {
+    // Yellow
+    warning: {
       light: '#ffff7a',
       main: '#ffd147',
       dark: '#c8a002',
     },
-    red: {
+    // Red
+    error: {
       light: '#ff718d',
       main: '#d13d60',
-      dark: '9a0037',
+      dark: '#9a0037',
     },
     gold: {
       light: '#fcef43',
       main: '#f6d42a',
     },
-    silver: {
+    // Silver
+    info: {
       light: '#eee9e9',
       main: '#c5bbba',
       dark: '#948b8a',

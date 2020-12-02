@@ -5,6 +5,7 @@ import { answers } from './stats';
 import { receiveAsk } from './question';
 import { track } from './mixpanel';
 import Util from '../util';
+import { localStorageEffect } from './persist';
 
 const typeMap = {
   MCQ: [{ optionNum: 4, options: ['', '', '', '', ''] }, null],
@@ -19,33 +20,27 @@ const typeMap = {
 const creatorImage = atom({
   key: 'creatorImage',
   default: '',
-  persistence_UNSTABLE: { type: 'creatorImage' },
+  effects_UNSTABLE: [localStorageEffect({ name: 'creatorImage' })],
 });
 const creatorType = atom({
   key: 'creatorType',
   default: 'MCQ',
-  persistence_UNSTABLE: { type: 'creatorType' },
+  effects_UNSTABLE: [localStorageEffect({ name: 'creatorType' })],
 });
 const creatorAnswer = atomFamily({
   key: 'creatorAnswer',
   default: (type) => typeMap[type][1],
-  persistence_UNSTABLE: {
-    type: 'creatorAnswer',
-  },
+  effects_UNSTABLE: (id) => [localStorageEffect({ name: 'creatorAnswer', id })],
 });
 const creatorMeta = atomFamily({
   key: 'creatorMeta',
   default: (type) => typeMap[type][0],
-  persistence_UNSTABLE: {
-    type: 'buildMeta',
-  },
+  effects_UNSTABLE: (id) => [localStorageEffect({ name: 'creatorMeta', id })],
 });
 const creatorText = atom({
   key: 'creatorText',
   default: '',
-  persistence_UNSTABLE: {
-    type: 'creatorText',
-  },
+  effects_UNSTABLE: [localStorageEffect({ name: 'creatorText' })],
 });
 
 const sendAsk = selector({
@@ -66,7 +61,11 @@ const sendAsk = selector({
     if (type === 'MultiSelect') {
       answer = answer.slice(0, meta.optionNum);
       if (answer.every((tf) => tf === false)) answer = null;
-    } else if (type === 'ShortAnswer' && answer.trim() === '') answer = null;
+    } else if (
+      type === 'ShortAnswer' &&
+      (answer === null || answer.trim() === '')
+    )
+      answer = null;
 
     const image = get(creatorImage) || null;
     const text = get(creatorText) || null;

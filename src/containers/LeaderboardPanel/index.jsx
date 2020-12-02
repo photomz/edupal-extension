@@ -39,7 +39,7 @@ const LeaderboardPanel = () => {
             trophyColor = 'gold';
             break;
           case 2:
-            trophyColor = 'silver';
+            trophyColor = 'info';
             break;
           case 3:
             trophyColor = 'bronze';

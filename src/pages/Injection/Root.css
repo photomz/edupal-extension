@@ -4,10 +4,6 @@
 	box-sizing: border-box;
 }
 
-.snackbarOverride {
-	margin-bottom: 96px !important;
-}
-
 div#edupal {
 	position: absolute;
   top: 0;

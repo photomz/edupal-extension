@@ -1,15 +1,16 @@
 import { atom, atomFamily, selector } from 'recoil';
+import { localStorageEffect } from './persist';
 
 // TODO: Remove persistence
 const questions = atomFamily({
   key: 'questions',
   default: {},
-  persistence_UNSTABLE: { type: 'questions' },
+  effects_UNSTABLE: (id) => [localStorageEffect({ name: 'questions', id })],
 });
 const questionIds = atom({
   key: 'questionIds',
   default: [],
-  persistence_UNSTABLE: { type: 'questionIds' },
+  effects_UNSTABLE: [localStorageEffect({ name: 'questionIds' })],
 });
 
 const receiveAsk = selector({

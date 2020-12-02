@@ -6,12 +6,9 @@ import MuiSpeedDial from '@material-ui/lab/SpeedDial';
 import MuiSpeedDialAction from '@material-ui/lab/SpeedDialAction';
 import MuiIcon from '@material-ui/core/Icon';
 
-import RadioIcon from '@material-ui/icons/RadioButtonChecked';
-import CheckIcon from '@material-ui/icons/CheckBox';
-import TrueFalseIcon from '@material-ui/icons/Beenhere';
-import ParagraphICon from '@material-ui/icons/ViewHeadline';
 import EdupalSvg from '../../assets/images/edupal_icon.svg';
 
+import g from '../../global';
 import { role, isDrawerOpen, tabOrder } from '../../logic/common';
 import { creatorType } from '../../logic/create';
 
@@ -45,13 +42,6 @@ const SpeedDial = styled(MuiSpeedDial)`
   }
 `;
 
-const actions = [
-  { icon: <RadioIcon />, name: 'Multiple Choice', value: 'MCQ' },
-  { icon: <CheckIcon />, name: 'Multi-Select', value: 'MultiSelect' },
-  { icon: <TrueFalseIcon />, name: 'True or False', value: 'TrueFalse' },
-  { icon: <ParagraphICon />, name: 'Short Answer', value: 'ShortAnswer' },
-];
-
 const ShortAppBar = React.forwardRef((_, ref) => {
   const [open, setOpen] = useRecoilState(isDrawerOpen);
   const userRole = useRecoilValue(role);
@@ -79,10 +69,10 @@ const ShortAppBar = React.forwardRef((_, ref) => {
         ref={ref}
       >
         {userRole === 'TEACHER' &&
-          actions.map(({ name, icon, value }) => (
+          Object.entries(g.questionTypes).map(([value, { name, Icon }]) => (
             <MuiSpeedDialAction
               key={name}
-              icon={icon}
+              icon={<Icon />}
               tooltipTitle={name}
               onClick={() => handleDialClick(value)}
             />

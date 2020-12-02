@@ -54,6 +54,7 @@ const App = () => {
   const mixpanelPeopleSet = useSetRecoilState(peopleSet);
   const mixpanelTrack = useSetRecoilState(track);
   const [connect, setConnect] = useState(true);
+  const [reconnect, setReconnect] = useState(false);
   const { sendJsonMessage, readyState, lastJsonMessage } = useWebsocket(
     g.socketUrl,
     {
@@ -64,6 +65,11 @@ const App = () => {
             'Whoops! Edu-pal lost connection. We are trying again...',
             { variant: 'warning' }
           );
+        setReconnect(true);
+      },
+      onOpen: () => {
+        if (reconnect)
+          enqueueSnackbar('Edu-pal has reconnected!', { variant: 'success' });
       },
     },
     connect
@@ -87,7 +93,7 @@ const App = () => {
 
   useEffect(() => {
     if (lastJsonMessage === null) return;
-    console.info(lastJsonMessage);
+    Util.log(lastJsonMessage);
     const { action, data } = lastJsonMessage;
     switch (action) {
       case 'receiveAsk':
@@ -126,13 +132,12 @@ const App = () => {
         });
         break;
       case 'joinMeetingAsStudent':
-        enqueueSnackbar(`You joined as student.`, {
+        enqueueSnackbar(`You joined Edu-pal as student.`, {
           variant: 'info',
         });
         setUserRole('STUDENT');
         break;
       case 'updateRoleFailed':
-        console.log(data);
         enqueueSnackbar(
           `Your cannot be teacher because ${data.culprit} is currently the teacher.`,
           { variant: 'error' }
@@ -145,8 +150,6 @@ const App = () => {
         updateRole(data);
         break;
       default:
-        // eslint-disable-next-line no-console
-        console.info(lastJsonMessage);
         break;
     }
   }, [lastJsonMessage]);
@@ -174,10 +177,9 @@ const App = () => {
   }, [readyState]);
 
   useEffect(() => {
-    console.log(socketMessage);
     if (!socketMessage.length) return;
     const front = socketMessage[socketMessage.length - 1];
-    console.info(front);
+    Util.log(front);
     sendJsonMessage(front);
     dequeue();
   }, [socketMessage]);
@@ -201,7 +203,7 @@ const App = () => {
           sendJsonMessage(disconnectPayload);
         }, 100);
 
-        console.info('Safely disconnected from Edu-pal socket connections.');
+        Util.log('Safely disconnected from Edu-pal socket connections.');
       });
 
       // wait for meet to relay call ended message
@@ -214,7 +216,7 @@ const App = () => {
         sendJsonMessage(disconnectPayload);
         setConnect(false);
       }, 100);
-      console.info('Safely disconnected from Edu-pal socket connections');
+      Util.log('Safely disconnected from Edu-pal socket connections');
     })();
   }, []);
 

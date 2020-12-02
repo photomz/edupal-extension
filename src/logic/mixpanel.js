@@ -1,13 +1,12 @@
 import { selector, atom } from 'recoil';
 import { queueMessage, meetData } from './common';
 import defaultParams from './mixpanelParams';
+import { localStorageEffect } from './persist';
 
 const signUpDate = atom({
   key: 'signUpDate',
   default: '',
-  persistence_UNSTABLE: {
-    type: 'signUpDate',
-  },
+  effects_UNSTABLE: [localStorageEffect({ name: 'signUpDate' })],
 });
 
 // eslint-disable-next-line no-unused-vars

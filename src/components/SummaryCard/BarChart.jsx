@@ -24,11 +24,13 @@ const BarChart = ({ qid }) => {
   } = useRecoilValue(questions(qid));
 
   // True false question type has no meta, create fallback
-  const { options, optionNum } = meta || {
-    options: [true, false],
-    optionNum: 2,
-  };
-
+  const { options, optionNum } =
+    type === 'TrueFalse'
+      ? {
+          options: [true, false],
+          optionNum: 2,
+        }
+      : meta;
   const hasOptionsText = options !== null;
   return (
     <Grid container spacing={1} justify="center" direction="column">

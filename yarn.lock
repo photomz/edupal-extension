@@ -9359,6 +9359,13 @@ react-dropzone@^10.2.1:
     file-selector "^0.1.12"
     prop-types "^15.7.2"
 
+react-error-boundary@^3.1.0:
+  version "3.1.0"
+  resolved "https://registry.yarnpkg.com/react-error-boundary/-/react-error-boundary-3.1.0.tgz#9487443df2f9ba1db90d8ab52351814907ea4af3"
+  integrity sha512-lmPrdi5SLRJR+AeJkqdkGlW/CRkAUvZnETahK58J4xb5wpbfDngasEGu+w0T1iXEhVrYBJZeW+c4V1hILCnMWQ==
+  dependencies:
+    "@babel/runtime" "^7.12.5"
+
 react-error-overlay@^6.0.8:
   version "6.0.8"
   resolved "https://registry.yarnpkg.com/react-error-overlay/-/react-error-overlay-6.0.8.tgz#474ed11d04fc6bda3af643447d85e9127ed6b5de"
@@ -9539,11 +9546,6 @@ readdirp@~3.5.0:
   integrity sha512-cMhu7c/8rdhkHXWsY+osBhfSy0JikwpHK/5+imo+LpeasTF8ouErHrlYkwT0++njiyuDvc7OFY5T3ukvZ8qmFQ==
   dependencies:
     picomatch "^2.2.1"
-
-recoil-persist@^0.7.0:
-  version "0.7.0"
-  resolved "https://registry.yarnpkg.com/recoil-persist/-/recoil-persist-0.7.0.tgz#0720490888c582f546c818eb3364a009918650cf"
-  integrity sha512-Jc0IFSjmT1h5gQGX8n9XLjQDNstovVUmeAQTlgoX6VnmUMrWjdYn7lOvQg+qHejqAlLcZCzKxCkNbJrIXJ9EIQ==
 
 recoil@^0.1.2:
   version "0.1.2"

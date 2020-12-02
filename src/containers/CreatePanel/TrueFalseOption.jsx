@@ -59,7 +59,7 @@ const TrueFalseOption = () => {
     >
       {[
         [true, 'True', 'primary'],
-        [false, 'False', 'red'],
+        [false, 'False', 'error'],
       ].map((el) => (
         <Button
           key={el[1]}
