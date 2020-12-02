@@ -84,7 +84,7 @@ const App = () => {
     });
 
     const keepAlive = setInterval(() => {
-      console.log('Keeping Edu-pal alive...');
+      Util.log('Keeping Edu-pal alive...');
       sendJsonMessage({ route: 'ping' });
     }, 60000 * 9);
     return clearInterval(keepAlive);

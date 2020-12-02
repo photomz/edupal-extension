@@ -45,7 +45,7 @@ const creatorText = atom({
 
 const sendAsk = selector({
   key: 'sendAsk',
-  set: ({ set, get, reset }) => {
+  set: ({ set, get }) => {
     const { name, userId, avatar, meetingId } = get(meetData);
     const type = get(creatorType);
     const questionId = nanoid();
@@ -97,6 +97,11 @@ const sendAsk = selector({
         ...payload,
       },
     });
+    // Cannot reset because reset creates localStorage empty object which throws errors
+    set(creatorImage, '');
+    set(creatorAnswer(type), typeMap[type][1]);
+    set(creatorMeta(type), typeMap[type][0]);
+    set(creatorText, '');
     // Hacky fix for recoil bug where only second fireMessage actually is queued
     setTimeout(() => {
       set(track, {
@@ -111,10 +116,6 @@ const sendAsk = selector({
           answer,
         },
       });
-      reset(creatorImage);
-      reset(creatorAnswer(type));
-      reset(creatorMeta(type));
-      reset(creatorText(type));
     }, 50);
   },
 });

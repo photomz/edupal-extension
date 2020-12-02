@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import styled from 'styled-components';
 import prop from 'prop-types';
 import { useRecoilState } from 'recoil';
@@ -45,7 +45,7 @@ Check.propTypes = {
 const McqOption = () => {
   const [meta, setMeta] = useRecoilState(creatorMeta('MultiSelect'));
   const [answer, setAnswer] = useRecoilState(creatorAnswer('MultiSelect'));
-  const [textInputs, setTextInputs] = useState(meta.options);
+  // const [textInputs, setTextInputs] = useState(meta.options);
 
   const handleCheck = (i, checked) => {
     setAnswer((prevArr) => {
@@ -89,15 +89,15 @@ const McqOption = () => {
               variant="outlined"
               placeholder={`Option #${i + 1}`}
               rowsMax={5}
-              value={textInputs[i]}
-              onBlur={() =>
-                setMeta((prev) => ({ ...prev, options: [...textInputs] }))
-              }
+              value={meta.options[i]}
+              // onBlur={() =>
+              //   setMeta((prev) => ({ ...prev, options: [...textInputs] }))
+              // }
               onChange={(e) =>
-                setTextInputs((prev) => {
-                  const newVal = [...prev];
+                setMeta((prev) => {
+                  const newVal = [...prev.options];
                   newVal[i] = e.target.value;
-                  return newVal;
+                  return { ...prev, options: [...newVal] };
                 })
               }
             />

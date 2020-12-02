@@ -1,9 +1,12 @@
 import Util from '../util';
-import mockMeetData from './data.json';
+import mockData from './data.json';
 
 const scrapeMeetData = () => {
   const dataScript = Util.contains('script', 'accounts.google.com');
-  if (!dataScript[1]) return mockMeetData;
+  if (!dataScript[1]) {
+    if (Util.isDev || process.env.REACT_APP_DEBUG) return mockData;
+    throw new Error('Edu-pal - Could not find user Google Meet data');
+  }
   const userData = JSON.parse(dataScript[1].text.match(/\[(.*?)\]/)[0]);
   return {
     meetingId: document
