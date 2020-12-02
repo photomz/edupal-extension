@@ -28,10 +28,6 @@
       "*://meet.google.com/**-**-**"
     ]
   },
-  "permissions": [
-    "notifications",
-    "*://meet.google.com/**-**-**"
-  ],
   "web_accessible_resources": [
     "static/**/*"
   ]
