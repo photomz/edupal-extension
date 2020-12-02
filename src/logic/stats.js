@@ -78,7 +78,7 @@ const optionBar = selectorFamily({
       0
     );
     const percent = Math.round(
-      (100 * numSelected) / get(numStudents(questionId))
+      (100 * numSelected) / (get(numStudents(questionId)) || 1)
     );
     const answer = get(answers(questionId));
     const isCorrect =
