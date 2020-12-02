@@ -47,6 +47,9 @@ const BarChartRow = ({ i, qid, isTf }) => {
     optionBar({ questionId: qid, option: isTf ? !i : i })
   );
 
+  // https://github.com/facebookexperimental/Recoil/issues/774
+  if (isCorrect === undefined) return <></>;
+
   const { colour } = g.correctness[isCorrect];
   const avatarStyles = isTf ? g.trueFalse : g.alphabet;
 

@@ -61,7 +61,8 @@ const AnswerCard = ({ qid }) => {
   const isLoading = useRecoilValue(loadingAnswer(qid));
 
   // https://github.com/facebookexperimental/Recoil/issues/774
-  if (isLoading || question === undefined) return <CardSkeleton />;
+  if (isLoading || question === undefined || isCorrect === undefined)
+    return <CardSkeleton />;
 
   const { Icon, colour } = g.correctness[isCorrect];
 

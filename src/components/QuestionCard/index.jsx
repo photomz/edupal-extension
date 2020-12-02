@@ -13,6 +13,7 @@ import OpenIcon from '@material-ui/icons/OpenInNew';
 import RightIcon from '@material-ui/icons/ChevronRight';
 import LazyAvatar from '../LazyAvatar';
 
+import CardSkeleton from '../CardSkeleton';
 import McqOption from './McqOption';
 import MultiSelectOption from './MultiSelectOption';
 import ShortAnswerOption from './ShortAnswerOption';
@@ -88,6 +89,9 @@ const QuestionCard = ({ qid }) => {
   const { avatar, teacher, askTimestamp } = useRecoilValue(questions(qid));
   const switchCard = useSetRecoilState(carouselOrder(qid));
   const hasResponded = useRecoilValue(iHaveResponded(qid));
+
+  // https://github.com/facebookexperimental/Recoil/issues/774
+  if (teacher === undefined) return <CardSkeleton />;
 
   return (
     <>

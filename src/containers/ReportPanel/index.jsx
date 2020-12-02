@@ -52,7 +52,8 @@ const ReportPanel = () => {
   const studentResponses = useRecoilValue(responses(qid));
 
   // https://github.com/facebookexperimental/Recoil/issues/774
-  if (question === undefined) return <CardSkeleton />;
+  if (question === undefined || !studentResponses.length)
+    return <CardSkeleton />;
 
   return (
     <Wrapper>
