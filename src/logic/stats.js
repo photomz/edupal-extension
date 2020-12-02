@@ -38,10 +38,16 @@ const responseSpeed = selectorFamily({
   },
 });
 
-// TODO: Create websocket route to GET
-const numStudents = atom({
+const numStudents = atomFamily({
   key: 'numStudents',
-  default: 5,
+  default: 1, // 0 might give ZeroDivision error
+});
+
+const receiveNumStudents = selector({
+  key: 'receiveNumStudents',
+  set: ({ set }, { questionId, numStudents: num }) => {
+    set(numStudents(questionId), num);
+  },
 });
 
 const answers = atomFamily({ key: 'answers', default: null });
@@ -58,7 +64,9 @@ const optionBar = selectorFamily({
         ),
       0
     );
-    const percent = Math.round((100 * numSelected) / get(numStudents));
+    const percent = Math.round(
+      (100 * numSelected) / get(numStudents(questionId))
+    );
     const answer = get(answers(questionId));
     const isCorrect =
       answer === null
@@ -88,4 +96,5 @@ export {
   optionBar,
   reportQuestion,
   goToReport,
+  receiveNumStudents,
 };

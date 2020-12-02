@@ -14,7 +14,7 @@ import Util from '../../util';
 import g from '../../global';
 import { receiveAsk } from '../../logic/question';
 import { receiveAnswer } from '../../logic/response';
-import { receiveRespond } from '../../logic/stats';
+import { receiveRespond, receiveNumStudents } from '../../logic/stats';
 import {
   isUploaderOpen,
   isDrawerOpen,
@@ -50,6 +50,7 @@ const App = () => {
   const setLeaderboard = useSetRecoilState(leaderboard);
   const updateRole = useSetRecoilState(receiveUpdateRole);
   const handleRespond = useSetRecoilState(receiveRespondAction);
+  const setNumStudents = useSetRecoilState(receiveNumStudents);
 
   const mixpanelPeopleSet = useSetRecoilState(peopleSet);
   const mixpanelTrack = useSetRecoilState(track);
@@ -119,6 +120,9 @@ const App = () => {
         break;
       case 'receiveAnswer':
         addAnswer(data);
+        break;
+      case 'numStudents':
+        setNumStudents(data);
         break;
       case 'joinMeetingSuccess':
         console.info('You are connected to Edu-pal!');

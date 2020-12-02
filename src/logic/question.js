@@ -1,7 +1,6 @@
 import { atom, atomFamily, selector } from 'recoil';
 import { localStorageEffect } from './persist';
 
-// TODO: Remove persistence
 const questions = atomFamily({
   key: 'questions',
   default: {},
