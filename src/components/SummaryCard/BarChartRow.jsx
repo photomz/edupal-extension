@@ -44,7 +44,7 @@ const StyledGrid = styled(Grid)`
 
 const BarChartRow = ({ i, qid, isTf }) => {
   const { percent, isCorrect, numSelected } = useRecoilValue(
-    optionBar({ questionId: qid, option: !i })
+    optionBar({ questionId: qid, option: isTf ? !i : i })
   );
 
   const { colour } = g.correctness[isCorrect];

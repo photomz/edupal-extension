@@ -69,8 +69,14 @@ const App = () => {
         setReconnect(true);
       },
       onOpen: () => {
-        if (reconnect)
+        if (reconnect) {
           enqueueSnackbar('Edu-pal has reconnected!', { variant: 'success' });
+          const { meetingId, userId, name, avatar } = meet;
+          sendJsonMessage({
+            route: 'joinMeeting',
+            data: { meetingId, role: userRole, userId, name, avatar },
+          });
+        }
       },
     },
     connect
