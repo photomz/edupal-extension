@@ -1,7 +1,7 @@
 {
   "manifest_version": 2,
   "name": "Edu-pal",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "author": "Edu-pal Group",
   "description": "Quick learning feedback for online lessons",
   "icons": {
