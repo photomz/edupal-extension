@@ -19,7 +19,7 @@ const injectScript = (filePath, type = 'script', tag = 'html') => {
 
 (async () => {
   // Wait until in call
-  while (document.querySelector('.koV58.Zi94Db.S7urwe') === null) {
+  while (document.querySelector('#yDmH0d') === null) {
     // eslint-disable-next-line no-await-in-loop
     await new Promise((r) => setTimeout(r, 500));
   }

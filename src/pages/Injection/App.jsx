@@ -125,9 +125,15 @@ const App = () => {
         setLeaderboard(data);
         break;
       case 'receiveAnswer':
+        enqueueSnackbar(`Your teacher received your answer!`, {
+          variant: 'success',
+        });
         addAnswer(data);
         break;
       case 'numStudents':
+        enqueueSnackbar(`Question sent successfully!`, {
+          variant: 'success',
+        });
         setNumStudents(data);
         break;
       case 'joinMeetingSuccess':
@@ -174,14 +180,33 @@ const App = () => {
     if (readyState !== 1) return;
     mixpanelPeopleSet({});
     if (signUpDate === '') {
-      mixpanelTrack({
-        event: 'New User',
-        props: {
-          signUpDate,
-          name: meet.name,
-        },
-      });
-      setSignUpDate(new Date().toISOString());
+      const now = new Date().toISOString();
+      setSignUpDate(now);
+      enqueueSnackbar(
+        `Need help getting started? Check out our quick start guide!`,
+        {
+          variant: 'info',
+          action: (
+            <MuiButton
+              onClick={() =>
+                window.open('https://www.edu-pal.org/faq#getting-started')
+              }
+            >
+              OK
+            </MuiButton>
+          ),
+        }
+      );
+      // Hacky fix for recoil bug where only second fireMessage actually is queued
+      setTimeout(() => {
+        mixpanelTrack({
+          event: 'New User',
+          props: {
+            signUpDate: now,
+            name: meet.name,
+          },
+        });
+      }, 50);
     }
   }, [readyState]);
 
@@ -192,15 +217,6 @@ const App = () => {
     sendJsonMessage(front);
     dequeue();
   }, [socketMessage]);
-
-  // useEffect(() => {
-  //   const timeout = setInterval(() => {
-  //     setMeetChat(document.querySelector(g.meetChatClass) !== null);
-  //   }, 1000);
-  //   return () => {
-  //     clearInterval(timeout);
-  //   };
-  // }, []);
 
   useEffect(() => {
     (async () => {

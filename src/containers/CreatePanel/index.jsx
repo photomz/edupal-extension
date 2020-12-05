@@ -7,7 +7,7 @@ import MuiCardHeader from '@material-ui/core/CardHeader';
 import MuiCardContent from '@material-ui/core/CardContent';
 import MuiCardActions from '@material-ui/core/CardActions';
 import MuiTextField from '@material-ui/core/TextField';
-import MuiIconButton from '@material-ui/core/IconButton';
+import MuiButton from '@material-ui/core/Button';
 import MuiGrid from '@material-ui/core/Grid';
 import MuiTooltip from '@material-ui/core/Tooltip';
 import { DropzoneDialog } from 'material-ui-dropzone';
@@ -39,8 +39,9 @@ const TextField = styled(MuiTextField)`
   margin-bottom: ${({ theme }) => theme.spacing(2)}px;
 `;
 
-const Button = styled(MuiIconButton)`
+const Button = styled(MuiButton)`
   &&& {
+    min-width: 120px;
     margin-left: ${({ theme }) => theme.spacing(2)}px;
     padding: ${({ theme }) => theme.spacing(1)}px;
   }
@@ -83,8 +84,13 @@ const CreatePanel = () => {
               </Button>
             </MuiTooltip> */}
             <MuiTooltip title="Send question">
-              <Button color="primary" onClick={ask}>
-                <SendIcon />
+              <Button
+                color="primary"
+                onClick={ask}
+                variant="contained"
+                endIcon={<SendIcon />}
+              >
+                Send
               </Button>
             </MuiTooltip>
           </MuiGrid>

@@ -1,4 +1,5 @@
 import React, { useState, useRef } from 'react';
+import styled from 'styled-components';
 import prop from 'prop-types';
 
 import MuiButton from '@material-ui/core/Button';
@@ -11,6 +12,10 @@ import MuiMenuItem from '@material-ui/core/MenuItem';
 import MuiMenuList from '@material-ui/core/MenuList';
 
 import ArrowDropDownIcon from '@material-ui/icons/ArrowDropDown';
+
+const FixedButton = styled(MuiButton)`
+  min-width: 160px;
+`;
 
 const SplitButton = ({ options, value, handleChange }) => {
   const [open, setOpen] = useState(false);
@@ -30,12 +35,14 @@ const SplitButton = ({ options, value, handleChange }) => {
   return (
     <>
       <MuiButtonGroup
-        variant="contained"
+        variant="outlined"
         color="primary"
         ref={anchorRef}
         aria-label="split button"
       >
-        <MuiButton>{options[value]}</MuiButton>
+        <FixedButton onClick={() => setOpen((prev) => !prev)}>
+          {options[value]}
+        </FixedButton>
         <MuiButton
           color="primary"
           size="small"
