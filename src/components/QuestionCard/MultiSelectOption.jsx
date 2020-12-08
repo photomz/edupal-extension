@@ -87,6 +87,7 @@ const TextOption = ({ i, text, handleCheck, hasResponded, checked }) => (
     <StyledButton
       variant="outlined"
       color="default"
+      disabled={hasResponded}
       onClick={() => handleCheck(i)}
     >
       <Typography>{text}</Typography>

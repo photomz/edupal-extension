@@ -1,6 +1,6 @@
 /* eslint-disable no-console */
 import React, { useState, useEffect, useRef } from 'react';
-import { hot } from 'react-hot-loader';
+import styled from 'styled-components';
 import { useRecoilValue, useSetRecoilState, useRecoilState } from 'recoil';
 import useWebsocket from 'react-use-websocket';
 import { useSnackbar } from 'notistack';
@@ -24,7 +24,7 @@ import {
   role,
   leaderboard,
   receiveUpdateRole,
-  // isMeetChatOpen,
+  sendUpdateRole,
 } from '../../logic/common';
 import { receiveRespondAction } from '../../logic/snackbar';
 import {
@@ -32,6 +32,10 @@ import {
   track,
   signUpDate as userSignUpDate,
 } from '../../logic/mixpanel';
+
+const SnackAction = styled(MuiButton)`
+  color: ${({ theme }) => theme.palette.common.white};
+`;
 
 const App = () => {
   // const setMeetChat = useSetRecoilState(isMeetChatOpen);
@@ -50,6 +54,7 @@ const App = () => {
   const setLeaderboard = useSetRecoilState(leaderboard);
   const updateRole = useSetRecoilState(receiveUpdateRole);
   const handleRespond = useSetRecoilState(receiveRespondAction);
+  const switchRole = useSetRecoilState(sendUpdateRole);
   const setNumStudents = useSetRecoilState(receiveNumStudents);
 
   const mixpanelPeopleSet = useSetRecoilState(peopleSet);
@@ -114,9 +119,9 @@ const App = () => {
         enqueueSnackbar(`${data.student.name} answered a question!`, {
           variant: 'info',
           action: (
-            <MuiButton onClick={() => handleRespond(data.questionId)}>
+            <SnackAction onClick={() => handleRespond(data.questionId)}>
               More
-            </MuiButton>
+            </SnackAction>
           ),
         });
         addResponse(data);
@@ -137,20 +142,29 @@ const App = () => {
         setNumStudents(data);
         break;
       case 'joinMeetingSuccess':
-        console.info('You are connected to Edu-pal!');
+        // eslint-disable-next-line no-case-declarations
+        const { role: receivedRole } = data;
+        // eslint-disable-next-line no-case-declarations
+        const otherRole = receivedRole === 'STUDENT' ? 'TEACHER' : 'STUDENT';
+        enqueueSnackbar(
+          `You joined Edu-pal as ${receivedRole.toLowerCase()}!`,
+          {
+            variant: 'info',
+            action: (
+              <SnackAction onClick={() => switchRole(otherRole)}>
+                Switch
+              </SnackAction>
+            ),
+          }
+        );
+        setUserRole(receivedRole);
         mixpanelTrack({
           event: 'Join Meeting',
           props: {
             meetingId: meet.meetingId,
-            role: userRole,
+            role: receivedRole,
           },
         });
-        break;
-      case 'joinMeetingAsStudent':
-        enqueueSnackbar(`You joined Edu-pal as student.`, {
-          variant: 'info',
-        });
-        setUserRole('STUDENT');
         break;
       case 'updateRoleFailed':
         enqueueSnackbar(
@@ -187,13 +201,13 @@ const App = () => {
         {
           variant: 'info',
           action: (
-            <MuiButton
+            <SnackAction
               onClick={() =>
                 window.open('https://www.edu-pal.org/faq#getting-started')
               }
             >
               OK
-            </MuiButton>
+            </SnackAction>
           ),
         }
       );
@@ -264,4 +278,4 @@ const App = () => {
   );
 };
 
-export default hot(module)(App);
+export default App;

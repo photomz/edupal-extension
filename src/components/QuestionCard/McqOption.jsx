@@ -8,19 +8,18 @@ import MuiTypography from '@material-ui/core/Typography';
 import MuiButton from '@material-ui/core/Button';
 
 import LazyAvatar from '../LazyAvatar';
-import { sendRespond } from '../../logic/response';
+import { sendRespond, iHaveResponded } from '../../logic/response';
 import { questions } from '../../logic/question';
 import g from '../../global';
 
 const StyledAvatar = styled(LazyAvatar)`
-  ${({ theme: $, colour }) => `
-  
+  ${({ theme: $, $colour, $disabled }) => `
   margin: ${$.spacing(1)}px;
-  background-color: ${$.palette[colour].main};
+  background-color: ${$.palette[$colour].main};
   transition: all 0.3s ease-in-out;
   &:hover {
-    box-shadow: ${$.shadows[4]};
-    background-color: ${$.palette[colour].dark};
+    box-shadow: ${$.shadows[$disabled ? 0 : 4]};
+    background-color: ${$.palette[$colour][$disabled ? 'main' : 'dark']};
   }
   color: ${$.palette.common.white};
   font-weight: ${$.typography.fontWeightMedium};
@@ -44,8 +43,13 @@ const StyledButton = styled(MuiButton)`
   `}
 `;
 
-const LetterFab = ({ i, handleRespond }) => (
-  <StyledAvatar colour={g.alphabet[i][1]} onClick={() => handleRespond(i)}>
+const LetterFab = ({ i, handleRespond, hasResponded }) => (
+  <StyledAvatar
+    $colour={g.alphabet[i][1]}
+    onClick={() => handleRespond(i)}
+    disabled={hasResponded}
+    $disabled={hasResponded}
+  >
     {g.alphabet[i][0]}
   </StyledAvatar>
 );
@@ -57,9 +61,10 @@ LetterFab.defaultProps = {
 LetterFab.propTypes = {
   i: prop.number.isRequired,
   handleRespond: prop.func,
+  hasResponded: prop.bool.isRequired,
 };
 
-const TextOption = ({ i, text, handleRespond }) => (
+const TextOption = ({ i, text, handleRespond, hasResponded }) => (
   <MuiGrid
     container
     item
@@ -69,10 +74,15 @@ const TextOption = ({ i, text, handleRespond }) => (
     alignItems="stretch"
     wrap="nowrap"
   >
-    <LetterFab i={i} handleRespond={handleRespond} />
+    <LetterFab
+      i={i}
+      handleRespond={handleRespond}
+      hasResponded={hasResponded}
+    />
     <StyledButton
       variant="outlined"
       color="default"
+      disabled={hasResponded}
       onClick={() => handleRespond(i)}
     >
       <MuiTypography>{text}</MuiTypography>
@@ -84,6 +94,7 @@ TextOption.propTypes = {
   i: prop.number.isRequired,
   text: prop.oneOfType([prop.string, prop.number]).isRequired,
   handleRespond: prop.func.isRequired,
+  hasResponded: prop.bool.isRequired,
 };
 
 const McqOption = ({ qid }) => {
@@ -91,6 +102,7 @@ const McqOption = ({ qid }) => {
     meta: { optionNum, options },
   } = useRecoilValue(questions(qid));
   const handleResponse = useSetRecoilState(sendRespond(qid));
+  const hasResponded = useRecoilValue(iHaveResponded(qid)) || false;
 
   const hasOptionsText = options !== null;
 
@@ -103,9 +115,15 @@ const McqOption = ({ qid }) => {
             i={i}
             text={options[i]}
             handleRespond={handleResponse}
+            hasResponded={hasResponded}
           />
         ) : (
-          <LetterFab key={i} i={i} handleRespond={handleResponse} />
+          <LetterFab
+            key={i}
+            i={i}
+            handleRespond={handleResponse}
+            hasResponded={hasResponded}
+          />
         )
       )}
     </MuiGrid>
