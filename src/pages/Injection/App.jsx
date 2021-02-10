@@ -2,8 +2,8 @@
 import React, { useState, useEffect, useRef } from 'react';
 import styled from 'styled-components';
 import { useRecoilValue, useSetRecoilState, useRecoilState } from 'recoil';
-import useWebsocket from 'react-use-websocket';
 import { useSnackbar } from 'notistack';
+import useWebsocket from 'react-use-websocket';
 import MuiButton from '@material-ui/core/Button';
 
 import ShortAppBar from '../../containers/ShortAppBar';
@@ -220,7 +220,7 @@ const App = () => {
             name: meet.name,
           },
         });
-      }, 50);
+      }, 100);
     }
   }, [readyState]);
 

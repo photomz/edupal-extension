@@ -11,7 +11,7 @@ const messages = atom({ key: 'messages', default: [] });
 const queueMessage = selector({
   key: 'queueMessage',
   set: ({ set }, obj) => {
-    set(messages, (prev) => prev.concat(obj));
+    set(messages, (prev) => console.log(prev) || prev.concat(obj));
   },
 });
 const dequeueMessage = selector({

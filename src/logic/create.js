@@ -116,7 +116,7 @@ const sendAsk = selector({
           answer,
         },
       });
-    }, 50);
+    }, 100);
   },
 });
 

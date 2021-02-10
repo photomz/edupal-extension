@@ -7,7 +7,7 @@ import TrueFalseIcon from '@material-ui/icons/Beenhere';
 import ParagraphIcon from '@material-ui/icons/ViewHeadline';
 
 export default {
-  mixpanelToken: '163ddda22a51cddd2fcce948b3d8406d',
+  mixpanelToken: process.env.REACT_APP_MIXPANEL_TOKEN,
   socketUrl: 'wss://0cyod0odw5.execute-api.ap-southeast-1.amazonaws.com/dev/',
   alphabet: [
     ['A', 'primary'],

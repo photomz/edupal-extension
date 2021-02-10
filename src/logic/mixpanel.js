@@ -55,7 +55,9 @@ const track = selector({
         },
       },
     };
-    set(queueMessage, payload);
+    setTimeout(() => {
+      set(queueMessage, payload);
+    }, 100);
   },
 });
 
