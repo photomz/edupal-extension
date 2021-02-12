@@ -20,7 +20,10 @@ const LeaderboardPanel = () => {
   const sendGetLeaderboard = useSetRecoilState(queueMessage);
 
   useEffect(() => {
-    sendGetLeaderboard({ route: 'getLeaderboard', data: { meetingId } });
+    sendGetLeaderboard({
+      route: 'getLeaderboard',
+      data: { meetingId, userId },
+    });
   }, []);
 
   if (!board.length)

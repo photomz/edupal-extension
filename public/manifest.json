@@ -1,7 +1,7 @@
 {
   "manifest_version": 2,
   "name": "Edu-pal - Learning Feedback for Google Meet",
-  "version": "0.1.3",
+  "version": "0.1.4",
   "author": "Edu-pal Group",
   "description": "Quick student feedback for Google Meet lessons",
   "icons": {

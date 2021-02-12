@@ -245,13 +245,15 @@ const App = () => {
           name,
         },
       };
-      document.addEventListener('beforeunload', () => {
+      document.addEventListener('beforeunload', (e) => {
         mixpanelTrack({ event: 'Leave Meeting' });
         setTimeout(() => {
           sendJsonMessage(disconnectPayload);
         }, 100);
 
         Util.log('Safely disconnected from Edu-pal socket connections.');
+        (e || document.event).returnValue = null;
+        return null;
       });
 
       // wait for meet to relay call ended message

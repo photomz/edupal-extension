@@ -8,7 +8,7 @@ import ParagraphIcon from '@material-ui/icons/ViewHeadline';
 
 export default {
   mixpanelToken: process.env.REACT_APP_MIXPANEL_TOKEN,
-  socketUrl: 'wss://0cyod0odw5.execute-api.ap-southeast-1.amazonaws.com/dev/',
+  socketUrl: 'wss://g78v4bdy8f.execute-api.ap-southeast-1.amazonaws.com/prod/',
   alphabet: [
     ['A', 'primary'],
     ['B', 'error'],
