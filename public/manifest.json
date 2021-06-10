@@ -1,7 +1,7 @@
 {
   "manifest_version": 2,
   "name": "Edu-pal - Learning Feedback for Google Meet",
-  "version": "0.1.4",
+  "version": "0.1.5",
   "author": "Edu-pal Group",
   "description": "Quick student feedback for Google Meet lessons",
   "icons": {
@@ -24,11 +24,7 @@
     }
   ],
   "externally_connectable": {
-    "matches": [
-      "*://meet.google.com/**-**-**"
-    ]
+    "matches": ["*://meet.google.com/**-**-**"]
   },
-  "web_accessible_resources": [
-    "static/**/*"
-  ]
+  "web_accessible_resources": ["static/**/*"]
 }

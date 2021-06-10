@@ -1,5 +1,13 @@
 ### Versions
 
+## v0.1.5
+
+###### 2021-06-10
+
+#### Hotfixes
+
+- [WIZ] Make scrapeMeetData compatible with new Google Meet major version @photo_mz
+
 ## v0.1.4
 
 ###### 2021-02-12
