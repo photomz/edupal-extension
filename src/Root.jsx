@@ -12,10 +12,10 @@ import CssBaseline from '@material-ui/core/CssBaseline';
 import { ErrorBoundary } from 'react-error-boundary';
 import MuiSnackbar from '@material-ui/core/Snackbar';
 import MuiButton from '@material-ui/core/Button';
-import SnackbarProvider from '../../containers/Snackbar';
+import SnackbarProvider from './containers/Snackbar';
 import App from './App';
-import themeTemplate from '../../styles/theme';
-import resetState from '../../logic/reset';
+import themeTemplate from './styles/theme';
+import resetState from './logic/reset';
 import './Root.css';
 
 import 'fontsource-roboto/latin-300.css';

@@ -6,15 +6,15 @@ import { useSnackbar } from 'notistack';
 import useWebsocket from 'react-use-websocket';
 import MuiButton from '@material-ui/core/Button';
 
-import ShortAppBar from '../../containers/ShortAppBar';
-import Sidebar from '../../containers/Sidebar';
-import QuestionSnack from '../../containers/Snackbar/QuestionSnack';
+import ShortAppBar from './containers/ShortAppBar';
+import Sidebar from './containers/Sidebar';
+import QuestionSnack from './containers/Snackbar/QuestionSnack';
 
-import Util from '../../util';
-import g from '../../global';
-import { receiveAsk } from '../../logic/question';
-import { receiveAnswer } from '../../logic/response';
-import { receiveRespond, receiveNumStudents } from '../../logic/stats';
+import Util from './util';
+import g from './global';
+import { receiveAsk } from './logic/question';
+import { receiveAnswer } from './logic/response';
+import { receiveRespond, receiveNumStudents } from './logic/stats';
 import {
   isUploaderOpen,
   isDrawerOpen,
@@ -25,13 +25,13 @@ import {
   leaderboard,
   receiveUpdateRole,
   sendUpdateRole,
-} from '../../logic/common';
-import { receiveRespondAction } from '../../logic/snackbar';
+} from './logic/common';
+import { receiveRespondAction } from './logic/snackbar';
 import {
   peopleSet,
   track,
   signUpDate as userSignUpDate,
-} from '../../logic/mixpanel';
+} from './logic/mixpanel';
 
 const SnackAction = styled(MuiButton)`
   color: ${({ theme }) => theme.palette.common.white};
