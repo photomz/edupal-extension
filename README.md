@@ -1,10 +1,10 @@
-# Edu-pal: E-Learning Q&A Game for Google Meet
+# Edu-pal: Q&A for Google Meet (500k logins)
 
 [Chrome Web Store 🚀](https://chrome.google.com/webstore/detail/edu-pal-learning-feedback/geopbiaefoieahodpfbclhoabkikbnkn) | [Pitch Deck 💡](https://drive.google.com/file/d/1OrvaGk4hP9OD8jZcwqO6skcJlsyEHc6V/view?usp=sharing) | [ProductHunt 👀](https://www.producthunt.com/products/edu-pal#edu-pal)
 
 [![Edu-pal Video Demo](https://img.youtube.com/vi/SO5M4FiOt5M/0.jpg)](https://www.youtube.com/watch?v=SO5M4FiOt5M)
 
-Edu-pal is a viral, no-login Chrome Extension designed to make Q&A in online classes fuss-free. Teachers persuade kids to love learning with fun games and friendly competition!
+Edu-pal is a viral (500k logins), no-login Chrome Extension designed to make Q&A in online classes fuss-free. Teachers persuade kids to love learning with fun games and friendly competition!
 
 **🚀 Instant Feedback:** Gauge student understanding real-time.
 
