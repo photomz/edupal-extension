@@ -35,7 +35,6 @@ In remote learning, teachers face muted mics and missing feedback, struggling to
 ## Why Edu-pal
 - **🏆 Best Approach:** Combines game-based learning and continuous assessment, removing barriers in remote education.
 - **🌏 Asia-Pacific Focus:** Targeting a region underserved by competitors.
-- **🤝 Strong Partnerships:** Collaborations with SG Code Campus and Stalford Learning Centre.
 - **🚀 Traction:** $3000 in grants, 6000 MAUs at peak, 500k logins without paid advertising.
 - **💰 Market Growth:** eLearning sector valued at $171 billion in 2020, with a 12% growth rate.
 
